@@ -18,10 +18,14 @@
 
 @property(strong, nonatomic) Icon *selectedCategory;
 
+@property(strong, nonatomic) NSMutableArray *categoriesArray;
+
 @property(strong, nonatomic) NSMutableArray *listenersArray;
 @property(strong, nonatomic) NSMutableArray *actuatorsArray;
 @property(strong, nonatomic) NSMutableArray *sensorArray;
 @property(strong, nonatomic) NSMutableArray *regionsArray;
 @property(strong, nonatomic) NSMutableArray *gesturesArray;
+
+-(void)selectCategoryByType:(ICON_TYPE)iconType;
 
 @end

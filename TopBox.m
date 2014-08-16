@@ -74,12 +74,14 @@
     
     if(self.hasAddButton){
         self.addIconBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.height, self.frame.size.height)];
-        self.addIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
-        [self.addIcon changeIconType:ICON_ADD];
-        [self.addIconBox addSubview:self.addIcon];
+
     } else {
         self.addIconBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     }
+    
+    self.addIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+    [self.addIcon changeIconType:ICON_ADD];
+    [self.addIconBox addSubview:self.addIcon];
     
     [self.addIconBox setBackgroundColor:self.abc.primaryColor1];
     
@@ -158,6 +160,22 @@
 
 -(void)changeTrayColor:(UIColor *)color{
     [self.scrollBar setBackgroundColor:color];
+}
+
+-(void)changeHasAddBox:(BOOL)hasAddBox{
+    self.hasAddButton = hasAddBox;
+    
+    if(self.hasAddButton){
+        [self.addIconBox setFrame:CGRectMake(0, 0, self.frame.size.height, self.frame.size.height)];
+        
+    } else {
+        [self.addIconBox setFrame:CGRectMake(0, 0, 0, 0)];
+    }
+    
+    [self.addIconBox setBackgroundColor:self.abc.primaryColor1];
+    
+    [self.scrollBar setFrame:CGRectMake(self.addIconBox.frame.origin.x + self.addIconBox.frame.size.width, 0, self.frame.size.width - self.addIconBox.frame.size.width, self.frame.size.height)];
+    [self changeIsCentered:self.isCentered];
 }
 
 @end

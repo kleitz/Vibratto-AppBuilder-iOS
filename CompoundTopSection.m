@@ -20,7 +20,8 @@
         self.regionsArray = [[NSMutableArray alloc] init];
         self.gesturesArray = [[NSMutableArray alloc] init];
         self.listenersArray = [[NSMutableArray alloc] init];
-
+        self.categoriesArray = [[NSMutableArray alloc] init];
+        
         [self setFrame:frame];
         [self setBackgroundColor:[UIColor clearColor]];
         
@@ -108,28 +109,42 @@
     }
 }
 
+-(void)selectCategoryByType:(ICON_TYPE)iconType{
+    for(int i=0; i<self.categories.boxItems.count; i++){
+        Icon *thisIcon = [self.categories.boxItems objectAtIndex:i];
+        if(thisIcon.iconType == iconType){
+            [self selectCategory:thisIcon];
+        }
+    }
+}
+
 -(void)fillIconBox{
     [self.iconBox emptyBox];
     
     switch (self.selectedCategory.iconType) {
         case ICON_ACTUATOR:
             [self.iconBox fillBox:self.actuatorsArray andDelegate:self];
+            [self.iconBox changeHasAddBox:YES];
             break;
         
         case ICON_SENSOR:
             [self.iconBox fillBox:self.sensorArray andDelegate:self];
+            [self.iconBox changeHasAddBox:YES];
             break;
         
         case ICON_REGION:
             [self.iconBox fillBox:self.regionsArray andDelegate:self];
+            [self.iconBox changeHasAddBox:YES];
             break;
         
         case ICON_GESTURE:
             [self.iconBox fillBox:self.gesturesArray andDelegate:self];
+            [self.iconBox changeHasAddBox:YES];
             break;
         
         case ICON_LISTENER:
             [self.iconBox fillBox:self.listenersArray andDelegate:self];
+            [self.iconBox changeHasAddBox:NO];
             break;
             
         default:

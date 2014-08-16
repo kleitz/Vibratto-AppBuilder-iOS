@@ -33,6 +33,8 @@
 -(void)setHighlightedIcon:(NSInteger)index;
 -(void)emptyBox;
 -(void)fillBox:(NSArray *)newItems andDelegate:(id<IconDelegate>)delegate;
+-(void)changeHasAddBox:(BOOL)hasAddBox;
+
 -(Icon *)returnItemAtIndex:(NSInteger)index;
 
 @end
