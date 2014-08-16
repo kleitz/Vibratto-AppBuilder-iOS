@@ -19,23 +19,25 @@
         self.bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width * ((1.0f - self.constants.iconImagePercent)/2), self.frame.size.height * ((1.0f - self.constants.iconImagePercent)/2), self.frame.size.width * self.constants.iconImagePercent, self.frame.size.height * self.constants.iconImagePercent)];
         self.customImage = [[UIImage alloc] init];
         self.layer.cornerRadius = self.frame.size.width/2;
-        self.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        self.layer.borderWidth = 1.0f;
+        //self.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        //self.layer.borderWidth = 1.0f;
         
         [self setBackgroundColor:self.constants.seeThruColor];
+        
+        [self addSubview:self.bgImage];
     }
     
     return self;
 }
 
--(void)setIconType:(ICON_TYPE)iconType{
-    self.iconType = iconType;
-    
+-(void)changeIconType:(ICON_TYPE)iconType{
+    //NSLog(@"Icon changeIconType");
+    [self setIconType:iconType];
     switch (self.iconType) {
         case ICON_ADD:
             [self.bgImage setImage:self.constants.plusImage];
             break;
-        
+            
         case ICON_ACTUATOR:
             [self.bgImage setImage:self.constants.actuatorImageDefault];
             break;
@@ -48,7 +50,6 @@
             break;
     }
 }
-
 /*
 - (void)drawRect:(CGRect)rect{
     

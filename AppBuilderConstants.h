@@ -27,5 +27,6 @@
 @property(assign, nonatomic) CGFloat iconHeight;
 @property(assign, nonatomic) CGFloat iconImageHeight;
 @property(assign, nonatomic) CGFloat iconImagePercent;
+@property(assign, nonatomic) CGFloat topBoxAddIconBoxWidth;
 
 @end

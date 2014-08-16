@@ -16,6 +16,7 @@
 @implementation DeviceViewController
 
 -(id)init{
+    NSLog(@"DeviceViewController init");
     self = [super init];
     if(self){
         self.constants = [AppBuilderConstants getAppBuilderConstants];
@@ -26,10 +27,26 @@
 
 - (void)viewDidLoad
 {
+    NSLog(@"DeviceViewController viewDidLoad");
     [super viewDidLoad];
-    self.topBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0.2f)];
-    [self.topBox setBackgroundColor:self.constants.primaryColor2];
+    [self.view setBackgroundColor:self.constants.primaryColor1];
+    self.topBox = [[TopBox alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.constants.iconHeight * 1.2)];
+    
+    [self.view addSubview:self.topBox];
+}
+
+/*
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    self.isTouching = YES;
+}
+
+-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     
 }
+
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    self.isTouching = NO;
+}
+*/
 
 @end

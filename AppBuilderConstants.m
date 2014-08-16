@@ -23,13 +23,15 @@ static AppBuilderConstants *abc;
         abc.primaryColor1 = [[UIColor alloc] initWithRed:0.671 green:1.0 blue:0.945 alpha:1.0];
         abc.primaryColor2 = [[UIColor alloc] initWithRed:0.671 green:0.725 blue:1.00 alpha:1.0];
         abc.primaryColor3 = [[UIColor alloc] initWithRed:.698 green:1.0 blue:0.671 alpha:1.0];
-        abc.seeThruColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:0.4];
+        abc.seeThruColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:0.65];
         
         abc.primaryButtonDiameter = 60.0f;
         abc.topBoxHeight = 80.0f;
-        abc.iconHeight = 60.0f;
+        abc.iconHeight = 50.0f;
         abc.iconImageHeight = 45.0f;
         abc.iconImagePercent = 0.7f;
+        
+        abc.topBoxAddIconBoxWidth = 80.0f;
     }
     
     return abc;

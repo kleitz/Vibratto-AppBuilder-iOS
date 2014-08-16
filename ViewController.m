@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "AppBuilderConstants.h"
+#import "DeviceViewController.h"
 
 @interface ViewController ()
 
@@ -48,6 +49,9 @@
 
 -(void)newDeviceButtonClicked{
     NSLog(@"New device button clicked!");
+    DeviceViewController *dvc = [[DeviceViewController alloc] init];
+    
+    [self presentViewController:dvc animated:YES completion:nil];
 }
 
 /*

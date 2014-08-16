@@ -24,4 +24,6 @@ typedef enum {
 @property(strong, nonatomic) AppBuilderConstants *constants;
 @property(assign, nonatomic) ICON_TYPE iconType;
 
+-(void)changeIconType:(ICON_TYPE)iconType;
+
 @end

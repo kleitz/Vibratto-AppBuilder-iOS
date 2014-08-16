@@ -8,12 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "AppBuilderConstants.h"
+#import "TopBox.h"
 
 @interface DeviceViewController : UIViewController
 
 @property(strong, nonatomic) AppBuilderConstants *constants;
-@property(strong, nonatomic) UIView *topBox;
+@property(strong, nonatomic) TopBox *topBox;
+
 @property(strong, nonatomic) UIView *editBox;
 @property(strong, nonatomic) UIButton *createButton;
 @property(strong, nonatomic) UIButton *cancelButton;
+
+@property(assign, nonatomic) BOOL isTouching;
+
 @end
