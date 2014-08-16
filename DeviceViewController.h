@@ -14,10 +14,15 @@
 
 @property(strong, nonatomic) AppBuilderConstants *constants;
 @property(strong, nonatomic) TopBox *topBox;
+@property(strong, nonatomic) TopBox *componentsTray;
 
 @property(strong, nonatomic) UIView *editBox;
+@property(strong, nonatomic) UIView *mainView;
+
 @property(strong, nonatomic) UIButton *createButton;
 @property(strong, nonatomic) UIButton *cancelButton;
+
+@property(assign, nonatomic) CGPoint currentPoint;
 
 @property(assign, nonatomic) BOOL isTouching;
 

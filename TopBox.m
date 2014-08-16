@@ -57,10 +57,13 @@
 }
 
 -(void)initialize{
+    NSLog(@"TopBox initialize");
+    
     self.abc = [AppBuilderConstants getAppBuilderConstants];
     self.boxItems = [[NSMutableArray alloc] init];
     self.iconBuffer = self.frame.size.height/2 - self.abc.iconHeight/2;
     self.selectedIcon = nil;
+    self.isCentered = NO;
     
     if(self.hasAddButton){
         self.addIconBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.height, self.frame.size.height)];
@@ -80,9 +83,26 @@
     [self addSubview:self.addIconBox];
     [self addSubview:self.scrollBar];
     
-    
+    /*
     for(int i=0; i<9; i++){
         [self addIcon:ICON_ACTUATOR andIconImage:nil];
+    }
+    */
+}
+
+-(void)changeIsCentered:(BOOL)isCentered{
+    self.isCentered = isCentered;
+    
+    if(isCentered){
+        self.iconBuffer = (self.frame.size.width - (self.boxItems.count * self.abc.iconHeight))/(self.boxItems.count + 1);
+    } else {
+        
+        self.iconBuffer = self.frame.size.height/2 - self.abc.iconHeight/2;
+    }
+    
+    for(int i=0; i<self.boxItems.count; i++){
+        Icon *thisIcon = [self.boxItems objectAtIndex:i];
+        [thisIcon setFrame:CGRectMake(self.iconBuffer + (self.iconBuffer * i) + (self.abc.iconHeight * i), thisIcon.frame.origin.y, thisIcon.frame.size.width, thisIcon.frame.size.height)];
     }
 }
 
@@ -110,6 +130,10 @@
     NSLog(@"TopBox addIcon: %f", newIcon.frame.size.width + newIcon.frame.origin.x);
     [self.boxItems addObject:newIcon];
     [self.scrollBar addSubview:newIcon];
+}
+
+-(void)changeTrayColor:(UIColor *)color{
+    [self.scrollBar setBackgroundColor:color];
 }
 
 @end
