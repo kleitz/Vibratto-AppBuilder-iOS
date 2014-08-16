@@ -7,12 +7,28 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    //[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackOpaque;
+    
+    
+    ViewController *viewController = [[ViewController alloc] init];
+        
+    self.navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self.navController setNavigationBarHidden:YES];
+    
+    self.window.rootViewController = self.navController;
+    [self.window makeKeyAndVisible];
+    
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
+    //self.keyboardSize = CGSizeMake(325.0f, 216.0f);
+    
     return YES;
 }
 							

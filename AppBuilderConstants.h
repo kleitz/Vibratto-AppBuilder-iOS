@@ -12,10 +12,20 @@
 
 +(AppBuilderConstants *)getAppBuilderConstants;
 
+@property(strong, nonatomic) UIImage *plusImage;
+@property(strong, nonatomic) UIImage *actuatorImageDefault;
+@property(strong, nonatomic) UIImage *sensorImageDefault;
+@property(strong, nonatomic) UIImage *regionImageDefault;
+
 @property(strong, nonatomic) UIColor *primaryColor1;
 @property(strong, nonatomic) UIColor *primaryColor2;
 @property(strong, nonatomic) UIColor *primaryColor3;
+@property(strong, nonatomic) UIColor *seeThruColor;
 
 @property(assign, nonatomic) CGFloat primaryButtonDiameter;
+@property(assign, nonatomic) CGFloat topBoxHeight;
+@property(assign, nonatomic) CGFloat iconHeight;
+@property(assign, nonatomic) CGFloat iconImageHeight;
+@property(assign, nonatomic) CGFloat iconImagePercent;
 
 @end

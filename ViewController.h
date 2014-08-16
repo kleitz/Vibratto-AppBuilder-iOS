@@ -12,6 +12,6 @@
 @interface ViewController : UIViewController
 
 @property(strong, nonatomic) AppBuilderConstants *constants;
-@property(strong, nonatomic) UIButton *newDeviceButton;
+@property(strong, nonatomic) UIButton *addDeviceButton;
 
 @end

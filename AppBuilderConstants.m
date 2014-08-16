@@ -10,20 +10,29 @@
 
 @implementation AppBuilderConstants
 
-static AppBuilderConstants *appBuilderConstants;
+static AppBuilderConstants *abc;
 
 +(AppBuilderConstants *)getAppBuilderConstants {
-    if(!appBuilderConstants){
-        appBuilderConstants = [[AppBuilderConstants alloc] init];
+    if(!abc){
+        abc = [[AppBuilderConstants alloc] init];
         
-        appBuilderConstants.primaryColor1 = [[UIColor alloc] initWithRed:0.671 green:1.0 blue:0.945 alpha:1.0];
-        appBuilderConstants.primaryColor2 = [[UIColor alloc] initWithRed:0.671 green:0.725 blue:1.00 alpha:1.0];
-        appBuilderConstants.primaryColor3 = [[UIColor alloc] initWithRed:.698 green:1.0 blue:0.671 alpha:1.0];
+        abc.plusImage = [UIImage imageNamed:@"plus.png"];
+        abc.sensorImageDefault = [UIImage imageNamed:@"binocular.png"];
+        abc.actuatorImageDefault = [UIImage imageNamed:@"bulb.png"];
         
-        appBuilderConstants.primaryButtonDiameter = 30.0f;
+        abc.primaryColor1 = [[UIColor alloc] initWithRed:0.671 green:1.0 blue:0.945 alpha:1.0];
+        abc.primaryColor2 = [[UIColor alloc] initWithRed:0.671 green:0.725 blue:1.00 alpha:1.0];
+        abc.primaryColor3 = [[UIColor alloc] initWithRed:.698 green:1.0 blue:0.671 alpha:1.0];
+        abc.seeThruColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:0.4];
+        
+        abc.primaryButtonDiameter = 60.0f;
+        abc.topBoxHeight = 80.0f;
+        abc.iconHeight = 60.0f;
+        abc.iconImageHeight = 45.0f;
+        abc.iconImagePercent = 0.7f;
     }
     
-    return appBuilderConstants;
+    return abc;
 }
 
 @end

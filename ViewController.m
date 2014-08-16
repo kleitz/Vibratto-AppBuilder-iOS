@@ -16,6 +16,7 @@
 @implementation ViewController
 
 -(id)init{
+    NSLog(@"ViewController init");
     self = [super init];
     if(self){
         self.constants = [AppBuilderConstants getAppBuilderConstants];
@@ -29,16 +30,20 @@
     [super viewDidLoad];
     
     [self.view setBackgroundColor:self.constants.primaryColor1];
+    //[self.view setBackgroundColor:[UIColor blueColor]];
+    
     //self.newDeviceButton = [UIButton alloc] initWithFrame:[CGRectMake(self.view.frame.size.width/2, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)]
     //self.newDeviceButton = [[UIButton alloc] initWithFrame:[self createCenteredButtonWithDiameter:self.constants.primaryButtonDiameter]];
-    self.newDeviceButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.constants.primaryButtonDiameter/2, self.view.frame.size.height * 0.7, self.constants.primaryButtonDiameter, self.constants.primaryButtonDiameter)];
-    [self.newDeviceButton.layer setCornerRadius:self.constants.primaryButtonDiameter/2];
-    [self.newDeviceButton.layer setBorderColor:[UIColor lightGrayColor].CGColor];
-    [self.newDeviceButton.layer setBorderWidth:1.0f];
-    [self.newDeviceButton setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.3]];
-    [self.newDeviceButton addTarget:self action:@selector(newDeviceButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    self.addDeviceButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.constants.primaryButtonDiameter/2, self.view.frame.size.height * 0.8, self.constants.primaryButtonDiameter, self.constants.primaryButtonDiameter)];
+    [self.addDeviceButton.layer setCornerRadius:self.constants.primaryButtonDiameter/2];
+    [self.addDeviceButton.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+    [self.addDeviceButton.layer setBorderWidth:1.0f];
+    [self.addDeviceButton setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.3]];
+    [self.addDeviceButton addTarget:self action:@selector(newDeviceButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.view addSubview:self.newDeviceButton];
+    [self.view addSubview:self.addDeviceButton];
+    
+    NSLog(@"Done setting up!");
 }
 
 -(void)newDeviceButtonClicked{
