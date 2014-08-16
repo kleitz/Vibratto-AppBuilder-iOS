@@ -62,6 +62,26 @@
         case ICON_SENSOR:
             [self.bgImage setImage:self.constants.sensorImageDefault];
             break;
+        
+        case ICON_GESTURE:
+            [self.bgImage setImage:self.constants.gestureImageDefault];
+            break;
+        
+        case ICON_REGION:
+            [self.bgImage setImage:self.constants.regionImageDefault];
+            break;
+        
+        case ICON_LISTENER:
+            [self.bgImage setImage:self.constants.listenerImageDefault];
+            break;
+        
+        case ICON_UPLOAD:
+            [self.bgImage setImage:self.constants.uploadImageDefault];
+            break;
+        
+        case ICON_CUSTOM:
+            [self.bgImage setImage:self.customImage];
+            break;
             
         default:
             break;

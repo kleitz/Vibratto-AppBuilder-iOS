@@ -14,6 +14,10 @@ typedef enum {
     ICON_ADD,
     ICON_ACTUATOR,
     ICON_SENSOR,
+    ICON_REGION,
+    ICON_GESTURE,
+    ICON_LISTENER,
+    ICON_UPLOAD,
     ICON_CUSTOM
 } ICON_TYPE;
 

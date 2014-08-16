@@ -33,14 +33,7 @@
 }
 
 -(void)iconClicked:(Icon *)icon{
-    /*
-    if(self.selectedIcon == icon){
-        NSLog(@"TopBox icons are the same");
-        
-    } else {
-        
-    }
-    */
+
     [icon toggleHighlighted];
     
     if(self.selectedIcon != nil){
@@ -53,6 +46,20 @@
         self.selectedIcon = nil;
     } else {
         self.selectedIcon = icon;
+    }
+}
+
+-(void)emptyBox{
+    for(int i=self.boxItems.count -1; i>=0; i--){
+        [[self.boxItems objectAtIndex:i] removeFromSuperview];
+        [self.boxItems removeObjectAtIndex:i];
+    }
+}
+
+-(void)fillBox:(NSArray *)newItems andDelegate:(id<IconDelegate>)delegate{
+    for(int i=0; i<newItems.count; i++){
+        Icon *thisIcon = [newItems objectAtIndex:i];
+        [self addIcon:thisIcon.iconType andIconImage:thisIcon.customImage andDelegate:delegate andTag:thisIcon.tag];
     }
 }
 
@@ -73,7 +80,8 @@
     } else {
         self.addIconBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     }
-    [self.addIconBox setBackgroundColor:self.abc.primaryColor3];
+    
+    [self.addIconBox setBackgroundColor:self.abc.primaryColor1];
     
     self.scrollBar = [[UIScrollView alloc] initWithFrame:CGRectMake(self.addIconBox.frame.origin.x + self.addIconBox.frame.size.width, 0, self.frame.size.width - self.addIconBox.frame.size.width, self.frame.size.height)];
     [self.scrollBar setUserInteractionEnabled:YES];
@@ -106,7 +114,7 @@
     }
 }
 
--(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage{
+-(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag{
     //NSLog(@"TopBox addIcon");
     Icon *newIcon;
     if(self.boxItems.count > 0){
@@ -125,11 +133,27 @@
         [newIcon setCustomImage:iconImage];
     }
     
-    [newIcon setMyDelegate:self];
+    if(delegate != nil){
+        [newIcon setMyDelegate:delegate];
+    } else {
+        [newIcon setMyDelegate:self];
+    }
+    
+    [newIcon setTag:tag];
     
     NSLog(@"TopBox addIcon: %f", newIcon.frame.size.width + newIcon.frame.origin.x);
     [self.boxItems addObject:newIcon];
     [self.scrollBar addSubview:newIcon];
+}
+
+-(Icon *)returnItemAtIndex:(NSInteger)index{
+    Icon *thisIcon = [self.boxItems objectAtIndex:index];
+    return thisIcon;
+}
+
+-(void)setHighlightedIcon:(NSInteger)index{
+    Icon *thisIcon = [self.boxItems objectAtIndex:index];
+    [thisIcon toggleHighlighted];
 }
 
 -(void)changeTrayColor:(UIColor *)color{

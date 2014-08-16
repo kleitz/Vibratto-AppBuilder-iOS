@@ -26,9 +26,13 @@
 @property(assign, nonatomic) BOOL hasAddButton;
 @property(assign, nonatomic) BOOL isCentered;
 
--(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage;
+-(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag;
 -(id)initWithFrame:(CGRect)frame andHasAddBox:(BOOL)hasAddButton;
 -(void)changeIsCentered:(BOOL)isCentered;
 -(void)changeTrayColor:(UIColor *)color;
+-(void)setHighlightedIcon:(NSInteger)index;
+-(void)emptyBox;
+-(void)fillBox:(NSArray *)newItems andDelegate:(id<IconDelegate>)delegate;
+-(Icon *)returnItemAtIndex:(NSInteger)index;
 
 @end

@@ -16,10 +16,14 @@
 @property(strong, nonatomic) UIImage *actuatorImageDefault;
 @property(strong, nonatomic) UIImage *sensorImageDefault;
 @property(strong, nonatomic) UIImage *regionImageDefault;
+@property(strong, nonatomic) UIImage *listenerImageDefault;
+@property(strong, nonatomic) UIImage *gestureImageDefault;
+@property(strong, nonatomic) UIImage *uploadImageDefault;
 
 @property(strong, nonatomic) UIColor *primaryColor1;
 @property(strong, nonatomic) UIColor *primaryColor2;
 @property(strong, nonatomic) UIColor *primaryColor3;
+@property(strong, nonatomic) UIColor *primaryColor4;
 @property(strong, nonatomic) UIColor *seeThruColor;
 @property(strong, nonatomic) UIColor *seeThruColorHighlight;
 
