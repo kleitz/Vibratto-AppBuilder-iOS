@@ -21,6 +21,7 @@
 @property(strong, nonatomic) UIColor *primaryColor2;
 @property(strong, nonatomic) UIColor *primaryColor3;
 @property(strong, nonatomic) UIColor *seeThruColor;
+@property(strong, nonatomic) UIColor *seeThruColorHighlight;
 
 @property(assign, nonatomic) CGFloat primaryButtonDiameter;
 @property(assign, nonatomic) CGFloat topBoxHeight;

@@ -30,7 +30,7 @@
     NSLog(@"DeviceViewController viewDidLoad");
     [super viewDidLoad];
     [self.view setBackgroundColor:self.constants.primaryColor1];
-    self.topBox = [[TopBox alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.constants.iconHeight * 1.2)];
+    self.topBox = [[TopBox alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.constants.iconHeight * 1.2) andHasAddBox:NO];
     
     [self.view addSubview:self.topBox];
 }

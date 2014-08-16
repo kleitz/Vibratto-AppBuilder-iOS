@@ -10,12 +10,14 @@
 #import "Icon.h"
 #import "AppBuilderConstants.h"
 
-@interface TopBox : UIView
+@interface TopBox : UIView<IconDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;
 @property(strong, nonatomic) UIScrollView *scrollBar;
 @property(strong, nonatomic) UIView *addIconBox;
+
 @property(strong, nonatomic) Icon *addIcon;
+@property(strong, nonatomic) Icon *selectedIcon;
 
 @property(strong, nonatomic) NSMutableArray *boxItems;
 
@@ -24,5 +26,6 @@
 @property(assign, nonatomic) BOOL hasAddButton;
 
 -(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage;
+-(id)initWithFrame:(CGRect)frame andHasAddBox:(BOOL)hasAddButton;
 
 @end

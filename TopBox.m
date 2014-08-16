@@ -15,32 +15,75 @@
     NSLog(@"TopBox initWithFrame");
     self = [super initWithFrame:frame];
     if(self){
-        self.abc = [AppBuilderConstants getAppBuilderConstants];
-        self.addIconBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.height, self.frame.size.height)];
-        self.scrollBar = [[UIScrollView alloc] initWithFrame:CGRectMake(self.frame.size.height, 0, self.frame.size.width - self.frame.size.height, self.frame.size.height)];
-        [self.scrollBar setUserInteractionEnabled:YES];
-        [self.scrollBar setBackgroundColor:self.abc.primaryColor2];
-        [self.addIconBox setBackgroundColor:self.abc.primaryColor3];
-        [self.scrollBar setScrollEnabled:YES];
-        NSLog(@"TopBox scrollBar width: %f", self.scrollBar.contentSize.width);
-        
-        self.boxItems = [[NSMutableArray alloc] init];
-        self.iconBuffer = self.addIconBox.frame.size.width/2 - self.abc.iconHeight/2;
-        self.addIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
-        [self.addIcon changeIconType:ICON_ADD];
-        [self.addIconBox addSubview:self.addIcon];
-        
-        [self addSubview:self.addIconBox];
-        [self addSubview:self.scrollBar];
-        
-        
-        for(int i=0; i<9; i++){
-            [self addIcon:ICON_ACTUATOR andIconImage:nil];
-        }
-        
+        self.hasAddButton = NO;
+        [self initialize];
     }
     
     return self;
+}
+
+-(id)initWithFrame:(CGRect)frame andHasAddBox:(BOOL)hasAddButton{
+    self = [super initWithFrame:frame];
+    if(self){
+        self.hasAddButton = hasAddButton;
+        [self initialize];
+    }
+    
+    return self;
+}
+
+-(void)iconClicked:(Icon *)icon{
+    /*
+    if(self.selectedIcon == icon){
+        NSLog(@"TopBox icons are the same");
+        
+    } else {
+        
+    }
+    */
+    [icon toggleHighlighted];
+    
+    if(self.selectedIcon != nil){
+        [self.selectedIcon toggleHighlighted];
+    }
+    
+    if(self.selectedIcon == icon){
+        NSLog(@"TopBox icon is equal");
+        [self.selectedIcon toggleHighlighted];
+        self.selectedIcon = nil;
+    } else {
+        self.selectedIcon = icon;
+    }
+}
+
+-(void)initialize{
+    self.abc = [AppBuilderConstants getAppBuilderConstants];
+    self.boxItems = [[NSMutableArray alloc] init];
+    self.iconBuffer = self.frame.size.height/2 - self.abc.iconHeight/2;
+    self.selectedIcon = nil;
+    
+    if(self.hasAddButton){
+        self.addIconBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.height, self.frame.size.height)];
+        self.addIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+        [self.addIcon changeIconType:ICON_ADD];
+        [self.addIconBox addSubview:self.addIcon];
+    } else {
+        self.addIconBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    }
+    [self.addIconBox setBackgroundColor:self.abc.primaryColor3];
+    
+    self.scrollBar = [[UIScrollView alloc] initWithFrame:CGRectMake(self.addIconBox.frame.origin.x + self.addIconBox.frame.size.width, 0, self.frame.size.width - self.addIconBox.frame.size.width, self.frame.size.height)];
+    [self.scrollBar setUserInteractionEnabled:YES];
+    [self.scrollBar setBackgroundColor:self.abc.primaryColor2];
+    [self.scrollBar setScrollEnabled:YES];
+    
+    [self addSubview:self.addIconBox];
+    [self addSubview:self.scrollBar];
+    
+    
+    for(int i=0; i<9; i++){
+        [self addIcon:ICON_ACTUATOR andIconImage:nil];
+    }
 }
 
 -(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage{
@@ -61,6 +104,8 @@
     if(iconImage != nil){
         [newIcon setCustomImage:iconImage];
     }
+    
+    [newIcon setMyDelegate:self];
     
     NSLog(@"TopBox addIcon: %f", newIcon.frame.size.width + newIcon.frame.origin.x);
     [self.boxItems addObject:newIcon];
