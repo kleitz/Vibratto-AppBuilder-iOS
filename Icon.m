@@ -71,6 +71,18 @@
             [self.bgImage setImage:self.constants.regionImageDefault];
             break;
         
+        case ICON_COMPARATOR:
+            [self.bgImage setImage:self.constants.comparatorImage];
+            break;
+        
+        case ICON_GREATERTHEN:
+            [self.bgImage setImage:self.constants.greaterThenImage];
+            break;
+        
+        case ICON_LESSTHEN:
+            [self.bgImage setImage:self.constants.lessThenImage];
+            break;
+            
         case ICON_LISTENER:
             [self.bgImage setImage:self.constants.listenerImageDefault];
             break;
@@ -81,6 +93,26 @@
         
         case ICON_CUSTOM:
             [self.bgImage setImage:self.customImage];
+            break;
+        
+        case ICON_MAP:
+            [self.bgImage setImage:self.constants.mapImageDefault];
+            break;
+            
+        case ICON_TILT:
+            [self.bgImage setImage:self.constants.tiltImageDefault];
+            break;
+        
+        case ICON_NUMBER:
+            [self.bgImage setImage:self.constants.numberImage];
+            break;
+        
+        case ICON_DECREASE_POWER:
+            [self.bgImage setImage:self.constants.decreasePowerImage];
+            break;
+        
+        case ICON_INCREASE_POWER:
+            [self.bgImage setImage:self.constants.increasePowerImage];
             break;
             
         default:

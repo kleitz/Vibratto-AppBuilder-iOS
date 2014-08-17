@@ -25,6 +25,12 @@
 @property(strong, nonatomic) NSMutableArray *sensorArray;
 @property(strong, nonatomic) NSMutableArray *regionsArray;
 @property(strong, nonatomic) NSMutableArray *gesturesArray;
+@property(strong, nonatomic) NSMutableArray *comparatorsArray;
+@property(strong, nonatomic) NSMutableArray *valueArray;
+
+@property(strong, nonatomic) id<IconDelegate>delegate;
+
+@property(assign, nonatomic) int visibleCount;
 
 -(void)selectCategoryByType:(ICON_TYPE)iconType;
 

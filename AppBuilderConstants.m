@@ -23,6 +23,17 @@ static AppBuilderConstants *abc;
         abc.regionImageDefault = [UIImage imageNamed:@"layout3.png"];
         abc.gestureImageDefault = [UIImage imageNamed:@"reload.png"];
         abc.uploadImageDefault = [UIImage imageNamed:@"box1.png"];
+        abc.tiltImageDefault = [UIImage imageNamed:@"refresh.png"];
+        abc.mapImageDefault = [UIImage imageNamed:@"map.png"];
+        abc.rightArrowImage = [UIImage imageNamed:@"arrow.png"];
+        abc.comparatorImage = [UIImage imageNamed:@"arrow17.png"];
+        abc.greaterThenImage = [UIImage imageNamed:@"arrow17.png"];
+        abc.lessThenImage = [UIImage imageNamed:@"arrow18.png"];
+        abc.numberImage = [UIImage imageNamed:@"calcuator.png"];
+        abc.increasePowerImage = [UIImage imageNamed:@"arrow4.png"];
+        abc.decreasePowerImage = [UIImage imageNamed:@"arrow2.png"];
+        
+        abc.labelFont = [UIFont systemFontOfSize:42];
         
         abc.primaryColor1 = [[UIColor alloc] initWithRed:0.671 green:1.0 blue:0.945 alpha:1.0];
         abc.primaryColor2 = [[UIColor alloc] initWithRed:0.671 green:0.725 blue:1.00 alpha:1.0];
@@ -36,6 +47,8 @@ static AppBuilderConstants *abc;
         abc.topBoxHeight = abc.iconHeight * 1.2f;
         abc.iconImageHeight = 45.0f;
         abc.iconImagePercent = 0.7f;
+        abc.builderIconHeight = 60.0f;
+        abc.builderBuffer = 15.0f;
         
         abc.topBoxAddIconBoxWidth = 80.0f;
     }

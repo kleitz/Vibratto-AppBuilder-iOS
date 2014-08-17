@@ -67,6 +67,8 @@
     NSLog(@"TopBox initialize");
     
     self.abc = [AppBuilderConstants getAppBuilderConstants];
+    self.displayCount = 0;
+    
     self.boxItems = [[NSMutableArray alloc] init];
     self.iconBuffer = self.frame.size.height/2 - self.abc.iconHeight/2;
     self.selectedIcon = nil;
@@ -104,7 +106,7 @@
     self.isCentered = isCentered;
     
     if(isCentered){
-        self.iconBuffer = (self.frame.size.width - (self.boxItems.count * self.abc.iconHeight))/(self.boxItems.count + 1);
+        self.iconBuffer = (self.frame.size.width - (self.displayCount * self.abc.iconHeight))/(self.displayCount + 1);
     } else {
         
         self.iconBuffer = self.frame.size.height/2 - self.abc.iconHeight/2;
@@ -146,6 +148,16 @@
     NSLog(@"TopBox addIcon: %f", newIcon.frame.size.width + newIcon.frame.origin.x);
     [self.boxItems addObject:newIcon];
     [self.scrollBar addSubview:newIcon];
+    
+    self.displayCount++;
+}
+
+-(void)addIconWithoutDisplay:(ICON_TYPE)iconType andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag{
+    Icon *newIcon;
+    newIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    [newIcon changeIconType:iconType];
+    [newIcon setTag:tag];
+    [self.boxItems addObject:newIcon];
 }
 
 -(Icon *)returnItemAtIndex:(NSInteger)index{

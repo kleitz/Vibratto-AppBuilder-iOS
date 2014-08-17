@@ -10,6 +10,15 @@
 #import "AppBuilderConstants.h"
 #import "CompoundTopSection.h"
 
+typedef enum {
+    PRE_SELECT,
+    SENSOR_SELECT,
+    COMPARATOR_SELECT,
+    VALUE_SELECT,
+    REGION_SELECT,
+    ACTION_SELECT
+} BUILD_LISTENER_STATUS;
+
 @interface DeviceViewController : UIViewController<IconDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;
@@ -24,6 +33,19 @@
 @property(strong, nonatomic) Icon *bigAddIcon;
 @property(strong, nonatomic) Icon *uploadIcon;
 
+@property(strong, nonatomic) Icon *sensorIcon;
+@property(strong, nonatomic) Icon *comparatorIcon;
+@property(strong, nonatomic) Icon *valueIcon;
+@property(strong, nonatomic) Icon *regionIcon;
+@property(strong, nonatomic) Icon *gestureIcon;
+
+@property(strong, nonatomic) UILabel *ifLabel;
+@property(strong, nonatomic) UILabel *isLabel;
+@property(strong, nonatomic) UILabel *applyLabel;
+@property(strong, nonatomic) UILabel *ontoLabel;
+
+@property(strong, nonatomic) UIImageView *arrow1;
+
 @property(strong, nonatomic) UIView *editBox;
 @property(strong, nonatomic) UIView *mainView;
 
@@ -31,6 +53,13 @@
 @property(strong, nonatomic) UIButton *cancelButton;
 
 @property(assign, nonatomic) CGPoint currentPoint;
+
+@property(assign, nonatomic) CGSize ifSize;
+@property(assign, nonatomic) CGSize isSize;
+@property(assign, nonatomic) CGSize applySize;
+@property(assign, nonatomic) CGSize ontoSize;
+
+@property(assign, nonatomic) BUILD_LISTENER_STATUS buildStage;
 
 @property(assign, nonatomic) BOOL isTouching;
 

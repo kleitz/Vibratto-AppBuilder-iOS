@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "AppBuilderConstants.h"
+#import "Icon.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<IconDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *constants;
-@property(strong, nonatomic) UIButton *addDeviceButton;
+@property(strong, nonatomic) Icon *addDeviceButton;
 
 @end

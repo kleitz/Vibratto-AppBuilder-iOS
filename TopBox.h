@@ -23,10 +23,13 @@
 
 @property(assign, nonatomic) CGFloat iconBuffer;
 
+@property(assign, nonatomic) NSInteger displayCount;
+
 @property(assign, nonatomic) BOOL hasAddButton;
 @property(assign, nonatomic) BOOL isCentered;
 
 -(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag;
+-(void)addIconWithoutDisplay:(ICON_TYPE)iconType andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag;
 -(id)initWithFrame:(CGRect)frame andHasAddBox:(BOOL)hasAddButton;
 -(void)changeIsCentered:(BOOL)isCentered;
 -(void)changeTrayColor:(UIColor *)color;

@@ -21,9 +21,51 @@
     self = [super init];
     if(self){
         self.abc = [AppBuilderConstants getAppBuilderConstants];
+        self.buildStage = PRE_SELECT;
+        
+        self.ifLabel = [[UILabel alloc] init];
+        self.isLabel = [[UILabel alloc] init];
+        self.applyLabel = [[UILabel alloc] init];
+        self.ontoLabel = [[UILabel alloc] init];
+        
+        self.sensorIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.builderIconHeight, self.abc.builderIconHeight)];
+        self.comparatorIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.builderIconHeight, self.abc.builderIconHeight)];
+        self.valueIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.builderIconHeight, self.abc.builderIconHeight)];
+        self.gestureIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.builderIconHeight, self.abc.builderIconHeight)];
+    
+        [self initLabel:self.ifLabel text:@"If" andSize:self.ifSize];
+        [self.ifLabel setText:@"If"];
+
+        [self initLabel:self.isLabel text:@"is" andSize:self.isSize];
+        [self.isLabel setText:@"is"];
+        
+        [self initLabel:self.applyLabel text:@"then" andSize:self.applySize];
+        [self.applyLabel setText:@"then"];
+        
+        [self initLabel:self.ontoLabel text:@"onto" andSize:self.ontoSize];
+        [self.ontoLabel setText:@"onto"];
+        
+        self.ifSize = [@"If" sizeWithFont:self.abc.labelFont];
+        self.isSize = [@"is" sizeWithFont:self.abc.labelFont];
+        self.applySize = [@"then" sizeWithFont:self.abc.labelFont];
+        self.ontoSize = [@"onto" sizeWithFont:self.abc.labelFont];
+        
+        self.arrow1 = [[UIImageView alloc] initWithImage:self.abc.rightArrowImage];
     }
     
     return self;
+}
+
+-(void)initLabel:(UILabel *)label text:(NSString *)text andSize:(CGSize)labelSize{
+    //label = [[UILabel alloc] init];
+    //[label setText:text];
+    [label setTextColor:[UIColor whiteColor]];
+    [label setFont:self.abc.labelFont];
+    [label setBackgroundColor:[UIColor clearColor]];
+
+    //labelSize = [text sizeWithFont:[UIFont systemFontOfSize:22]];
+    
+    //NSLog(@"DVC labelSize height: %f, width: %f", labelSize.height, labelSize.width);
 }
 
 - (void)viewDidLoad
@@ -37,6 +79,7 @@
     [self.view addSubview:self.mainView];
     
     self.topSection = [[CompoundTopSection alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 2 * self.abc.topBoxHeight)];
+    [self.topSection setDelegate:self];
     
     self.uploadIcon = [[Icon alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.abc.primaryButtonDiameter/2, self.view.frame.size.height - 80.0f + self.abc.topBoxHeight, self.abc.primaryButtonDiameter, self.abc.primaryButtonDiameter)];
     [self.uploadIcon changeIconType:ICON_UPLOAD];
@@ -44,26 +87,98 @@
     CGFloat addButtonWidth = 120.0f;
     self.bigAddIcon = [[Icon alloc] initWithFrame:CGRectMake(self.view.center.x - addButtonWidth/2, self.view.center.y + self.abc.topBoxHeight - addButtonWidth/2, addButtonWidth, addButtonWidth)];
     [self.bigAddIcon changeIconType:ICON_ADD];
-    [self.bigAddIcon setTag:11];
+    [self.bigAddIcon setTag:1];
     [self.bigAddIcon setMyDelegate:self];
     
     [self.mainView addSubview:self.topSection];
     [self.mainView addSubview:self.bigAddIcon];
-    [self.mainView addSubview:self.uploadIcon];
+    //[self.mainView addSubview:self.uploadIcon];
 }
 
 -(void)iconClicked:(Icon *)icon{
-    NSLog(@"DVC iconClicked");
-    if(icon.tag == 11){
+    NSLog(@"DVC iconClicked: %i, buildStage: %i", icon.tag, self.buildStage);
+    if(icon.tag == 1){
         NSLog(@"DVC big add button");
         
         [UIView animateWithDuration:0.5f animations:^{
-            [self.bigAddIcon setFrame:CGRectMake(40.0f, 90.0f + self.abc.topBoxHeight, 60.0f, 60.0f)];
-            [self.bigAddIcon.layer setCornerRadius:30.0f];
+            [self.bigAddIcon setFrame:CGRectMake(self.abc.builderBuffer + self.ifSize.width + self.abc.builderBuffer, 90.0f + self.abc.topBoxHeight, self.abc.builderIconHeight, self.abc.builderIconHeight)];
+            [self.bigAddIcon.layer setCornerRadius:self.abc.builderIconHeight/2];
             [self.bigAddIcon changeIconType:ICON_CUSTOM];
         } completion:^(BOOL finished){
+            [self.sensorIcon setFrame:CGRectMake(self.bigAddIcon.frame.origin.x, self.bigAddIcon.frame.origin.y, self.bigAddIcon.frame.size.width, self.bigAddIcon.frame.size.height)];
+            [self.mainView addSubview:self.sensorIcon];
+            
+            [self.bigAddIcon removeFromSuperview];
+            NSLog(@"DVC ifLabel width: %f, height: %f", self.ifSize.width, self.ifSize.height);
+            self.buildStage = SENSOR_SELECT;
+            
+            CGFloat heightAdjust = (self.bigAddIcon.frame.size.height - self.ifSize.height)/2;
+            [self.ifLabel setFrame:CGRectMake(self.abc.builderBuffer, 90.0f + self.abc.topBoxHeight + heightAdjust, self.ifSize.width, self.ifSize.height)];
+            [self.mainView addSubview:self.ifLabel];
+            
+            //[self.arrow1 setFrame:CGRectMake(self.ifLabel.frame.origin.y + self.ifLabel.frame.size.width, 90.0f + self.abc.topBoxHeight, self.arrow1.frame.size.width, self.arrow1.frame.size.height)];
+            //[self.mainView addSubview:self.arrow1];
+            
+            
             [self.topSection selectCategoryByType:ICON_SENSOR];
         }];
+    } else if(icon.tag >= 20 && icon.tag < 30 && self.buildStage == SENSOR_SELECT){
+        [self.sensorIcon changeIconType:icon.iconType];
+        [self gotoStage: COMPARATOR_SELECT];
+    } else if(icon.tag >= 30 && icon.tag < 40 && self.buildStage == COMPARATOR_SELECT){
+        [self.comparatorIcon changeIconType:icon.iconType];
+        [self gotoStage:VALUE_SELECT];
+    } else if(icon.tag >= 40 && icon.tag < 50 && self.buildStage == VALUE_SELECT){
+        [self.valueIcon changeIconType:icon.iconType];
+        [self gotoStage:ACTION_SELECT];
+    } else if(icon.tag >= 50 && icon.tag < 60 && self.buildStage == ACTION_SELECT){
+        [self.gestureIcon changeIconType:icon.iconType];
+        [self gotoStage:REGION_SELECT];
+    }
+}
+
+-(void)gotoStage:(BUILD_LISTENER_STATUS)stage{
+    switch (stage) {
+        case PRE_SELECT:
+            self.buildStage = PRE_SELECT;
+            break;
+        
+        case SENSOR_SELECT:
+            self.buildStage = SENSOR_SELECT;
+            break;
+        
+        case COMPARATOR_SELECT:
+            self.buildStage = COMPARATOR_SELECT;
+            [self.isLabel setFrame:CGRectMake(self.bigAddIcon.frame.size.width + self.bigAddIcon.frame.origin.x + self.abc.builderBuffer, self.bigAddIcon.frame.origin.y + (self.bigAddIcon.frame.size.height - self.isSize.height)/2, self.isSize.width, self.isSize.height)];
+            [self.mainView addSubview:self.isLabel];
+            [self.comparatorIcon setFrame:CGRectMake(self.isLabel.frame.origin.x + self.isLabel.frame.size.width + self.abc.builderBuffer, self.bigAddIcon.frame.origin.y, self.comparatorIcon.frame.size.width, self.comparatorIcon.frame.size.height)];
+            [self.mainView addSubview:self.comparatorIcon];
+            [self.topSection selectCategoryByType:ICON_COMPARATOR];
+            break;
+        
+        case VALUE_SELECT:
+            self.buildStage = VALUE_SELECT;
+            [self.valueIcon setFrame:CGRectMake(self.comparatorIcon.frame.origin.x + self.comparatorIcon.frame.size.width + self.abc.builderBuffer, self.comparatorIcon.frame.origin.y, self.abc.builderIconHeight, self.abc.builderIconHeight)];
+            [self.mainView addSubview:self.valueIcon];
+            [self.topSection selectCategoryByType:ICON_VALUE];
+            break;
+        
+        case ACTION_SELECT:
+            self.buildStage = ACTION_SELECT;
+            [self.applyLabel setFrame:CGRectMake(self.abc.builderBuffer, self.comparatorIcon.frame.origin.y + self.comparatorIcon.frame.size.height + self.abc.builderBuffer + (self.comparatorIcon.frame.size.height - self.applySize.height)/2, self.applySize.width, self.applySize.height)];
+            [self.mainView addSubview:self.applyLabel];
+            
+            [self.gestureIcon setFrame:CGRectMake(self.applyLabel.frame.origin.x + self.applyLabel.frame.size.width + self.abc.builderBuffer, self.comparatorIcon.frame.size.height + self.comparatorIcon.frame.origin.y + self.abc.builderBuffer, self.abc.builderIconHeight, self.abc.builderIconHeight)];
+            [self.mainView addSubview:self.gestureIcon];
+            [self.topSection selectCategoryByType:ICON_GESTURE];
+            
+            break;
+        
+        case REGION_SELECT:
+            break;
+            
+        default:
+            break;
     }
 }
 
