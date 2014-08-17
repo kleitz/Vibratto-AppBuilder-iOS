@@ -28,6 +28,8 @@
 @property(strong, nonatomic) UIImage *numberImage;
 @property(strong, nonatomic) UIImage *increasePowerImage;
 @property(strong, nonatomic) UIImage *decreasePowerImage;
+@property(strong, nonatomic) UIImage *allImage;
+@property(strong, nonatomic) UIImage *confirmImage;
 
 @property(strong, nonatomic) UIFont *labelFont;
 
@@ -46,5 +48,6 @@
 @property(assign, nonatomic) CGFloat topBoxAddIconBoxWidth;
 @property(assign, nonatomic) CGFloat builderIconHeight;
 @property(assign, nonatomic) CGFloat builderBuffer;
+@property(assign, nonatomic) CGFloat confirmListenerButtonHeight;
 
 @end

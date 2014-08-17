@@ -114,6 +114,14 @@
         case ICON_INCREASE_POWER:
             [self.bgImage setImage:self.constants.increasePowerImage];
             break;
+        
+        case ICON_ALL:
+            [self.bgImage setImage:self.constants.allImage];
+            break;
+        
+        case ICON_CONFIRM:
+            [self.bgImage setImage:self.constants.confirmImage];
+            break;
             
         default:
             break;

@@ -24,7 +24,7 @@ static AppBuilderConstants *abc;
         abc.gestureImageDefault = [UIImage imageNamed:@"reload.png"];
         abc.uploadImageDefault = [UIImage imageNamed:@"box1.png"];
         abc.tiltImageDefault = [UIImage imageNamed:@"refresh.png"];
-        abc.mapImageDefault = [UIImage imageNamed:@"map.png"];
+        abc.mapImageDefault = [UIImage imageNamed:@"map_pin.png"];
         abc.rightArrowImage = [UIImage imageNamed:@"arrow.png"];
         abc.comparatorImage = [UIImage imageNamed:@"arrow17.png"];
         abc.greaterThenImage = [UIImage imageNamed:@"arrow17.png"];
@@ -32,6 +32,8 @@ static AppBuilderConstants *abc;
         abc.numberImage = [UIImage imageNamed:@"calcuator.png"];
         abc.increasePowerImage = [UIImage imageNamed:@"arrow4.png"];
         abc.decreasePowerImage = [UIImage imageNamed:@"arrow2.png"];
+        abc.allImage = [UIImage imageNamed:@"earth.png"];
+        abc.confirmImage = [UIImage imageNamed:@"right.png"];
         
         abc.labelFont = [UIFont systemFontOfSize:42];
         
@@ -49,6 +51,7 @@ static AppBuilderConstants *abc;
         abc.iconImagePercent = 0.7f;
         abc.builderIconHeight = 60.0f;
         abc.builderBuffer = 15.0f;
+        abc.confirmListenerButtonHeight = 80.0f;
         
         abc.topBoxAddIconBoxWidth = 80.0f;
     }

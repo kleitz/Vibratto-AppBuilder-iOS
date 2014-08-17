@@ -32,7 +32,13 @@
         self.comparatorIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.builderIconHeight, self.abc.builderIconHeight)];
         self.valueIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.builderIconHeight, self.abc.builderIconHeight)];
         self.gestureIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.builderIconHeight, self.abc.builderIconHeight)];
-    
+        self.regionIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.builderIconHeight, self.abc.builderIconHeight)];
+        
+        self.confirmListenerIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.confirmListenerButtonHeight, self.abc.confirmListenerButtonHeight)];
+        [self.confirmListenerIcon changeIconType:ICON_CONFIRM];
+        [self.confirmListenerIcon setMyDelegate:self];
+        [self.confirmListenerIcon setTag:2];
+        
         [self initLabel:self.ifLabel text:@"If" andSize:self.ifSize];
         [self.ifLabel setText:@"If"];
 
@@ -42,13 +48,13 @@
         [self initLabel:self.applyLabel text:@"then" andSize:self.applySize];
         [self.applyLabel setText:@"then"];
         
-        [self initLabel:self.ontoLabel text:@"onto" andSize:self.ontoSize];
-        [self.ontoLabel setText:@"onto"];
+        [self initLabel:self.ontoLabel text:@"on" andSize:self.ontoSize];
+        [self.ontoLabel setText:@"on"];
         
         self.ifSize = [@"If" sizeWithFont:self.abc.labelFont];
         self.isSize = [@"is" sizeWithFont:self.abc.labelFont];
         self.applySize = [@"then" sizeWithFont:self.abc.labelFont];
-        self.ontoSize = [@"onto" sizeWithFont:self.abc.labelFont];
+        self.ontoSize = [@"on" sizeWithFont:self.abc.labelFont];
         
         self.arrow1 = [[UIImageView alloc] initWithImage:self.abc.rightArrowImage];
     }
@@ -122,6 +128,8 @@
             
             [self.topSection selectCategoryByType:ICON_SENSOR];
         }];
+    } else if(icon.tag == 2){
+        NSLog(@"DVC confirm listener clicked");
     } else if(icon.tag >= 20 && icon.tag < 30 && self.buildStage == SENSOR_SELECT){
         [self.sensorIcon changeIconType:icon.iconType];
         [self gotoStage: COMPARATOR_SELECT];
@@ -134,6 +142,9 @@
     } else if(icon.tag >= 50 && icon.tag < 60 && self.buildStage == ACTION_SELECT){
         [self.gestureIcon changeIconType:icon.iconType];
         [self gotoStage:REGION_SELECT];
+    } else if(icon.tag >= 60 && icon.tag < 70 && self.buildStage == REGION_SELECT){
+        [self.regionIcon changeIconType:icon.iconType];
+        [self gotoStage:CONFIRM_LISTENER];
     }
 }
 
@@ -175,6 +186,20 @@
             break;
         
         case REGION_SELECT:
+            self.buildStage = REGION_SELECT;
+            [self.ontoLabel setFrame:CGRectMake(self.gestureIcon.frame.origin.x + self.gestureIcon.frame.size.width + self.abc.builderBuffer, self.gestureIcon.frame.origin.y + (self.gestureIcon.frame.size.height - self.ontoSize.height)/2, self.ontoSize.width, self.ontoSize.height)];
+            [self.mainView addSubview:self.ontoLabel];
+            
+            [self.regionIcon setFrame:CGRectMake(self.ontoLabel.frame.origin.x + self.ontoLabel.frame.size.width + self.abc.builderBuffer, self.gestureIcon.frame.origin.y, self.abc.builderIconHeight, self.abc.builderIconHeight)];
+            [self.mainView addSubview:self.regionIcon];
+            [self.topSection selectCategoryByType:ICON_REGION];
+            break;
+        
+        case CONFIRM_LISTENER:
+            self.buildStage = CONFIRM_LISTENER;
+            [self.confirmListenerIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.confirmListenerButtonHeight/2, self.gestureIcon.frame.origin.y + self.gestureIcon.frame.size.height + self.abc.builderBuffer, self.abc.confirmListenerButtonHeight, self.abc.confirmListenerButtonHeight)];
+            [self.mainView addSubview:self.confirmListenerIcon];
+            
             break;
             
         default:

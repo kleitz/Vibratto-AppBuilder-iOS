@@ -82,6 +82,11 @@
         [self.iconBox emptyBox];
         
         
+        [self.iconBox addIcon:ICON_ALL andIconImage:nil andDelegate:self andTag:60];
+        
+        [self.regionsArray addObject:[self.iconBox returnItemAtIndex:0]];
+        [self.iconBox emptyBox];
+        
         [self addSubview:self.iconBox];
         [self addSubview:self.categories];
     }
