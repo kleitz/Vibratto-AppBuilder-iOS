@@ -29,6 +29,7 @@ typedef enum {
     ICON_DECREASE_POWER,
     ICON_ALL,
     ICON_CONFIRM,
+    ICON_CUSTOM_VALUE,
     ICON_CUSTOM
 } ICON_TYPE;
 
@@ -45,13 +46,18 @@ typedef enum {
 @property(strong, nonatomic) UIImageView *bgImage;
 @property(strong, nonatomic) UIImage *customImage;
 
+@property(strong, nonatomic) UILabel *customLabel;
+
 @property(strong, nonatomic) AppBuilderConstants *constants;
 @property(weak, nonatomic) id<IconDelegate> myDelegate;
 @property(assign, nonatomic) ICON_TYPE iconType;
+
+@property(assign, nonatomic) int customValue;
 
 @property(assign, nonatomic) BOOL isHighlighted;
 
 -(void)changeIconType:(ICON_TYPE)iconType;
 -(void)toggleHighlighted;
+-(void)changeCustomValue:(int)customValue setAsIconType:(BOOL)changeIconType;
 
 @end

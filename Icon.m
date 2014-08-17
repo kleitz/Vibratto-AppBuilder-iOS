@@ -14,12 +14,18 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.customValue = 0;
         self.constants = [AppBuilderConstants getAppBuilderConstants];
         self.isHighlighted = NO;
         self.iconType = ICON_CUSTOM;
         self.bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width * ((1.0f - self.constants.iconImagePercent)/2), self.frame.size.height * ((1.0f - self.constants.iconImagePercent)/2), self.frame.size.width * self.constants.iconImagePercent, self.frame.size.height * self.constants.iconImagePercent)];
         self.customImage = [[UIImage alloc] init];
         self.layer.cornerRadius = self.frame.size.width/2;
+        
+        self.customLabel = [[UILabel alloc] init];
+        [self.customLabel setTextAlignment:NSTextAlignmentCenter];
+        [self.customLabel setBackgroundColor:[UIColor clearColor]];
+        //[self addSubview:self.customLabel];
         //self.layer.borderColor = [UIColor lightGrayColor].CGColor;
         //self.layer.borderWidth = 1.0f;
         
@@ -47,9 +53,17 @@
     }
 }
 
+-(void)changeCustomValue:(int)customValue setAsIconType:(BOOL)changeIconType{
+    self.customValue = customValue;
+    if(changeIconType){
+        [self changeIconType:ICON_CUSTOM_VALUE];
+    }
+}
+
 -(void)changeIconType:(ICON_TYPE)iconType{
     //NSLog(@"Icon changeIconType");
     [self setIconType:iconType];
+    [self.customLabel removeFromSuperview];
     switch (self.iconType) {
         case ICON_ADD:
             [self.bgImage setImage:self.constants.plusImage];
@@ -90,11 +104,7 @@
         case ICON_UPLOAD:
             [self.bgImage setImage:self.constants.uploadImageDefault];
             break;
-        
-        case ICON_CUSTOM:
-            [self.bgImage setImage:self.customImage];
-            break;
-        
+            
         case ICON_MAP:
             [self.bgImage setImage:self.constants.mapImageDefault];
             break;
@@ -122,7 +132,17 @@
         case ICON_CONFIRM:
             [self.bgImage setImage:self.constants.confirmImage];
             break;
+
+        case ICON_CUSTOM_VALUE:
+            [self.customLabel setFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+            [self.customLabel.layer setCornerRadius:self.frame.size.height];
+            [self.customLabel setText:[NSString stringWithFormat:@"%i", self.customValue]];
+            [self addSubview:self.customLabel];
             
+        case ICON_CUSTOM:
+            [self.bgImage setImage:self.customImage];
+            break;
+
         default:
             break;
     }

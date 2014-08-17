@@ -37,6 +37,7 @@
 -(void)emptyBox;
 -(void)fillBox:(NSArray *)newItems andDelegate:(id<IconDelegate>)delegate;
 -(void)changeHasAddBox:(BOOL)hasAddBox;
+-(void)addIcon:(Icon *)iconToAdd;
 
 -(Icon *)returnItemAtIndex:(NSInteger)index;
 

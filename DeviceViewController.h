@@ -21,7 +21,7 @@ typedef enum {
     BUILD_LISTENER
 } BUILD_LISTENER_STATUS;
 
-@interface DeviceViewController : UIViewController<IconDelegate>
+@interface DeviceViewController : UIViewController<IconDelegate, UIAlertViewDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;
 

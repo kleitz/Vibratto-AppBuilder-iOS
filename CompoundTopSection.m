@@ -185,7 +185,8 @@
     }
     
     if(iconCategory == self.selectedCategory.iconType){
-        [self.iconBox addIcon:icon.iconType andIconImage:nil andDelegate:nil andTag:0];
+        //[self.iconBox addIcon:icon.iconType andIconImage:nil andDelegate:nil andTag:0];
+        [self.iconBox addIcon:icon];
     }
 }
 

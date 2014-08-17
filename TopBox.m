@@ -54,6 +54,8 @@
         [[self.boxItems objectAtIndex:i] removeFromSuperview];
         [self.boxItems removeObjectAtIndex:i];
     }
+    
+    [self.scrollBar setContentSize:CGSizeMake(0, self.scrollBar.contentSize.height)];
 }
 
 -(void)fillBox:(NSArray *)newItems andDelegate:(id<IconDelegate>)delegate{
@@ -149,6 +151,12 @@
     [self.boxItems addObject:newIcon];
     [self.scrollBar addSubview:newIcon];
     
+    self.displayCount++;
+}
+
+-(void)addIcon:(Icon *)iconToAdd{
+    [self.boxItems addObject:iconToAdd];
+    [self.scrollBar addSubview:iconToAdd];
     self.displayCount++;
 }
 

@@ -141,6 +141,12 @@
     } else if(icon.tag >= 30 && icon.tag < 40 && self.buildStage == COMPARATOR_SELECT){
         [self.comparatorIcon changeIconType:icon.iconType];
         [self gotoStage:VALUE_SELECT];
+    } else if(icon.tag == 40 && self.buildStage == VALUE_SELECT){
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Set Value" message:@"Enter Value (0-1023)" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
+        [alertView setTag:1];
+        [alertView show];
     } else if(icon.tag >= 40 && icon.tag < 50 && self.buildStage == VALUE_SELECT){
         [self.valueIcon changeIconType:icon.iconType];
         [self gotoStage:ACTION_SELECT];
@@ -327,6 +333,21 @@
         [UIView animateWithDuration:0.2f animations:^{
             [self.mainView setFrame:CGRectMake(self.mainView.frame.origin.x, 0, self.mainView.frame.size.width, self.mainView.frame.size.height)];
         }];
+    }
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"DVC alertView clickedbutton: %i, tag: %i", buttonIndex, alertView.tag);
+    if(alertView.tag == 1){
+        NSLog(@"DVC value input alertview");
+        
+        if(buttonIndex == 1){
+            int textVal = [[[alertView textFieldAtIndex:0] text] intValue];
+            if(textVal < 1024){
+                [self.valueIcon changeCustomValue:[[[alertView textFieldAtIndex:0] text] intValue] setAsIconType:YES];
+                [self gotoStage:ACTION_SELECT];
+            }
+        }
     }
 }
 
