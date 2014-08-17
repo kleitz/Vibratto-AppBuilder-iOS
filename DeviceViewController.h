@@ -17,7 +17,8 @@ typedef enum {
     VALUE_SELECT,
     REGION_SELECT,
     ACTION_SELECT,
-    CONFIRM_LISTENER
+    CONFIRM_LISTENER,
+    BUILD_LISTENER
 } BUILD_LISTENER_STATUS;
 
 @interface DeviceViewController : UIViewController<IconDelegate>
@@ -34,6 +35,7 @@ typedef enum {
 @property(strong, nonatomic) Icon *bigAddIcon;
 @property(strong, nonatomic) Icon *uploadIcon;
 @property(strong, nonatomic) Icon *confirmListenerIcon;
+@property(strong, nonatomic) Icon *createdListenerIcon;
 
 @property(strong, nonatomic) Icon *sensorIcon;
 @property(strong, nonatomic) Icon *comparatorIcon;

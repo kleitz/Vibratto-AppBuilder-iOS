@@ -37,9 +37,13 @@ static AppBuilderConstants *abc;
         
         abc.labelFont = [UIFont systemFontOfSize:42];
         
+        //abfff1
         abc.primaryColor1 = [[UIColor alloc] initWithRed:0.671 green:1.0 blue:0.945 alpha:1.0];
+        //abb9ff
         abc.primaryColor2 = [[UIColor alloc] initWithRed:0.671 green:0.725 blue:1.00 alpha:1.0];
+        //b2ffab
         abc.primaryColor3 = [[UIColor alloc] initWithRed:.698 green:1.0 blue:0.671 alpha:1.0];
+        //ffe7ab
         abc.primaryColor4 = [[UIColor alloc] initWithRed:1.0 green:0.906f blue:0.671 alpha:1.0f];
         abc.seeThruColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:0.65];
         abc.seeThruColorHighlight = [[UIColor alloc] initWithRed:0.7f green:0.7f blue:0.7f alpha:0.65];
@@ -52,6 +56,7 @@ static AppBuilderConstants *abc;
         abc.builderIconHeight = 60.0f;
         abc.builderBuffer = 15.0f;
         abc.confirmListenerButtonHeight = 80.0f;
+        abc.bigAddButtonHeight = 120.0f;
         
         abc.topBoxAddIconBoxWidth = 80.0f;
     }

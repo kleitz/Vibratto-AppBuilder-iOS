@@ -133,6 +133,62 @@
     [self.delegate iconClicked:icon];
 }
 
+-(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag{
+    NSMutableArray *thisArray;
+    Icon *icon;
+    switch (iconCategory) {
+        case ICON_ACTUATOR:
+            /*
+            self.actuatorsArray.count * self.abc.iconHeight + (self.actuatorsArray.count + 1) * self.iconBox.iconBuffer
+            Icon *icon = [Icon alloc] initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, , <#CGFloat height#>)
+            [self.actuatorsArray addObject:icon];
+            */
+            thisArray = self.actuatorsArray;
+        
+            //break;
+        
+        case ICON_SENSOR:
+            //[self.sensorArray addObject:icon];
+            //break;
+            thisArray = self.sensorArray;
+        
+        case ICON_GESTURE:
+            //[self.gesturesArray addObject:icon];
+            //break;
+            thisArray = self.gesturesArray;
+        
+        case ICON_REGION:
+            //[self.regionsArray addObject:icon];
+            //break;
+            thisArray = self.regionsArray;
+        
+        case ICON_LISTENER:
+            thisArray = self.listenersArray;
+            //[self.listenersArray addObject:icon];
+            //break;
+            
+        default:{
+            CGFloat iconX = thisArray.count * self.abc.iconHeight + (thisArray.count + 1) * self.iconBox.iconBuffer;
+            icon = [[Icon alloc] initWithFrame:CGRectMake(iconX, (self.abc.topBoxHeight - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
+            [icon changeIconType:iconType];
+            [icon setCustomImage:iconImage];
+            [icon setTag:tag];
+            if(delegate != nil){
+                [icon setMyDelegate:delegate];
+            } else {
+                [icon setMyDelegate:self];
+            }
+            
+            [thisArray addObject:icon];
+        }
+            break;
+    }
+    
+    if(iconCategory == self.selectedCategory.iconType){
+        [self.iconBox addIcon:icon.iconType andIconImage:nil andDelegate:nil andTag:0];
+    }
+}
+
 -(void)selectCategory:(Icon *)icon{
     
     [icon toggleHighlighted];
@@ -144,7 +200,7 @@
     if(self.selectedCategory == icon){
         NSLog(@"CTS icon is equal");
         [self.selectedCategory toggleHighlighted];
-        //self.selectedCategory = nil;
+        self.selectedCategory = nil;
     } else {
         NSLog(@"CTS icon not equal");
         self.selectedCategory = icon;

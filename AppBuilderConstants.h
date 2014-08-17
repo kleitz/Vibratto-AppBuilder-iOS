@@ -49,5 +49,6 @@
 @property(assign, nonatomic) CGFloat builderIconHeight;
 @property(assign, nonatomic) CGFloat builderBuffer;
 @property(assign, nonatomic) CGFloat confirmListenerButtonHeight;
+@property(assign, nonatomic) CGFloat bigAddButtonHeight;
 
 @end
