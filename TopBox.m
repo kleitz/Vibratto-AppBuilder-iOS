@@ -8,6 +8,7 @@
 
 #import "TopBox.h"
 #import "Icon.h"
+#import "IconSubtitle.h"
 
 @implementation TopBox
 

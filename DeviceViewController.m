@@ -67,15 +67,10 @@
 }
 
 -(void)initLabel:(UILabel *)label text:(NSString *)text andSize:(CGSize)labelSize{
-    //label = [[UILabel alloc] init];
-    //[label setText:text];
+
     [label setTextColor:[UIColor whiteColor]];
     [label setFont:self.abc.labelFont];
     [label setBackgroundColor:[UIColor clearColor]];
-
-    //labelSize = [text sizeWithFont:[UIFont systemFontOfSize:22]];
-    
-    //NSLog(@"DVC labelSize height: %f, width: %f", labelSize.height, labelSize.width);
 }
 
 - (void)viewDidLoad
@@ -106,7 +101,7 @@
 }
 
 -(void)iconClicked:(Icon *)icon{
-    NSLog(@"DVC iconClicked: %i, buildStage: %i", icon.tag, self.buildStage);
+    NSLog(@"DVC iconClicked: %li, buildStage: %i", icon.tag, self.buildStage);
     if(icon.tag == 1){
         NSLog(@"DVC big add button");
         
