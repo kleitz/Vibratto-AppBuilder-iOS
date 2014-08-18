@@ -13,13 +13,14 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    NSLog(@"IconSubtitle initWithFrame");
     if (self) {
         self.iconRatio = 0.8f;
-        [self setBackgroundColor:[UIColor clearColor]];
-        self.icon = [[Icon alloc] initWithFrame:CGRectMake(frame.size.width * (self.iconRatio/2), frame.size.height * (self.iconRatio/2), self.iconRatio * frame.size.width, self.frame.size.height)];
+
         self.subtitle = [[UILabel alloc] init];
         [self.subtitle setBackgroundColor:[UIColor clearColor]];
         [self.subtitle setTextColor:[UIColor darkGrayColor]];
+        [self.subtitle setFont:[UIFont systemFontOfSize:10]];
         [self addSubview:self.subtitle];
     }
     return self;
@@ -28,7 +29,7 @@
 -(void)changeSubtitle:(NSString *)text{
     self.subtitleSize = [text sizeWithFont:self.subtitle.font];
     [self.subtitle setText:text];
-    [self.subtitle setFrame:CGRectMake(self.center.x - (self.subtitleSize.width/2), self.icon.frame.origin.y + self.icon.frame.size.height, self.subtitleSize.width, self.subtitleSize.height)];
+    [self.subtitle setFrame:CGRectMake((self.frame.size.width/2) - (self.subtitleSize.width/2), (self.frame.size.height), self.subtitleSize.width, self.subtitleSize.height)];
 }
 
 @end

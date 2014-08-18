@@ -9,14 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "Icon.h"
 
-@interface IconSubtitle : UIView
-
-@property(strong, nonatomic) Icon *icon;
+@interface IconSubtitle : Icon
 
 @property(strong, nonatomic) UILabel *subtitle;
 
 @property(assign, nonatomic) CGFloat iconRatio;
 
 @property(assign, nonatomic) CGSize subtitleSize;
+
+-(void)changeSubtitle:(NSString *)text;
 
 @end

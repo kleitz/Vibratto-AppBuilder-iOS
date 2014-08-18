@@ -121,10 +121,6 @@
             [self.ifLabel setFrame:CGRectMake(self.abc.builderBuffer, 90.0f + self.abc.topBoxHeight + heightAdjust, self.ifSize.width, self.ifSize.height)];
             [self.mainView addSubview:self.ifLabel];
             
-            //[self.arrow1 setFrame:CGRectMake(self.ifLabel.frame.origin.y + self.ifLabel.frame.size.width, 90.0f + self.abc.topBoxHeight, self.arrow1.frame.size.width, self.arrow1.frame.size.height)];
-            //[self.mainView addSubview:self.arrow1];
-            
-            
             [self.topSection selectCategoryByType:ICON_SENSOR];
         }];
     } else if(icon.tag == 2){
@@ -273,7 +269,7 @@
                     [self.createdListenerIcon.layer setCornerRadius:self.abc.iconHeight/2];
                 } completion:^(BOOL finished){
                     //[self.topSection.iconBox addIcon:ICON_CUSTOM andIconImage:nil andDelegate:nil andTag:100];
-                    [self.topSection addNewIconInCategory:ICON_LISTENER iconType:ICON_CUSTOM andIconImage:nil andDelegate:self andTag:0];
+                    [self.topSection addNewIconInCategory:ICON_LISTENER iconType:ICON_CUSTOM andIconImage:nil andDelegate:self andTag:0 subtitle:nil];
                     [self.createdListenerIcon changeIconType:ICON_CUSTOM];
                     [self.createdListenerIcon removeFromSuperview];
                     [self gotoStage:PRE_SELECT];

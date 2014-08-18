@@ -49,8 +49,9 @@ static AppBuilderConstants *abc;
         abc.seeThruColorHighlight = [[UIColor alloc] initWithRed:0.7f green:0.7f blue:0.7f alpha:0.65];
         
         abc.primaryButtonDiameter = 60.0f;
-        abc.iconHeight = 50.0f;
-        abc.topBoxHeight = abc.iconHeight * 1.2f;
+        abc.iconHeight = 46.0f;
+        abc.iconTopBuffer = 4.0f;
+        abc.topBoxHeight = abc.iconHeight * 1.38f;
         abc.iconImageHeight = 45.0f;
         abc.iconImagePercent = 0.7f;
         abc.builderIconHeight = 60.0f;

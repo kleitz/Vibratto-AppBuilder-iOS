@@ -33,7 +33,6 @@
 @property(assign, nonatomic) int visibleCount;
 
 -(void)selectCategoryByType:(ICON_TYPE)iconType;
--(void)addNewIconInCategory:(Icon *)icon;
--(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag;
+-(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag subtitle:(NSString *)text;
 
 @end

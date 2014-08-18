@@ -62,7 +62,13 @@
 -(void)fillBox:(NSArray *)newItems andDelegate:(id<IconDelegate>)delegate{
     for(int i=0; i<newItems.count; i++){
         Icon *thisIcon = [newItems objectAtIndex:i];
-        [self addIcon:thisIcon.iconType andIconImage:thisIcon.customImage andDelegate:delegate andTag:thisIcon.tag];
+        if([thisIcon isKindOfClass:[IconSubtitle class]]){
+            NSString *subtitleText = ((IconSubtitle *)thisIcon).subtitle.text;
+            [self addIcon:thisIcon.iconType andIconImage:thisIcon.customImage andDelegate:delegate andTag:thisIcon.tag andSubtitle:subtitleText];
+        } else {
+            [self addIcon:thisIcon.iconType andIconImage:thisIcon.customImage andDelegate:delegate andTag:thisIcon.tag andSubtitle:nil];
+        }
+        
     }
 }
 
@@ -73,7 +79,8 @@
     self.displayCount = 0;
     
     self.boxItems = [[NSMutableArray alloc] init];
-    self.iconBuffer = self.frame.size.height/2 - self.abc.iconHeight/2;
+    //self.iconBuffer = self.frame.size.height/2 - self.abc.iconHeight/2;
+    self.iconBuffer = self.abc.iconTopBuffer;
     self.selectedIcon = nil;
     self.isCentered = NO;
     
@@ -121,16 +128,29 @@
     }
 }
 
--(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag{
+-(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag andSubtitle:(NSString *)subtitle{
     //NSLog(@"TopBox addIcon");
+
     Icon *newIcon;
+    
     if(self.boxItems.count > 0){
         Icon *lastIcon = [self.boxItems objectAtIndex:self.boxItems.count-1];
         
-        newIcon = [[Icon alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), lastIcon.frame.origin.y, self.abc.iconHeight, self.abc.iconHeight)];
+        if(subtitle == nil){
+            newIcon = [[Icon alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), lastIcon.frame.origin.y, self.abc.iconHeight, self.abc.iconHeight)];
+        } else {
+            newIcon = [[IconSubtitle alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), lastIcon.frame.origin.y, self.abc.iconHeight, self.abc.iconHeight)];
+            [((IconSubtitle *)newIcon) changeSubtitle:subtitle];
+        }
 
     } else {
-        newIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+        if(subtitle == nil){
+            newIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+        } else {
+            newIcon = [[IconSubtitle alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+            [((IconSubtitle *)newIcon) changeSubtitle:subtitle];
+        }
+        
     }
     
     [self.scrollBar setContentSize:CGSizeMake(self.scrollBar.contentSize.width + newIcon.frame.size.width + (2 * self.iconBuffer), self.scrollBar.contentSize.height)];

@@ -29,7 +29,7 @@
 @property(assign, nonatomic) BOOL hasAddButton;
 @property(assign, nonatomic) BOOL isCentered;
 
--(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag;
+-(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag andSubtitle:(NSString *)subtitle;
 -(void)addIconWithoutDisplay:(ICON_TYPE)iconType andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag;
 -(id)initWithFrame:(CGRect)frame andHasAddBox:(BOOL)hasAddButton;
 -(void)changeIsCentered:(BOOL)isCentered;

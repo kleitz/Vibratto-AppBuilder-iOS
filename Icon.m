@@ -13,6 +13,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    NSLog(@"Icon initWithFrame");
     if (self) {
         self.customValue = 0;
         self.constants = [AppBuilderConstants getAppBuilderConstants];
