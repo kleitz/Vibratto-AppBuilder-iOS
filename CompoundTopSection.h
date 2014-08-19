@@ -23,6 +23,8 @@
 @property(strong, nonatomic) TopBox *categories;
 @property(strong, nonatomic) TopBox *iconBox;
 
+@property(strong, nonatomic) DropDownMenu *visibleDropDown;
+
 @property(strong, nonatomic) Icon *selectedCategory;
 
 @property(strong, nonatomic) NSMutableArray *categoriesArray;

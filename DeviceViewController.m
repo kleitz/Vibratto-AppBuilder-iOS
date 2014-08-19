@@ -167,7 +167,8 @@
             [self.bigAddIcon setFrame:CGRectMake(self.view.center.x - self.abc.bigAddButtonHeight/2, self.view.center.y + self.abc.topBoxHeight - self.abc.bigAddButtonHeight/2, self.abc.bigAddButtonHeight, self.abc.bigAddButtonHeight)];
             [self.bigAddIcon changeIconType:ICON_ADD];
             [self.bigAddIcon.layer setCornerRadius:self.abc.bigAddButtonHeight/2];
-            [self.mainView addSubview:self.bigAddIcon];
+            //[self.mainView addSubview:self.bigAddIcon];
+            [self.mainView insertSubview:self.bigAddIcon belowSubview:self.topSection];
             
             break;
         

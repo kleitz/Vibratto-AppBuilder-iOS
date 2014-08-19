@@ -20,6 +20,9 @@
 @property(strong, nonatomic) NSMutableArray *iconTypes;
 @property(strong, nonatomic) TopBox *iconBox;
 
+@property(strong, nonatomic) Icon *okButton;
+@property(strong, nonatomic) Icon *cancelButton;
+
 @property(assign, nonatomic) CGFloat titleY;
 @property(assign, nonatomic) CGFloat iconBoxHeight;
 
@@ -29,5 +32,6 @@
 -(void)createTextField:(NSString *)text;
 -(void)addFields;
 -(void)displayIcons;
+-(void)setButtons;
 
 @end

@@ -15,14 +15,18 @@
     self = [super initWithFrame:frame];
     
     if(self){
-        self.hasIcons = NO;
+        self.hasIcons = YES;
+        
+        for(int i=0; i<10; i++){
+            [self.iconTypes addObject:[NSNumber numberWithInt:i]];
+        }
         
         [self createTextField:@"Name (Optional)"];
         [self createTextField:@"Pin Number"];
         
         NSLog(@"ADD textFields count: %i", self.textFields.count);
         
-        CGFloat ddHeight = self.titleY + (self.textFields.count * self.abc.dropDownMenuFeildHeight);
+        CGFloat ddHeight = self.titleY + self.abc.iconHeight + self.abc.dropDownGroupBuffer + (self.textFields.count * self.abc.dropDownMenuFeildHeight);
         if(self.hasIcons){
             ddHeight += self.iconBoxHeight;
         }
@@ -33,10 +37,13 @@
         
         [self setFieldName:@"Create Actuator"];
         [self addFields];
+
         
         if(self.hasIcons){
             [self displayIcons];
         }
+        
+        [self setButtons];
     }
     
     return self;

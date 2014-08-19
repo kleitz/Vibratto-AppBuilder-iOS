@@ -66,6 +66,8 @@ static AppBuilderConstants *abc;
         abc.dropDownMenuFeildHeight = 40.0f;
         abc.dropDownMenuTitleHeight = 40.0f;
         abc.dropDownChooseIconLabelHeight = 35.0f;
+        abc.dropDownGroupBuffer = 5.0f;
+        abc.dropDownFieldBuffer = 1.0f;
     }
     
     return abc;

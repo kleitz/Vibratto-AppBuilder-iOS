@@ -56,5 +56,7 @@
 @property(assign, nonatomic) CGFloat dropDownMenuFeildHeight;
 @property(assign, nonatomic) CGFloat dropDownMenuTitleHeight;
 @property(assign, nonatomic) CGFloat dropDownChooseIconLabelHeight;
+@property(assign, nonatomic) CGFloat dropDownFieldBuffer;
+@property(assign, nonatomic) CGFloat dropDownGroupBuffer;
 
 @end

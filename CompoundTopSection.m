@@ -16,6 +16,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.visibleCount = 0;
+        self.visibleDropDown = nil;
         
         self.abc = [AppBuilderConstants getAppBuilderConstants];
         self.actuatorsArray = [[NSMutableArray alloc] init];
@@ -95,23 +96,45 @@
     return self;
 }
 
+-(void)showDropDown:(DropDownMenu *)dropDown{
+    [dropDown setFrame:CGRectMake(0, self.frame.size.height - dropDown.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
+    //[self addSubview:dropDown];
+    [self insertSubview:dropDown belowSubview:[self.subviews objectAtIndex:0]];
+    
+    [UIView animateWithDuration:0.4f animations:^{
+        [dropDown setFrame:CGRectMake(0, self.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
+    } completion:^(BOOL finished){
+        [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height + dropDown.frame.size.height)];
+        
+    }];
+}
+
+-(void)retractDropDown{
+    [UIView animateWithDuration:0.4f animations:^{
+        [self.visibleDropDown setFrame:CGRectMake(self.visibleDropDown.frame.origin.x, self.visibleDropDown.frame.origin.y - self.visibleDropDown.frame.size.height, self.visibleDropDown.frame.size.width, self.visibleDropDown.frame.size.height)];
+    } completion: ^(BOOL finished){
+        [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height - self.visibleDropDown.frame.size.height)];
+        [self.visibleDropDown removeFromSuperview];
+        self.visibleDropDown = nil;
+    }];
+}
+
 -(void)iconClicked:(Icon *)icon{
     NSLog(@"CompoundTopSection iconClicked");
     switch (icon.tag) {
         case 10000:{
-            if(self.selectedCategory.iconType == ICON_ACTUATOR){
+            if(self.visibleDropDown != nil){
+                [self retractDropDown];
+            } else if(self.selectedCategory.iconType == ICON_ACTUATOR){
                 
                 ActuatorDropDown *dropDown = [[ActuatorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
+                self.visibleDropDown = dropDown;
+                //CGFloat dropDownEndHeight = dropDown.frame.size.height;
                 
-                /*
-                [dropDown setFrame:CGRectMake(0, self.frame.size.height - dropDown.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
-                [self addSubview:dropDown];
+                [self showDropDown:self.visibleDropDown];
                 
-                [UIView animateWithDuration:0.4f animations:^{
-                    [dropDown setFrame:CGRectMake(0, self.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
-                }];
-                */
-                [self.dropDownDelegate showDropDown:dropDown];
+                
+                //[self.dropDownDelegate showDropDown:dropDown];
             }
             
             break;

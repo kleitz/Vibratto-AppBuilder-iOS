@@ -17,12 +17,13 @@
 
     if(self){
         self.abc = [AppBuilderConstants getAppBuilderConstants];
-        [self setBackgroundColor:[UIColor whiteColor]];
+        [self setBackgroundColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0]];
         self.textFields = [[NSMutableArray alloc] init];
         self.iconTypes = [[NSMutableArray alloc] init];
         
         self.iconBoxHeight = self.abc.dropDownChooseIconLabelHeight + self.abc.topBoxHeight;
         self.titleY = self.abc.dropDownMenuTitleHeight;
+        
     }
     
     return self;
@@ -36,6 +37,7 @@
     [textField setPlaceholder:text];
     [textField setFont:self.abc.dropDownTitleFont];
     [textField setTextAlignment:NSTextAlignmentCenter];
+    [textField setDelegate:self];
     
     [self.textFields addObject:textField];
 }
@@ -68,11 +70,29 @@
         ICON_TYPE thisIconType = ((NSNumber *)[self.iconTypes objectAtIndex:i]).intValue;
         [self.iconBox addIcon:thisIconType andIconImage:nil andDelegate:self andTag:0];
     }
+    
+    [self addSubview:self.iconBox];
 }
 
 -(void)iconClicked:(Icon *)icon{
     NSLog(@"DDM iconClicked");
 }
+
+
+-(void)setButtons{
+    CGFloat originY;
+    if(self.hasIcons){
+        originY = self.iconBox.frame.origin.y + self.iconBox.frame.size.height + self.abc.dropDownGroupBuffer;
+    } else {
+        originY = self.titleY + self.textFields.count * (self.abc.dropDownMenuFeildHeight);
+    }
+    
+    self.okButton = [[Icon alloc] initWithFrame:CGRectMake(50.0f, originY, self.abc.iconHeight, self.abc.iconHeight)];
+    [self.okButton changeIconType:ICON_CONFIRM];
+    
+    [self addSubview:self.okButton];
+}
+
 
 -(void)setFieldName:(NSString *)name{
 
@@ -80,7 +100,7 @@
     [self.title setFont:self.abc.dropDownTitleFont];
     [self.title setTextColor:[UIColor darkGrayColor]];
     [self.title setTextAlignment:NSTextAlignmentCenter];
-    
+    [self.title setBackgroundColor:[UIColor clearColor]];
     [self.title setText:name];
     
     [self addSubview:self.title];
