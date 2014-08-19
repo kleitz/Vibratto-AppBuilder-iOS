@@ -79,7 +79,7 @@
     self.displayCount = 0;
     
     self.boxItems = [[NSMutableArray alloc] init];
-    //self.iconBuffer = self.frame.size.height/2 - self.abc.iconHeight/2;
+    CGFloat addIconBuffer = self.frame.size.height/2 - self.abc.addIconHeight/2;
     self.iconBuffer = self.abc.iconTopBuffer;
     self.selectedIcon = nil;
     self.isCentered = NO;
@@ -91,7 +91,7 @@
         self.addIconBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     }
     
-    self.addIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+    self.addIcon = [[Icon alloc] initWithFrame:CGRectMake(addIconBuffer, addIconBuffer, self.abc.addIconHeight, self.abc.addIconHeight)];
     [self.addIcon changeIconType:ICON_ADD];
     [self.addIconBox addSubview:self.addIcon];
     
@@ -133,21 +133,23 @@
 
     Icon *newIcon;
     
+    NSLog(@"TopBox iconBuffer: %f", self.iconBuffer);
+    
     if(self.boxItems.count > 0){
         Icon *lastIcon = [self.boxItems objectAtIndex:self.boxItems.count-1];
         
         if(subtitle == nil){
-            newIcon = [[Icon alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), lastIcon.frame.origin.y, self.abc.iconHeight, self.abc.iconHeight)];
+            newIcon = [[Icon alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), (self.frame.size.height - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
         } else {
-            newIcon = [[IconSubtitle alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), lastIcon.frame.origin.y, self.abc.iconHeight, self.abc.iconHeight)];
+            newIcon = [[IconSubtitle alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), self.abc.iconTopBuffer, self.abc.iconHeight, self.abc.iconHeight)];
             [((IconSubtitle *)newIcon) changeSubtitle:subtitle];
         }
 
     } else {
         if(subtitle == nil){
-            newIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+            newIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, (self.frame.size.height - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
         } else {
-            newIcon = [[IconSubtitle alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+            newIcon = [[IconSubtitle alloc] initWithFrame:CGRectMake(self.iconBuffer, self.abc.iconTopBuffer, self.abc.iconHeight, self.abc.iconHeight)];
             [((IconSubtitle *)newIcon) changeSubtitle:subtitle];
         }
         

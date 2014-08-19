@@ -49,25 +49,25 @@
         
         self.iconBox = [[TopBox alloc] initWithFrame:CGRectMake(0, self.abc.topBoxHeight, self.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
         
-        [self.iconBox addIcon:ICON_TILT andIconImage:nil andDelegate:self andTag:20 andSubtitle:nil];
-        [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:21 andSubtitle:nil];
+        [self.iconBox addIcon:ICON_TILT andIconImage:nil andDelegate:self andTag:20 andSubtitle:@"Rotation"];
+        [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:21 andSubtitle:@"GPS"];
         
         [self.sensorArray addObject:[self.iconBox returnItemAtIndex:0]];
         [self.sensorArray addObject:[self.iconBox returnItemAtIndex:1]];
         [self.iconBox emptyBox];
         
         
-        [self.iconBox addIcon:ICON_GREATERTHEN andIconImage:nil andDelegate:self andTag:30 andSubtitle:nil];
-        [self.iconBox addIcon:ICON_LESSTHEN andIconImage:nil andDelegate:self andTag:31 andSubtitle:nil];
+        [self.iconBox addIcon:ICON_GREATERTHEN andIconImage:nil andDelegate:self andTag:30 andSubtitle:@"above"];
+        [self.iconBox addIcon:ICON_LESSTHEN andIconImage:nil andDelegate:self andTag:31 andSubtitle:@"below"];
         
         [self.comparatorsArray addObject:[self.iconBox returnItemAtIndex:0]];
         [self.comparatorsArray addObject:[self.iconBox returnItemAtIndex:1]];
         [self.iconBox emptyBox];
         
         
-        [self.iconBox addIcon:ICON_NUMBER andIconImage:nil andDelegate:self andTag:40 andSubtitle:nil];
-        [self.iconBox addIcon:ICON_TILT andIconImage:nil andDelegate:self andTag:41 andSubtitle:nil];
-        [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:42 andSubtitle:nil];
+        [self.iconBox addIcon:ICON_NUMBER andIconImage:nil andDelegate:self andTag:40 andSubtitle:@"Value..."];
+        [self.iconBox addIcon:ICON_TILT andIconImage:nil andDelegate:self andTag:41 andSubtitle:@"Rotation"];
+        [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:42 andSubtitle:@"GPS"];
         
         [self.valueArray addObject:[self.iconBox returnItemAtIndex:0]];
         [self.valueArray addObject:[self.iconBox returnItemAtIndex:1]];
@@ -75,15 +75,15 @@
         [self.iconBox emptyBox];
         
         
-        [self.iconBox addIcon:ICON_INCREASE_POWER andIconImage:nil andDelegate:self andTag:50 andSubtitle:nil];
-        [self.iconBox addIcon:ICON_DECREASE_POWER andIconImage:nil andDelegate:self andTag:51 andSubtitle:nil];
+        [self.iconBox addIcon:ICON_INCREASE_POWER andIconImage:nil andDelegate:self andTag:50 andSubtitle:@"+ Power"];
+        [self.iconBox addIcon:ICON_DECREASE_POWER andIconImage:nil andDelegate:self andTag:51 andSubtitle:@"- Power"];
         
         [self.gesturesArray addObject:[self.iconBox returnItemAtIndex:0]];
         [self.gesturesArray addObject:[self.iconBox returnItemAtIndex:1]];
         [self.iconBox emptyBox];
         
         
-        [self.iconBox addIcon:ICON_ALL andIconImage:nil andDelegate:self andTag:60 andSubtitle:nil];
+        [self.iconBox addIcon:ICON_ALL andIconImage:nil andDelegate:self andTag:60 andSubtitle:@"Device"];
         
         [self.regionsArray addObject:[self.iconBox returnItemAtIndex:0]];
         [self.iconBox emptyBox];

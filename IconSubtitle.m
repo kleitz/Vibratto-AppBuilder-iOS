@@ -20,7 +20,7 @@
         self.subtitle = [[UILabel alloc] init];
         [self.subtitle setBackgroundColor:[UIColor clearColor]];
         [self.subtitle setTextColor:[UIColor darkGrayColor]];
-        [self.subtitle setFont:[UIFont systemFontOfSize:10]];
+        [self.subtitle setFont:[UIFont systemFontOfSize:9]];
         [self addSubview:self.subtitle];
     }
     return self;

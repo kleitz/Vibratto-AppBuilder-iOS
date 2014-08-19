@@ -50,6 +50,7 @@ static AppBuilderConstants *abc;
         
         abc.primaryButtonDiameter = 60.0f;
         abc.iconHeight = 46.0f;
+        abc.addIconHeight = 50.0f;
         abc.iconTopBuffer = 4.0f;
         abc.topBoxHeight = abc.iconHeight * 1.38f;
         abc.iconImageHeight = 45.0f;
