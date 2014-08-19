@@ -119,6 +119,16 @@
     }];
 }
 
+-(void)dropDowncancelClicked:(DropDownMenu *)ddm{
+    NSLog(@"CTS drop down cancel clicked");
+    [self retractDropDown];
+}
+
+-(void)dropDownOkClicked:(DropDownMenu *)ddm{
+    NSLog(@"CTS drop down ok clicked");
+    [self retractDropDown];
+}
+
 -(void)iconClicked:(Icon *)icon{
     NSLog(@"CompoundTopSection iconClicked");
     switch (icon.tag) {
@@ -129,6 +139,7 @@
                 
                 ActuatorDropDown *dropDown = [[ActuatorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
                 self.visibleDropDown = dropDown;
+                [dropDown setDelegate:self];
                 //CGFloat dropDownEndHeight = dropDown.frame.size.height;
                 
                 [self showDropDown:self.visibleDropDown];

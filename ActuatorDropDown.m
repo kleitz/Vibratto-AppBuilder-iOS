@@ -22,20 +22,22 @@
         }
         
         [self createTextField:@"Name (Optional)"];
-        [self createTextField:@"Pin Number"];
+        [self createTextField:@"Pin Number" keyboardType:UIKeyboardTypeNumberPad];
         
         NSLog(@"ADD textFields count: %i", self.textFields.count);
         
-        CGFloat ddHeight = self.titleY + self.abc.iconHeight + self.abc.dropDownGroupBuffer + (self.textFields.count * self.abc.dropDownMenuFeildHeight);
+        CGFloat ddHeight = self.titleY + self.abc.dropDownGroupBuffer + (self.abc.dropDownMenuFeildHeight + (self.abc.dropDownFieldBuffer * 2)) + self.abc.dropDownGroupBuffer;
         if(self.hasIcons){
             ddHeight += self.iconBoxHeight;
         }
+        
+        ddHeight += self.abc.dropDownMenuFeildHeight * 1.3f;
         
         NSLog(@"Add textFields height: %f", ddHeight);
         
         [self setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, ddHeight)];
         
-        [self setFieldName:@"Create Actuator"];
+        [self setFieldName:@"Add Actuator"];
         [self addFields];
 
         

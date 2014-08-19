@@ -11,6 +11,16 @@
 #import "AppBuilderConstants.h"
 #import "Icon.h"
 
+@class DropDownMenu;
+
+@protocol DropDownDelegate <NSObject>
+
+@optional
+-(void)dropDowncancelClicked:(DropDownMenu *)ddm;
+-(void)dropDownOkClicked:(DropDownMenu *)ddm;
+@end
+
+
 @interface DropDownMenu : UIView<IconDelegate, UITextFieldDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;
@@ -20,8 +30,11 @@
 @property(strong, nonatomic) NSMutableArray *iconTypes;
 @property(strong, nonatomic) TopBox *iconBox;
 
-@property(strong, nonatomic) Icon *okButton;
-@property(strong, nonatomic) Icon *cancelButton;
+@property(strong, nonatomic) id<DropDownDelegate> delegate;
+@property(strong, nonatomic) Icon *selectedIcon;
+
+@property(strong, nonatomic) UIButton *okButton;
+@property(strong, nonatomic) UIButton *cancelButton;
 
 @property(assign, nonatomic) CGFloat titleY;
 @property(assign, nonatomic) CGFloat iconBoxHeight;
@@ -30,6 +43,7 @@
 
 -(void)setFieldName:(NSString *)name;
 -(void)createTextField:(NSString *)text;
+-(void)createTextField:(NSString *)text keyboardType:(UIKeyboardType)keyboardType;
 -(void)addFields;
 -(void)displayIcons;
 -(void)setButtons;

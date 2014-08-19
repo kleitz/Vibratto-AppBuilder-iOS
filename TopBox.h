@@ -22,6 +22,7 @@
 @property(strong, nonatomic) NSMutableArray *boxItems;
 
 @property(assign, nonatomic) CGFloat iconBuffer;
+@property(assign, nonatomic) CGFloat iconHeight;
 
 @property(assign, nonatomic) NSInteger displayCount;
 

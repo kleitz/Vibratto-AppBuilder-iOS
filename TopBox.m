@@ -74,6 +74,7 @@
     
     self.abc = [AppBuilderConstants getAppBuilderConstants];
     self.displayCount = 0;
+    self.iconHeight = self.abc.iconHeight;
     
     self.boxItems = [[NSMutableArray alloc] init];
     self.iconBuffer = self.frame.size.height/2 - self.abc.iconHeight/2;
@@ -91,7 +92,10 @@
     [self.addIcon changeIconType:ICON_ADD];
     [self.addIcon setTag:10000];
     [self.addIcon setMyDelegate:self];
-    [self.addIconBox addSubview:self.addIcon];
+    
+    if(self.hasAddButton){
+        [self.addIconBox addSubview:self.addIcon];
+    }
     
     [self.addIconBox setBackgroundColor:self.abc.primaryColor1];
     
@@ -132,10 +136,10 @@
     if(self.boxItems.count > 0){
         Icon *lastIcon = [self.boxItems objectAtIndex:self.boxItems.count-1];
         
-        newIcon = [[Icon alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), lastIcon.frame.origin.y, self.abc.iconHeight, self.abc.iconHeight)];
+        newIcon = [[Icon alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), lastIcon.frame.origin.y, self.iconHeight, self.iconHeight)];
 
     } else {
-        newIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+        newIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.iconHeight, self.iconHeight)];
     }
     
     [self.scrollBar setContentSize:CGSizeMake(self.scrollBar.contentSize.width + newIcon.frame.size.width + (2 * self.iconBuffer), self.scrollBar.contentSize.height)];
@@ -193,9 +197,11 @@
     
     if(self.hasAddButton){
         [self.addIconBox setFrame:CGRectMake(0, 0, self.frame.size.height, self.frame.size.height)];
+        [self.addIconBox addSubview:self.addIcon];
         
     } else {
         [self.addIconBox setFrame:CGRectMake(0, 0, 0, 0)];
+        [self.addIcon removeFromSuperview];
     }
     
     [self.addIconBox setBackgroundColor:self.abc.primaryColor1];

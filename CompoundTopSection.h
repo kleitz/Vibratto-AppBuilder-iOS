@@ -10,13 +10,7 @@
 #import "TopBox.h"
 #import "DropDownMenu.h"
 
-@protocol CompoundTopSectionDelegate <NSObject>
-
-@optional
--(void)showDropDown:(DropDownMenu *)dropDown;
-@end
-
-@interface CompoundTopSection : UIView<IconDelegate>
+@interface CompoundTopSection : UIView<IconDelegate, DropDownDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;
 
@@ -38,7 +32,6 @@
 @property(strong, nonatomic) NSMutableArray *valueArray;
 
 @property(strong, nonatomic) id<IconDelegate>delegate;
-@property(strong, nonatomic) id<CompoundTopSectionDelegate>dropDownDelegate;
 
 @property(assign, nonatomic) int visibleCount;
 

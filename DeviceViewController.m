@@ -90,7 +90,6 @@
     
     self.topSection = [[CompoundTopSection alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 2 * self.abc.topBoxHeight)];
     [self.topSection setDelegate:self];
-    [self.topSection setDropDownDelegate:self];
     
     self.uploadIcon = [[Icon alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.abc.primaryButtonDiameter/2, self.view.frame.size.height - 80.0f + self.abc.topBoxHeight, self.abc.primaryButtonDiameter, self.abc.primaryButtonDiameter)];
     [self.uploadIcon changeIconType:ICON_UPLOAD];
