@@ -36,7 +36,7 @@ static AppBuilderConstants *abc;
         abc.confirmImage = [UIImage imageNamed:@"right.png"];
         
         abc.labelFont = [UIFont systemFontOfSize:42];
-        abc.dropDownTitleFont = [UIFont systemFontOfSize:24];
+        abc.dropDownTitleFont = [UIFont systemFontOfSize:25];
         abc.dropDownFieldFont = [UIFont systemFontOfSize:20];
         abc.dropDownChooseIconFont = [UIFont systemFontOfSize:22];
         

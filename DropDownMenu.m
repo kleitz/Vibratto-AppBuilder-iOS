@@ -128,7 +128,7 @@
         originY = self.titleY + self.textFields.count * (self.abc.dropDownMenuFeildHeight);
     }
     
-    self.okButton = [[UIButton alloc] initWithFrame:CGRectMake(0, originY, (self.frame.size.width/2) - 1, self.abc.dropDownMenuFeildHeight * 1.3f)];
+    self.okButton = [[UIButton alloc] initWithFrame:CGRectMake(0, originY, (self.frame.size.width/2) - 1, self.abc.dropDownMenuFeildHeight * 1.2f)];
     [self.okButton setBackgroundColor:[UIColor colorWithRed:0.97f green:0.97f blue:0.97f alpha:1.0f]];
     [self.okButton setTitle:@"OK" forState:UIControlStateNormal];
     [self.okButton addTarget:self action:@selector(okButtonClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -136,7 +136,7 @@
     
     [self addSubview:self.okButton];
     
-    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake((self.frame.size.width/2) + 1, originY, (self.frame.size.width/2) -1, self.abc.dropDownMenuFeildHeight * 1.3f)];
+    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake((self.frame.size.width/2) + 1, originY, (self.frame.size.width/2) -1, self.abc.dropDownMenuFeildHeight * 1.2f)];
     [self.cancelButton setBackgroundColor:[UIColor colorWithRed:0.97f green:0.97f blue:0.97f alpha:1.0f]];
     [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [self.cancelButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
