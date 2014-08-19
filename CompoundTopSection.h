@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "TopBox.h"
+#import "DropDownMenu.h"
+
+@protocol CompoundTopSectionDelegate <NSObject>
+
+@optional
+-(void)showDropDown:(DropDownMenu *)dropDown;
+@end
 
 @interface CompoundTopSection : UIView<IconDelegate>
 
@@ -29,11 +36,12 @@
 @property(strong, nonatomic) NSMutableArray *valueArray;
 
 @property(strong, nonatomic) id<IconDelegate>delegate;
+@property(strong, nonatomic) id<CompoundTopSectionDelegate>dropDownDelegate;
 
 @property(assign, nonatomic) int visibleCount;
 
 -(void)selectCategoryByType:(ICON_TYPE)iconType;
--(void)addNewIconInCategory:(Icon *)icon;
+//-(void)addNewIconInCategory:(Icon *)icon;
 -(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag;
 
 @end

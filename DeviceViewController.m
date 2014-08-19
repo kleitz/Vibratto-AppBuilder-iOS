@@ -90,6 +90,7 @@
     
     self.topSection = [[CompoundTopSection alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 2 * self.abc.topBoxHeight)];
     [self.topSection setDelegate:self];
+    [self.topSection setDropDownDelegate:self];
     
     self.uploadIcon = [[Icon alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.abc.primaryButtonDiameter/2, self.view.frame.size.height - 80.0f + self.abc.topBoxHeight, self.abc.primaryButtonDiameter, self.abc.primaryButtonDiameter)];
     [self.uploadIcon changeIconType:ICON_UPLOAD];
@@ -292,6 +293,25 @@
         default:
             break;
     }
+}
+
+-(void)showDropDown:(DropDownMenu *)dropDown{
+    NSLog(@"DVC showDropDown");
+    [dropDown setFrame:CGRectMake(0, self.topSection.frame.origin.y + self.topSection.frame.size.height - dropDown.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
+    [self.mainView insertSubview:dropDown belowSubview:self.topSection];
+    //[self.mainView addSubview:dropDown];
+    
+    [UIView animateWithDuration:0.4f animations:^{
+        [dropDown setFrame:CGRectMake(0, self.topSection.frame.origin.y + self.topSection.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
+    }];
+    /*
+    for(int i=0; i<self.mainView.subviews.count; i++){
+        if([[self.mainView.subviews objectAtIndex:i] isKindOfClass:[CompoundTopSection class]]){
+            self.mainView inser
+            break;
+        }
+    }
+    */
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{

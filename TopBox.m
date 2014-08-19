@@ -33,19 +33,23 @@
 }
 
 -(void)iconClicked:(Icon *)icon{
-
-    [icon toggleHighlighted];
-    
-    if(self.selectedIcon != nil){
-        [self.selectedIcon toggleHighlighted];
-    }
-    
-    if(self.selectedIcon == icon){
-        NSLog(@"TopBox icon is equal");
-        [self.selectedIcon toggleHighlighted];
-        self.selectedIcon = nil;
+    NSLog(@"TopBox iconClicked: %i", icon.tag);
+    if(icon.tag == 10000){
+        [self.delegate iconClicked:icon];
     } else {
-        self.selectedIcon = icon;
+        [icon toggleHighlighted];
+        
+        if(self.selectedIcon != nil){
+            [self.selectedIcon toggleHighlighted];
+        }
+        
+        if(self.selectedIcon == icon){
+            NSLog(@"TopBox icon is equal");
+            [self.selectedIcon toggleHighlighted];
+            self.selectedIcon = nil;
+        } else {
+            self.selectedIcon = icon;
+        }
     }
 }
 
@@ -85,6 +89,8 @@
     
     self.addIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.iconBuffer, self.abc.iconHeight, self.abc.iconHeight)];
     [self.addIcon changeIconType:ICON_ADD];
+    [self.addIcon setTag:10000];
+    [self.addIcon setMyDelegate:self];
     [self.addIconBox addSubview:self.addIcon];
     
     [self.addIconBox setBackgroundColor:self.abc.primaryColor1];

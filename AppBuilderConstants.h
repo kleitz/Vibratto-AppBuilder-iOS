@@ -32,6 +32,9 @@
 @property(strong, nonatomic) UIImage *confirmImage;
 
 @property(strong, nonatomic) UIFont *labelFont;
+@property(strong, nonatomic) UIFont *dropDownTitleFont;
+@property(strong, nonatomic) UIFont *dropDownFieldFont;
+@property(strong, nonatomic) UIFont *dropDownChooseIconFont;
 
 @property(strong, nonatomic) UIColor *primaryColor1;
 @property(strong, nonatomic) UIColor *primaryColor2;
@@ -50,5 +53,8 @@
 @property(assign, nonatomic) CGFloat builderBuffer;
 @property(assign, nonatomic) CGFloat confirmListenerButtonHeight;
 @property(assign, nonatomic) CGFloat bigAddButtonHeight;
+@property(assign, nonatomic) CGFloat dropDownMenuFeildHeight;
+@property(assign, nonatomic) CGFloat dropDownMenuTitleHeight;
+@property(assign, nonatomic) CGFloat dropDownChooseIconLabelHeight;
 
 @end

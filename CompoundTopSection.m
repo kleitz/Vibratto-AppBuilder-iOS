@@ -7,6 +7,7 @@
 //
 
 #import "CompoundTopSection.h"
+#import "ActuatorDropDown.h"
 
 @implementation CompoundTopSection
 
@@ -47,6 +48,7 @@
         self.selectedCategory = listenerIcon;
         
         self.iconBox = [[TopBox alloc] initWithFrame:CGRectMake(0, self.abc.topBoxHeight, self.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
+        [self.iconBox setDelegate:self];
         
         [self.iconBox addIcon:ICON_TILT andIconImage:nil andDelegate:self andTag:20];
         [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:21];
@@ -96,6 +98,25 @@
 -(void)iconClicked:(Icon *)icon{
     NSLog(@"CompoundTopSection iconClicked");
     switch (icon.tag) {
+        case 10000:{
+            if(self.selectedCategory.iconType == ICON_ACTUATOR){
+                
+                ActuatorDropDown *dropDown = [[ActuatorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
+                
+                /*
+                [dropDown setFrame:CGRectMake(0, self.frame.size.height - dropDown.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
+                [self addSubview:dropDown];
+                
+                [UIView animateWithDuration:0.4f animations:^{
+                    [dropDown setFrame:CGRectMake(0, self.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
+                }];
+                */
+                [self.dropDownDelegate showDropDown:dropDown];
+            }
+            
+            break;
+        }
+            
         case 10:
             NSLog(@"CTS actuator category");
             [self selectCategory:icon];
@@ -130,7 +151,9 @@
             break;
     }
     
-    [self.delegate iconClicked:icon];
+    if(icon.tag != 10000){
+        [self.delegate iconClicked:icon];
+    }
 }
 
 -(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag{
