@@ -21,6 +21,16 @@ typedef enum {
     BUILD_LISTENER
 } BUILD_LISTENER_STATUS;
 
+/*
+typedef enum{
+    BST_SENSOR,
+    BST_COMPARATOR,
+    BST_VALUE,
+    BST_GESTURE,
+    BST_REGION
+} BUILDER_SEQUENCE_TYPES;
+*/
+
 @interface DeviceViewController : UIViewController<IconDelegate, UIAlertViewDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;

@@ -34,6 +34,20 @@
         self.gestureIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.builderIconHeight, self.abc.builderIconHeight)];
         self.regionIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.builderIconHeight, self.abc.builderIconHeight)];
         
+        int tagBase = 1000;
+        
+        [self.sensorIcon setTag:tagBase + ICON_SENSOR];
+        [self.comparatorIcon setTag:tagBase + ICON_COMPARATOR];
+        [self.valueIcon setTag:tagBase + ICON_VALUE];
+        [self.gestureIcon setTag:tagBase + ICON_GESTURE];
+        [self.regionIcon setTag:tagBase + ICON_REGION];
+        
+        [self.sensorIcon setMyDelegate:self];
+        [self.comparatorIcon setMyDelegate:self];
+        [self.valueIcon setMyDelegate:self];
+        [self.gestureIcon setMyDelegate:self];
+        [self.regionIcon setMyDelegate:self];
+        
         self.confirmListenerIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.confirmListenerButtonHeight, self.abc.confirmListenerButtonHeight)];
         [self.confirmListenerIcon changeIconType:ICON_CONFIRM];
         [self.confirmListenerIcon setMyDelegate:self];
@@ -101,7 +115,7 @@
 }
 
 -(void)iconClicked:(Icon *)icon{
-    NSLog(@"DVC iconClicked: %li, buildStage: %i", icon.tag, self.buildStage);
+    NSLog(@"DVC iconClicked: %li, buildStage: %i", (long)icon.tag, self.buildStage);
     if(icon.tag == 1){
         NSLog(@"DVC big add button");
         [self gotoStage: SENSOR_SELECT];
@@ -129,6 +143,36 @@
     } else if(icon.tag >= (ICON_REGION * 100) && icon.tag < ((ICON_REGION * 100) + 100) && self.buildStage == REGION_SELECT){
         [self.regionIcon changeIconType:icon.iconType];
         [self gotoStage:CONFIRM_LISTENER];
+    } else if(icon.tag >= 1000 && icon.tag <2000){
+        int tagAdjust = icon.tag - 1000;
+        
+        [self.topSection selectCategoryByType:tagAdjust];
+        /*
+        switch (tagAdjust) {
+            case ICON_SENSOR:
+                [self.topSection selectCategoryByType:ICON_SENSOR];
+                break;
+                
+            case ICON_COMPARATOR:
+                self.top
+                break;
+            
+            case ICON_REGION:
+                break;
+                
+            case ICON_ACTION:
+                break;
+            
+            case ICON_VALUE:
+                break;
+                
+            case ICON_GESTURE:
+                break;
+                
+            default:
+                break;
+        }
+        */
     }
 
 }
