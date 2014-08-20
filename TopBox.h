@@ -23,8 +23,11 @@
 @property(strong, nonatomic) NSMutableArray *boxItems;
 
 @property(assign, nonatomic) CGFloat iconBuffer;
+@property(assign, nonatomic) CGFloat iconHeight;
 
 @property(assign, nonatomic) NSInteger displayCount;
+
+@property(weak, nonatomic) id<IconDelegate> delegate;
 
 @property(assign, nonatomic) BOOL hasAddButton;
 @property(assign, nonatomic) BOOL isCentered;

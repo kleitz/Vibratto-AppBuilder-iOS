@@ -36,6 +36,9 @@ static AppBuilderConstants *abc;
         abc.confirmImage = [UIImage imageNamed:@"right.png"];
         
         abc.labelFont = [UIFont systemFontOfSize:42];
+        abc.dropDownTitleFont = [UIFont systemFontOfSize:25];
+        abc.dropDownFieldFont = [UIFont systemFontOfSize:20];
+        abc.dropDownChooseIconFont = [UIFont systemFontOfSize:22];
         
         //abfff1
         abc.primaryColor1 = [[UIColor alloc] initWithRed:0.671 green:1.0 blue:0.945 alpha:1.0];
@@ -61,6 +64,12 @@ static AppBuilderConstants *abc;
         abc.bigAddButtonHeight = 120.0f;
         
         abc.topBoxAddIconBoxWidth = 80.0f;
+        
+        abc.dropDownMenuFeildHeight = 44.0f;
+        abc.dropDownMenuTitleHeight = 40.0f;
+        abc.dropDownChooseIconLabelHeight = 35.0f;
+        abc.dropDownGroupBuffer = 6.0f;
+        abc.dropDownFieldBuffer = 1.0f;
     }
     
     return abc;

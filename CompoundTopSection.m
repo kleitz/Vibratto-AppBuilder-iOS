@@ -8,6 +8,7 @@
 
 #import "CompoundTopSection.h"
 #import "IconSubtitle.h"
+#import "ActuatorDropDown.h"
 
 @implementation CompoundTopSection
 
@@ -16,6 +17,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.visibleCount = 0;
+        self.visibleDropDown = nil;
         
         self.abc = [AppBuilderConstants getAppBuilderConstants];
         self.actuatorsArray = [[NSMutableArray alloc] init];
@@ -48,6 +50,7 @@
         self.selectedCategory = listenerIcon;
         
         self.iconBox = [[TopBox alloc] initWithFrame:CGRectMake(0, self.abc.topBoxHeight, self.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
+        [self.iconBox setDelegate:self];
         
         [self.iconBox addIcon:ICON_TILT andIconImage:nil andDelegate:self andTag:20 andSubtitle:@"Rotation"];
         [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:21 andSubtitle:@"GPS"];
@@ -94,9 +97,61 @@
     return self;
 }
 
+-(void)showDropDown:(DropDownMenu *)dropDown{
+    [dropDown setFrame:CGRectMake(0, self.frame.size.height - dropDown.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
+    //[self addSubview:dropDown];
+    [self insertSubview:dropDown belowSubview:[self.subviews objectAtIndex:0]];
+    
+    [UIView animateWithDuration:0.4f animations:^{
+        [dropDown setFrame:CGRectMake(0, self.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
+    } completion:^(BOOL finished){
+        [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height + dropDown.frame.size.height)];
+        
+    }];
+}
+
+-(void)retractDropDown{
+    [UIView animateWithDuration:0.4f animations:^{
+        [self.visibleDropDown setFrame:CGRectMake(self.visibleDropDown.frame.origin.x, self.visibleDropDown.frame.origin.y - self.visibleDropDown.frame.size.height, self.visibleDropDown.frame.size.width, self.visibleDropDown.frame.size.height)];
+    } completion: ^(BOOL finished){
+        [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height - self.visibleDropDown.frame.size.height)];
+        [self.visibleDropDown removeFromSuperview];
+        self.visibleDropDown = nil;
+    }];
+}
+
+-(void)dropDowncancelClicked:(DropDownMenu *)ddm{
+    NSLog(@"CTS drop down cancel clicked");
+    [self retractDropDown];
+}
+
+-(void)dropDownOkClicked:(DropDownMenu *)ddm{
+    NSLog(@"CTS drop down ok clicked");
+    [self retractDropDown];
+}
+
 -(void)iconClicked:(Icon *)icon{
     NSLog(@"CompoundTopSection iconClicked");
     switch (icon.tag) {
+        case 10000:{
+            if(self.visibleDropDown != nil){
+                [self retractDropDown];
+            } else if(self.selectedCategory.iconType == ICON_ACTUATOR){
+                
+                ActuatorDropDown *dropDown = [[ActuatorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
+                self.visibleDropDown = dropDown;
+                [dropDown setDelegate:self];
+                //CGFloat dropDownEndHeight = dropDown.frame.size.height;
+                
+                [self showDropDown:self.visibleDropDown];
+                
+                
+                //[self.dropDownDelegate showDropDown:dropDown];
+            }
+            
+            break;
+        }
+            
         case 10:
             NSLog(@"CTS actuator category");
             [self selectCategory:icon];
@@ -131,7 +186,9 @@
             break;
     }
     
-    [self.delegate iconClicked:icon];
+    if(icon.tag != 10000){
+        [self.delegate iconClicked:icon];
+    }
 }
 
 -(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag subtitle:(NSString *)subtitle{

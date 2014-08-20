@@ -8,13 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "TopBox.h"
+#import "DropDownMenu.h"
 
-@interface CompoundTopSection : UIView<IconDelegate>
+@interface CompoundTopSection : UIView<IconDelegate, DropDownDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;
 
 @property(strong, nonatomic) TopBox *categories;
 @property(strong, nonatomic) TopBox *iconBox;
+
+@property(strong, nonatomic) DropDownMenu *visibleDropDown;
 
 @property(strong, nonatomic) Icon *selectedCategory;
 
@@ -34,5 +37,6 @@
 
 -(void)selectCategoryByType:(ICON_TYPE)iconType;
 -(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag subtitle:(NSString *)text;
+
 
 @end

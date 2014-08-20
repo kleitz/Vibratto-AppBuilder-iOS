@@ -34,19 +34,23 @@
 }
 
 -(void)iconClicked:(Icon *)icon{
-
-    [icon toggleHighlighted];
-    
-    if(self.selectedIcon != nil){
-        [self.selectedIcon toggleHighlighted];
-    }
-    
-    if(self.selectedIcon == icon){
-        NSLog(@"TopBox icon is equal");
-        [self.selectedIcon toggleHighlighted];
-        self.selectedIcon = nil;
+    NSLog(@"TopBox iconClicked: %i", icon.tag);
+    if(icon.tag == 10000){
+        [self.delegate iconClicked:icon];
     } else {
-        self.selectedIcon = icon;
+        [icon toggleHighlighted];
+        
+        if(self.selectedIcon != nil){
+            [self.selectedIcon toggleHighlighted];
+        }
+        
+        if(self.selectedIcon == icon){
+            NSLog(@"TopBox icon is equal");
+            [self.selectedIcon toggleHighlighted];
+            self.selectedIcon = nil;
+        } else {
+            self.selectedIcon = icon;
+        }
     }
 }
 
@@ -77,6 +81,7 @@
     
     self.abc = [AppBuilderConstants getAppBuilderConstants];
     self.displayCount = 0;
+    self.iconHeight = self.abc.iconHeight;
     
     self.boxItems = [[NSMutableArray alloc] init];
     CGFloat addIconBuffer = self.frame.size.height/2 - self.abc.addIconHeight/2;
@@ -93,7 +98,12 @@
     
     self.addIcon = [[Icon alloc] initWithFrame:CGRectMake(addIconBuffer, addIconBuffer, self.abc.addIconHeight, self.abc.addIconHeight)];
     [self.addIcon changeIconType:ICON_ADD];
-    [self.addIconBox addSubview:self.addIcon];
+    [self.addIcon setTag:10000];
+    [self.addIcon setMyDelegate:self];
+    
+    if(self.hasAddButton){
+        [self.addIconBox addSubview:self.addIcon];
+    }
     
     [self.addIconBox setBackgroundColor:self.abc.primaryColor1];
     
@@ -210,9 +220,11 @@
     
     if(self.hasAddButton){
         [self.addIconBox setFrame:CGRectMake(0, 0, self.frame.size.height, self.frame.size.height)];
+        [self.addIconBox addSubview:self.addIcon];
         
     } else {
         [self.addIconBox setFrame:CGRectMake(0, 0, 0, 0)];
+        [self.addIcon removeFromSuperview];
     }
     
     [self.addIconBox setBackgroundColor:self.abc.primaryColor1];

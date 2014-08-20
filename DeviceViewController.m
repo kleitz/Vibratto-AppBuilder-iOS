@@ -157,7 +157,8 @@
             [self.bigAddIcon setFrame:CGRectMake(self.view.center.x - self.abc.bigAddButtonHeight/2, self.view.center.y + self.abc.topBoxHeight - self.abc.bigAddButtonHeight/2, self.abc.bigAddButtonHeight, self.abc.bigAddButtonHeight)];
             [self.bigAddIcon changeIconType:ICON_ADD];
             [self.bigAddIcon.layer setCornerRadius:self.abc.bigAddButtonHeight/2];
-            [self.mainView addSubview:self.bigAddIcon];
+            //[self.mainView addSubview:self.bigAddIcon];
+            [self.mainView insertSubview:self.bigAddIcon belowSubview:self.topSection];
             
             break;
         
@@ -283,6 +284,25 @@
         default:
             break;
     }
+}
+
+-(void)showDropDown:(DropDownMenu *)dropDown{
+    NSLog(@"DVC showDropDown");
+    [dropDown setFrame:CGRectMake(0, self.topSection.frame.origin.y + self.topSection.frame.size.height - dropDown.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
+    [self.mainView insertSubview:dropDown belowSubview:self.topSection];
+    //[self.mainView addSubview:dropDown];
+    
+    [UIView animateWithDuration:0.4f animations:^{
+        [dropDown setFrame:CGRectMake(0, self.topSection.frame.origin.y + self.topSection.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
+    }];
+    /*
+    for(int i=0; i<self.mainView.subviews.count; i++){
+        if([[self.mainView.subviews objectAtIndex:i] isKindOfClass:[CompoundTopSection class]]){
+            self.mainView inser
+            break;
+        }
+    }
+    */
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
