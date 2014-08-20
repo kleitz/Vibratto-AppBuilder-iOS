@@ -111,6 +111,32 @@
     }
 }
 
+-(void)colapseDropDown{
+    NSLog(@"DDM colapseDropDown");
+    
+    CGFloat ddCenterX = self.center.x;
+    CGFloat ddCenterY = self.center.y;
+    
+    for(int i=self.subviews.count -1; i>=0; i--){
+        [[self.subviews objectAtIndex:i] removeFromSuperview];
+    }
+    
+    [self setBackgroundColor:self.abc.seeThruColor];
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        [self setFrame:CGRectMake(ddCenterX - (self.abc.iconHeight/2), ddCenterY - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
+        [self.layer setCornerRadius:(self.abc.iconHeight/2)];
+        [self setBackgroundColor:self.abc.seeThruColor];
+    } completion:^(BOOL finished){
+        if(self.selectedIcon != nil){
+            [self setBackgroundColor:[UIColor clearColor]];
+            [self.selectedIcon setFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+            [self.selectedIcon toggleHighlighted];
+            [self addSubview:self.selectedIcon];
+        }
+        [self.delegate finishedCollapsingDropDown:self];
+    }];
+}
 
 -(void)setButtons{
     CGFloat originY;

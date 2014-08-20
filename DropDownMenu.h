@@ -18,6 +18,7 @@
 @optional
 -(void)dropDowncancelClicked:(DropDownMenu *)ddm;
 -(void)dropDownOkClicked:(DropDownMenu *)ddm;
+-(void)finishedCollapsingDropDown:(DropDownMenu *)ddm;
 @end
 
 
@@ -47,6 +48,7 @@
 -(void)addFields;
 -(void)displayIcons;
 -(void)setButtons;
+-(void)colapseDropDown;
 
 -(CGFloat)getProjectedHeight;
 

@@ -99,8 +99,12 @@
 }
 
 -(void)showDropDown:(DropDownMenu *)dropDown{
+    NSLog(@"CTS showDropDown: %f, height: %f", dropDown.frame.size.height, self.frame.size.height);
     [dropDown setFrame:CGRectMake(0, self.frame.size.height - dropDown.frame.size.height, dropDown.frame.size.width, dropDown.frame.size.height)];
     //[self addSubview:dropDown];
+    NSLog(@"CTS showDropDown post: %f, height: %f", dropDown.frame.size.height, self.frame.size.height);
+    NSLog(@"CTS dropDown y: %f", dropDown.frame.origin.y);
+    
     [self insertSubview:dropDown belowSubview:[self.subviews objectAtIndex:0]];
     
     [UIView animateWithDuration:0.4f animations:^{
@@ -128,28 +132,71 @@
 
 -(void)dropDownOkClicked:(DropDownMenu *)ddm{
     NSLog(@"CTS drop down ok clicked");
-    [self retractDropDown];
+    //[self retractDropDown];
+    [self.visibleDropDown colapseDropDown];
+}
+
+-(void)finishedCollapsingDropDown:(DropDownMenu *)ddm{
+    NSLog(@"CTS drop down fished collapsing");
+    [self.visibleDropDown removeFromSuperview];
+    [self addSubview:self.visibleDropDown];
+    
+    CGFloat xVal =
+        self.iconBox.addIconBox.frame.size.width +
+        self.iconBox.iconBuffer +
+        (self.iconBox.boxItems.count * (self.iconBox.iconBuffer + self.abc.iconHeight));
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        [self.visibleDropDown setFrame:CGRectMake(xVal, self.abc.topBoxHeight +  ((self.abc.topBoxHeight - self.visibleDropDown.frame.size.height)/2), self.visibleDropDown.frame.size.width, self.visibleDropDown.frame.size.height)];
+    } completion:^(BOOL finished){
+        
+        /*
+        switch (self.selectedCategory.iconType) {
+            case ICON_SENSOR:
+                
+                break;
+            
+            case ICON_ACTUATOR:
+                break;
+            
+            case ICON_REGION:
+                break;
+            
+            case ICON_GESTURE:
+                break;
+                
+            default:
+                break;
+        }
+        */
+        [self addNewIconInCategory:self.selectedCategory.iconType iconType:self.visibleDropDown.selectedIcon.iconType andIconImage:nil andDelegate:self andTag:0 subtitle:nil];
+        [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height - [self.visibleDropDown getProjectedHeight])];
+        [self.visibleDropDown removeFromSuperview];
+        self.visibleDropDown = nil;
+        //[self.createdListenerIcon changeIconType:ICON_CUSTOM];
+        //[self.createdListenerIcon removeFromSuperview];
+
+    }];
 }
 
 -(void)iconClicked:(Icon *)icon{
     NSLog(@"CompoundTopSection iconClicked");
     switch (icon.tag) {
         case 10000:{
+            NSLog(@"CTS Clicked add button");
             if(self.visibleDropDown != nil){
                 [self retractDropDown];
             } else if(self.selectedCategory.iconType == ICON_ACTUATOR){
-                
-                ActuatorDropDown *dropDown = [[ActuatorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
-                self.visibleDropDown = dropDown;
-                [dropDown setDelegate:self];
+                NSLog(@"CTS actuator");
+                self.visibleDropDown = [[ActuatorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
+                [self.visibleDropDown setDelegate:self];
                 
                 [self showDropDown:self.visibleDropDown];
             } else if(self.selectedCategory.iconType == ICON_SENSOR){
-                
+                NSLog(@"CTS sensor");
                 //SensorDropDown *dropDown = [[S]]
-                SensorDropDown *dropDown = [[SensorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
-                self.visibleDropDown = dropDown;
-                [dropDown setDelegate:self];
+                self.visibleDropDown = [[SensorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
+                [self.visibleDropDown setDelegate:self];
                 
                 [self showDropDown:self.visibleDropDown];
             }
@@ -197,47 +244,61 @@
 }
 
 -(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag subtitle:(NSString *)subtitle{
+    NSLog(@"CTS addNewIconInCategory: %i", iconCategory);
+    
     NSMutableArray *thisArray;
     Icon *icon;
     switch (iconCategory) {
         case ICON_ACTUATOR:
+            NSLog(@"CTS iconActuator");
             thisArray = self.actuatorsArray;
+            break;
         
         case ICON_SENSOR:
+            NSLog(@"CTS iconSensor");
             thisArray = self.sensorArray;
+            break;
         
         case ICON_GESTURE:
+            NSLog(@"CTS iconGesture");
             thisArray = self.gesturesArray;
+            break;
         
         case ICON_REGION:
+            NSLog(@"CTS iconRegion");
             thisArray = self.regionsArray;
+            break;
         
         case ICON_LISTENER:
+            NSLog(@"CTS iconListener");
             thisArray = self.listenersArray;
+            break;
             
         default:{
-            CGFloat iconX = thisArray.count * self.abc.iconHeight + (thisArray.count + 1) * self.iconBox.iconBuffer;
-            if(subtitle != nil){
-                icon = [[Icon alloc] initWithFrame:CGRectMake(iconX, (self.abc.topBoxHeight - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
-            } else {
-                icon = [[IconSubtitle alloc] initWithFrame:CGRectMake(iconX, (self.abc.topBoxHeight - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
-                [((IconSubtitle *)icon) changeSubtitle:subtitle];
-            }
-            
-            [icon changeIconType:iconType];
-            [icon setCustomImage:iconImage];
-            [icon setTag:tag];
-            if(delegate != nil){
-                [icon setMyDelegate:delegate];
-            } else {
-                [icon setMyDelegate:self];
-            }
-            
-            [thisArray addObject:icon];
-        }
+            NSLog(@"CTS default");
             break;
+        }
+            
     }
     
+    CGFloat iconX = (thisArray.count * self.abc.iconHeight) + ((thisArray.count + 1) * self.iconBox.iconBuffer);
+    if(subtitle != nil){
+        icon = [[Icon alloc] initWithFrame:CGRectMake(iconX, (self.abc.topBoxHeight - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
+    } else {
+        icon = [[IconSubtitle alloc] initWithFrame:CGRectMake(iconX, (self.abc.topBoxHeight - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
+        [((IconSubtitle *)icon) changeSubtitle:subtitle];
+    }
+    
+    [icon changeIconType:iconType];
+    [icon setCustomImage:iconImage];
+    [icon setTag:tag];
+    if(delegate != nil){
+        [icon setMyDelegate:delegate];
+    } else {
+        [icon setMyDelegate:self];
+    }
+    
+    [thisArray addObject:icon];
     
     if(iconCategory == self.selectedCategory.iconType){
         //[self.iconBox addIcon:icon.iconType andIconImage:nil andDelegate:nil andTag:0];
