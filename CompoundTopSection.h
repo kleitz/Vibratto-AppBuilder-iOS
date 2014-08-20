@@ -31,6 +31,12 @@
 @property(strong, nonatomic) NSMutableArray *comparatorsArray;
 @property(strong, nonatomic) NSMutableArray *valueArray;
 
+@property(assign, nonatomic) int sensorsBaseTag;
+@property(assign, nonatomic) int actuatorsBaseTag;
+@property(assign, nonatomic) int regionsBaseTag;
+@property(assign, nonatomic) int gesturesBaseTag;
+@property(assign, nonatomic) int listenersBaseTag;
+
 @property(strong, nonatomic) id<IconDelegate>delegate;
 
 @property(assign, nonatomic) int visibleCount;

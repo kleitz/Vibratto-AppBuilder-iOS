@@ -10,4 +10,8 @@
 
 @interface ActuatorDropDown : DropDownMenu
 
+@property(strong, nonatomic) NSString *namePlaceholder;
+@property(strong, nonatomic) NSString *pinNumberPlaceholder;
+@property(assign, nonatomic) int pinNumber;
+
 @end

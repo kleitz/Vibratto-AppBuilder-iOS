@@ -20,9 +20,13 @@
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_CUSTOM]];
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_SENSOR]];
         
-        [self createTextField:@"Name (Optional)"];
-        [self createTextField:@"Pin Number" keyboardType:UIKeyboardTypeNumberPad];
-        [self createTextField:@"Sensitivity (Optional)" keyboardType:UIKeyboardTypeNumberPad];
+        self.pinNumberPlaceholder = @"Pin Number";
+        self.sensitivityPlaceholder = @"Sensitivity (Optional)";
+        self.namePlaceholder = @"Name (Optional)";
+        
+        [self createTextField:self.namePlaceholder];
+        [self createTextField:self.pinNumberPlaceholder keyboardType:UIKeyboardTypeNumberPad];
+        [self createTextField:self.sensitivityPlaceholder keyboardType:UIKeyboardTypeNumberPad];
         
         [self setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, [self getProjectedHeight])];
         
@@ -39,5 +43,36 @@
     
     return self;
 }
+
+-(void)okButtonClicked{
+    
+    for(int i=0; i<self.textFields.count; i++){
+        UITextField *thisTextField = [self.textFields objectAtIndex:i];
+        if([thisTextField.placeholder isEqualToString:self.namePlaceholder]){
+            if(![thisTextField.text isEqualToString: @""]){
+                self.name = thisTextField.text;
+            } else {
+                self.name = nil;
+            }
+        } else if([thisTextField.placeholder isEqualToString:self.pinNumberPlaceholder]){
+            if(![thisTextField.text isEqualToString:@""]){
+                self.pinNumber = [thisTextField.text intValue];
+            } else {
+                self.pinNumber = 0;
+            }
+        } else if([thisTextField.placeholder isEqualToString:self.sensitivityPlaceholder]){
+            if(![thisTextField.text isEqualToString:@""]){
+                self.sensitivity = [thisTextField.text intValue];
+            } else {
+                self.sensitivity = -1;
+            }
+        }
+    }
+    
+    [super okButtonClicked];
+    
+    NSLog(@"ADD name: %@, pinNumber: %i", self.name, self.pinNumber);
+}
+
 
 @end

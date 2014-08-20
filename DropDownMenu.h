@@ -37,6 +37,8 @@
 @property(strong, nonatomic) UIButton *okButton;
 @property(strong, nonatomic) UIButton *cancelButton;
 
+@property(strong, nonatomic) NSString *name;
+
 @property(assign, nonatomic) CGFloat titleY;
 @property(assign, nonatomic) CGFloat iconBoxHeight;
 
@@ -49,6 +51,8 @@
 -(void)displayIcons;
 -(void)setButtons;
 -(void)colapseDropDown;
+-(void)okButtonClicked;
+-(void)cancelClicked;
 
 -(CGFloat)getProjectedHeight;
 

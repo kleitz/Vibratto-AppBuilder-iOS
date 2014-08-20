@@ -105,32 +105,32 @@
     if(icon.tag == 1){
         NSLog(@"DVC big add button");
         [self gotoStage: SENSOR_SELECT];
-        
     } else if(icon.tag == 2){
         NSLog(@"DVC confirm listener clicked");
         [self gotoStage:BUILD_LISTENER];
-    } else if(icon.tag >= 20 && icon.tag < 30 && self.buildStage == SENSOR_SELECT){
+    } else if(icon.tag >= (ICON_SENSOR * 100) && icon.tag < ((ICON_SENSOR * 100) + 100) && self.buildStage == SENSOR_SELECT){
         [self.sensorIcon changeIconType:icon.iconType];
         [self gotoStage: COMPARATOR_SELECT];
-    } else if(icon.tag >= 30 && icon.tag < 40 && self.buildStage == COMPARATOR_SELECT){
+    } else if(icon.tag >= (ICON_COMPARATOR * 100) && icon.tag < ((ICON_COMPARATOR * 100) + 100) && self.buildStage == COMPARATOR_SELECT){
         [self.comparatorIcon changeIconType:icon.iconType];
         [self gotoStage:VALUE_SELECT];
-    } else if(icon.tag == 40 && self.buildStage == VALUE_SELECT){
+    } else if(icon.tag == (ICON_VALUE * 100) && self.buildStage == VALUE_SELECT){
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Set Value" message:@"Enter Value (0-1023)" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
         [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
         [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
         [alertView setTag:1];
         [alertView show];
-    } else if(icon.tag >= 40 && icon.tag < 50 && self.buildStage == VALUE_SELECT){
+    } else if(icon.tag >= (ICON_VALUE * 100) && icon.tag < ((ICON_VALUE * 100) + 100) && self.buildStage == VALUE_SELECT){
         [self.valueIcon changeIconType:icon.iconType];
         [self gotoStage:ACTION_SELECT];
-    } else if(icon.tag >= 50 && icon.tag < 60 && self.buildStage == ACTION_SELECT){
+    } else if(icon.tag >= (ICON_GESTURE * 100) && icon.tag < ((ICON_GESTURE * 100) + 100) && self.buildStage == ACTION_SELECT){
         [self.gestureIcon changeIconType:icon.iconType];
         [self gotoStage:REGION_SELECT];
-    } else if(icon.tag >= 60 && icon.tag < 70 && self.buildStage == REGION_SELECT){
+    } else if(icon.tag >= (ICON_REGION * 100) && icon.tag < ((ICON_REGION * 100) + 100) && self.buildStage == REGION_SELECT){
         [self.regionIcon changeIconType:icon.iconType];
         [self gotoStage:CONFIRM_LISTENER];
     }
+
 }
 
 -(void)gotoStage:(BUILD_LISTENER_STATUS)stage{

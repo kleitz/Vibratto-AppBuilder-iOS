@@ -16,14 +16,16 @@
     
     if(self){
         self.hasIcons = YES;
+        self.pinNumberPlaceholder = @"Pin Number";
+        self.namePlaceholder = @"Name (Optional)";
         
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_CUSTOM]];
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_ANNOUNCER]];
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_ACTUATOR]];
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_LIGHTNING]];
         
-        [self createTextField:@"Name (Optional)"];
-        [self createTextField:@"Pin Number" keyboardType:UIKeyboardTypeNumberPad];
+        [self createTextField:self.namePlaceholder];
+        [self createTextField:self.pinNumberPlaceholder keyboardType:UIKeyboardTypeNumberPad];
         
         [self setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, [self getProjectedHeight])];
         
@@ -38,6 +40,30 @@
     }
     
     return self;
+}
+
+-(void)okButtonClicked{
+    
+    for(int i=0; i<self.textFields.count; i++){
+        UITextField *thisTextField = [self.textFields objectAtIndex:i];
+        if([thisTextField.placeholder isEqualToString:self.namePlaceholder]){
+            if(![thisTextField.text isEqualToString: @""]){
+                self.name = thisTextField.text;
+            } else {
+                self.name = nil;
+            }
+        } else if([thisTextField.placeholder isEqualToString:self.pinNumberPlaceholder]){
+            if(![thisTextField.text isEqualToString:@""]){
+                self.pinNumber = [thisTextField.text intValue];
+            } else {
+                self.pinNumber = 0;
+            }
+        }
+    }
+
+    [super okButtonClicked];
+
+    NSLog(@"ADD name: %@, pinNumber: %i", self.name, self.pinNumber);
 }
 
 @end

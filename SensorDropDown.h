@@ -10,4 +10,12 @@
 
 @interface SensorDropDown : DropDownMenu
 
+@property(strong, nonatomic) NSString *name;
+@property(strong, nonatomic) NSString *namePlaceholder;
+@property(strong, nonatomic) NSString *pinNumberPlaceholder;
+@property(strong, nonatomic) NSString *sensitivityPlaceholder;
+
+@property(assign, nonatomic) int sensitivity;
+@property(assign, nonatomic) int pinNumber;
+
 @end

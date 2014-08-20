@@ -30,6 +30,37 @@
         self.comparatorsArray = [[NSMutableArray alloc] init];
         self.valueArray = [[NSMutableArray alloc] init];
         
+        self.actuatorsBaseTag = 100;
+        self.sensorsBaseTag = 200;
+        self.gesturesBaseTag = 500;
+        self.regionsBaseTag = 600;
+        self.listenersBaseTag = 700;
+
+/*
+    } else if(icon.tag >= 200 && icon.tag < 300 && self.buildStage == SENSOR_SELECT){
+        [self.sensorIcon changeIconType:icon.iconType];
+        [self gotoStage: COMPARATOR_SELECT];
+    } else if(icon.tag >= 300 && icon.tag < 400 && self.buildStage == COMPARATOR_SELECT){
+        [self.comparatorIcon changeIconType:icon.iconType];
+        [self gotoStage:VALUE_SELECT];
+    } else if(icon.tag == 400 && self.buildStage == VALUE_SELECT){
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Set Value" message:@"Enter Value (0-1023)" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
+        [alertView setTag:1];
+        [alertView show];
+    } else if(icon.tag >= 400 && icon.tag < 500 && self.buildStage == VALUE_SELECT){
+        [self.valueIcon changeIconType:icon.iconType];
+        [self gotoStage:ACTION_SELECT];
+    } else if(icon.tag >= 500 && icon.tag < 600 && self.buildStage == ACTION_SELECT){
+        [self.gestureIcon changeIconType:icon.iconType];
+        [self gotoStage:REGION_SELECT];
+    } else if(icon.tag >= 600 && icon.tag < 700 && self.buildStage == REGION_SELECT){
+        [self.regionIcon changeIconType:icon.iconType];
+        [self gotoStage:CONFIRM_LISTENER];
+    }
+*/
+        
         [self setFrame:frame];
         [self setBackgroundColor:[UIColor clearColor]];
         
@@ -53,25 +84,25 @@
         self.iconBox = [[TopBox alloc] initWithFrame:CGRectMake(0, self.abc.topBoxHeight, self.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
         [self.iconBox setDelegate:self];
         
-        [self.iconBox addIcon:ICON_TILT andIconImage:nil andDelegate:self andTag:20 andSubtitle:@"Rotation"];
-        [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:21 andSubtitle:@"GPS"];
+        [self.iconBox addIcon:ICON_TILT andIconImage:nil andDelegate:self andTag:(ICON_SENSOR * 100) andSubtitle:@"Rotation"];
+        [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:(ICON_SENSOR * 100) + 1 andSubtitle:@"GPS"];
         
         [self.sensorArray addObject:[self.iconBox returnItemAtIndex:0]];
         [self.sensorArray addObject:[self.iconBox returnItemAtIndex:1]];
         [self.iconBox emptyBox];
         
         
-        [self.iconBox addIcon:ICON_GREATERTHEN andIconImage:nil andDelegate:self andTag:30 andSubtitle:@"above"];
-        [self.iconBox addIcon:ICON_LESSTHEN andIconImage:nil andDelegate:self andTag:31 andSubtitle:@"below"];
+        [self.iconBox addIcon:ICON_GREATERTHEN andIconImage:nil andDelegate:self andTag:(ICON_COMPARATOR * 100) andSubtitle:@"above"];
+        [self.iconBox addIcon:ICON_LESSTHEN andIconImage:nil andDelegate:self andTag:(ICON_COMPARATOR * 100) + 1 andSubtitle:@"below"];
         
         [self.comparatorsArray addObject:[self.iconBox returnItemAtIndex:0]];
         [self.comparatorsArray addObject:[self.iconBox returnItemAtIndex:1]];
         [self.iconBox emptyBox];
         
         
-        [self.iconBox addIcon:ICON_NUMBER andIconImage:nil andDelegate:self andTag:40 andSubtitle:@"Value..."];
-        [self.iconBox addIcon:ICON_TILT andIconImage:nil andDelegate:self andTag:41 andSubtitle:@"Rotation"];
-        [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:42 andSubtitle:@"GPS"];
+        [self.iconBox addIcon:ICON_NUMBER andIconImage:nil andDelegate:self andTag:(ICON_VALUE * 100) andSubtitle:@"Value..."];
+        [self.iconBox addIcon:ICON_TILT andIconImage:nil andDelegate:self andTag:(ICON_VALUE * 100) + 1 andSubtitle:@"Rotation"];
+        [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:(ICON_VALUE * 100) + 2 andSubtitle:@"GPS"];
         
         [self.valueArray addObject:[self.iconBox returnItemAtIndex:0]];
         [self.valueArray addObject:[self.iconBox returnItemAtIndex:1]];
@@ -79,19 +110,43 @@
         [self.iconBox emptyBox];
         
         
-        [self.iconBox addIcon:ICON_INCREASE_POWER andIconImage:nil andDelegate:self andTag:50 andSubtitle:@"+ Power"];
-        [self.iconBox addIcon:ICON_DECREASE_POWER andIconImage:nil andDelegate:self andTag:51 andSubtitle:@"- Power"];
+        [self.iconBox addIcon:ICON_INCREASE_POWER andIconImage:nil andDelegate:self andTag:(ICON_GESTURE * 100) andSubtitle:@"+ Power"];
+        [self.iconBox addIcon:ICON_DECREASE_POWER andIconImage:nil andDelegate:self andTag:(ICON_GESTURE * 100) + 1 andSubtitle:@"- Power"];
         
         [self.gesturesArray addObject:[self.iconBox returnItemAtIndex:0]];
         [self.gesturesArray addObject:[self.iconBox returnItemAtIndex:1]];
         [self.iconBox emptyBox];
         
         
-        [self.iconBox addIcon:ICON_ALL andIconImage:nil andDelegate:self andTag:60 andSubtitle:@"Device"];
+        [self.iconBox addIcon:ICON_ALL andIconImage:nil andDelegate:self andTag:(ICON_REGION * 100) andSubtitle:@"Device"];
         
         [self.regionsArray addObject:[self.iconBox returnItemAtIndex:0]];
         [self.iconBox emptyBox];
-        
+
+/*
+ } else if(icon.tag >= (ICON_SENSOR * 100) && icon.tag < ((ICON_SENSOR * 100) + 100) && self.buildStage == SENSOR_SELECT){
+ [self.sensorIcon changeIconType:icon.iconType];
+ [self gotoStage: COMPARATOR_SELECT];
+ } else if(icon.tag >= (ICON_COMPARATOR * 100) && icon.tag < ((ICON_COMPARATOR * 100) + 100) && self.buildStage == COMPARATOR_SELECT){
+ [self.comparatorIcon changeIconType:icon.iconType];
+ [self gotoStage:VALUE_SELECT];
+ } else if(icon.tag == (ICON_VALUE * 100) && self.buildStage == VALUE_SELECT){
+ UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Set Value" message:@"Enter Value (0-1023)" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+ [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
+ [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
+ [alertView setTag:1];
+ [alertView show];
+ } else if(icon.tag >= (ICON_VALUE * 100) && icon.tag < ((ICON_VALUE * 100) + 100) && self.buildStage == VALUE_SELECT){
+ [self.valueIcon changeIconType:icon.iconType];
+ [self gotoStage:ACTION_SELECT];
+ } else if(icon.tag >= (ICON_ACTION * 100) && icon.tag < ((ICON_ACTION * 100) + 100) && self.buildStage == ACTION_SELECT){
+ [self.gestureIcon changeIconType:icon.iconType];
+ [self gotoStage:REGION_SELECT];
+ } else if(icon.tag >= (ICON_REGION * 100) && icon.tag < ((ICON_REGION * 100) + 100) && self.buildStage == REGION_SELECT){
+ [self.regionIcon changeIconType:icon.iconType];
+ [self gotoStage:CONFIRM_LISTENER];
+ }
+*/
         [self addSubview:self.iconBox];
         [self addSubview:self.categories];
     }
@@ -133,7 +188,27 @@
 -(void)dropDownOkClicked:(DropDownMenu *)ddm{
     NSLog(@"CTS drop down ok clicked");
     //[self retractDropDown];
-    [self.visibleDropDown colapseDropDown];
+    if(self.selectedCategory.iconType == ICON_ACTUATOR){
+        if(((ActuatorDropDown *)ddm).pinNumber == 0){
+            [self retractDropDown];
+        } else {
+            if(((ActuatorDropDown *)ddm).name == nil){
+                ((ActuatorDropDown *)ddm).name = [NSString stringWithFormat:@"%i",((ActuatorDropDown *)ddm).pinNumber];
+            }
+            
+            [self.visibleDropDown colapseDropDown];            
+        }
+    } else if(self.selectedCategory.iconType == ICON_SENSOR){
+        if(((SensorDropDown *)ddm).pinNumber == 0){
+            [self retractDropDown];
+        } else {
+            if(((SensorDropDown *)ddm).name == nil){
+                ((SensorDropDown *)ddm).name = [NSString stringWithFormat:@"%i",((SensorDropDown *)ddm).pinNumber];
+            }
+            
+            [self.visibleDropDown colapseDropDown];
+        }
+    }
 }
 
 -(void)finishedCollapsingDropDown:(DropDownMenu *)ddm{
@@ -146,30 +221,23 @@
         self.iconBox.iconBuffer +
         (self.iconBox.boxItems.count * (self.iconBox.iconBuffer + self.abc.iconHeight));
     
-    [UIView animateWithDuration:0.3f animations:^{
-        [self.visibleDropDown setFrame:CGRectMake(xVal, self.abc.topBoxHeight +  ((self.abc.topBoxHeight - self.visibleDropDown.frame.size.height)/2), self.visibleDropDown.frame.size.width, self.visibleDropDown.frame.size.height)];
+    CGFloat yVal = 0;
+    
+    yVal = self.abc.topBoxHeight + self.abc.iconTopBuffer;
+    
+    /*
+    if(self.visibleDropDown.name == nil){
+        yVal = self.abc.topBoxHeight +  ((self.abc.topBoxHeight - self.visibleDropDown.frame.size.height)/2);
+    } else {
+        yVal = self.abc.topBoxHeight + self.abc.iconTopBuffer;
+    }
+    */
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        [self.visibleDropDown setFrame:CGRectMake(xVal, yVal, self.visibleDropDown.frame.size.width, self.visibleDropDown.frame.size.height)];
     } completion:^(BOOL finished){
-        
-        /*
-        switch (self.selectedCategory.iconType) {
-            case ICON_SENSOR:
-                
-                break;
-            
-            case ICON_ACTUATOR:
-                break;
-            
-            case ICON_REGION:
-                break;
-            
-            case ICON_GESTURE:
-                break;
-                
-            default:
-                break;
-        }
-        */
-        [self addNewIconInCategory:self.selectedCategory.iconType iconType:self.visibleDropDown.selectedIcon.iconType andIconImage:nil andDelegate:self andTag:0 subtitle:nil];
+
+        [self addNewIconInCategory:self.selectedCategory.iconType iconType:self.visibleDropDown.selectedIcon.iconType andIconImage:nil andDelegate:self andTag:0 subtitle:self.visibleDropDown.name];
         [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height - [self.visibleDropDown getProjectedHeight])];
         [self.visibleDropDown removeFromSuperview];
         self.visibleDropDown = nil;
@@ -282,16 +350,20 @@
     }
     
     CGFloat iconX = (thisArray.count * self.abc.iconHeight) + ((thisArray.count + 1) * self.iconBox.iconBuffer);
-    if(subtitle != nil){
+    if(subtitle == nil){
+        NSLog(@"CTS subtitle is nil");
         icon = [[Icon alloc] initWithFrame:CGRectMake(iconX, (self.abc.topBoxHeight - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
     } else {
-        icon = [[IconSubtitle alloc] initWithFrame:CGRectMake(iconX, (self.abc.topBoxHeight - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
+        icon = [[IconSubtitle alloc] initWithFrame:CGRectMake(iconX, self.abc.iconTopBuffer, self.abc.iconHeight, self.abc.iconHeight)];
         [((IconSubtitle *)icon) changeSubtitle:subtitle];
     }
     
     [icon changeIconType:iconType];
     [icon setCustomImage:iconImage];
-    [icon setTag:tag];
+    int tagNum = (iconCategory * 100) + thisArray.count;
+
+    [icon setTag:tagNum];
+    
     if(delegate != nil){
         [icon setMyDelegate:delegate];
     } else {
