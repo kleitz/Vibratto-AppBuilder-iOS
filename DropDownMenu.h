@@ -48,4 +48,6 @@
 -(void)displayIcons;
 -(void)setButtons;
 
+-(CGFloat)getProjectedHeight;
+
 @end

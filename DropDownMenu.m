@@ -54,7 +54,7 @@
     for(int i=0; i<self.textFields.count; i++){
         UITextField *thisTextField = [self.textFields objectAtIndex:i];
         [thisTextField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
-        CGFloat fieldY = self.title.frame.size.height + self.abc.dropDownGroupBuffer + self.abc.dropDownGroupBuffer + (i * (self.abc.dropDownMenuFeildHeight + (self.abc.dropDownFieldBuffer * 2)));
+        CGFloat fieldY = self.title.frame.size.height + (i * (self.abc.dropDownMenuFeildHeight + (self.abc.dropDownFieldBuffer * 2)));
         
         NSLog(@"DDM fieldY: %f", fieldY);
         
@@ -64,36 +64,28 @@
 }
 
 -(void)displayIcons{
-    CGFloat chooseIconLabelY = self.title.frame.size.height + self.abc.dropDownGroupBuffer + self.abc.dropDownFieldBuffer + (self.textFields.count * (self.abc.dropDownMenuFeildHeight + (self.abc.dropDownFieldBuffer * 2))) + self.abc.dropDownGroupBuffer;
-    NSString *textString = @"Choose Icon: ";
-    CGSize iconLabelSize = [textString sizeWithFont:self.abc.dropDownChooseIconFont];
-    self.chooseIconLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.abc.dropDownGroupBuffer, chooseIconLabelY, iconLabelSize.width, self.abc.dropDownChooseIconLabelHeight)];
-    [self.chooseIconLabel setFont:self.abc.dropDownChooseIconFont];
-    [self.chooseIconLabel setBackgroundColor:[UIColor clearColor]];
-    [self.chooseIconLabel setTextColor:[UIColor darkGrayColor]];
-    [self.chooseIconLabel setText:textString];
-    
-    //[self addSubview:self.chooseIconLabel];
-    
+    CGFloat chooseIconLabelY =
+        self.title.frame.size.height +
+        (self.textFields.count * (self.abc.dropDownMenuFeildHeight + (self.abc.dropDownFieldBuffer * 2))) +
+        self.abc.dropDownGroupBuffer;
+
     NSLog(@"DDM displayIcons: %f", self.chooseIconLabel.frame.origin.x + self.chooseIconLabel.frame.size.width);
 
     self.iconBox = [[TopBox alloc] initWithFrame:CGRectMake(0, chooseIconLabelY, self.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
-
-//    self.iconBox = [[TopBox alloc] initWithFrame:CGRectMake(self.chooseIconLabel.frame.origin.x + self.chooseIconLabel.frame.size.width, chooseIconLabelY, self.frame.size.width - (self.chooseIconLabel.frame.origin.x + self.chooseIconLabel.frame.size.width), self.abc.topBoxHeight - 10.0f) andHasAddBox:NO];
-    //[self.iconBox setBackgroundColor:[UIColor clearColor]];
-    //[self.iconBox setIconHeight:self.abc.iconHeight - 5.0f];
-    //[self.iconBox changeTrayColor:[UIColor clearColor]];
     
-    /*
     for(int i=0; i<self.iconTypes.count; i++){
         ICON_TYPE thisIconType = ((NSNumber *)[self.iconTypes objectAtIndex:i]).intValue;
-        [self.iconBox addIcon:thisIconType andIconImage:nil andDelegate:self andTag:0];
+        
+        [self.iconBox addIcon:thisIconType andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
     }
-    */
+    
+    /*
     [self.iconBox addIcon:ICON_CUSTOM andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
     [self.iconBox addIcon:ICON_ACTUATOR andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
     [self.iconBox addIcon:ICON_ALL andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
     [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
+    */
+    
     [self.iconBox changeIsCentered:YES];
     [self.iconBox changeTrayColor:[UIColor clearColor]];
     //[self.iconBox changeTrayColor:[UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1.0]];
@@ -123,9 +115,15 @@
 -(void)setButtons{
     CGFloat originY;
     if(self.hasIcons){
-        originY = self.iconBox.frame.origin.y + self.iconBox.frame.size.height + self.abc.dropDownGroupBuffer;
+        originY =
+            self.iconBox.frame.origin.y +
+            self.iconBox.frame.size.height +
+            self.abc.dropDownGroupBuffer;
     } else {
-        originY = self.titleY + self.textFields.count * (self.abc.dropDownMenuFeildHeight);
+        originY =
+            self.titleY +
+            (self.textFields.count * (self.abc.dropDownMenuFeildHeight + (self.abc.dropDownFieldBuffer * 2))) +
+            self.abc.dropDownGroupBuffer;
     }
     
     self.okButton = [[UIButton alloc] initWithFrame:CGRectMake(0, originY, (self.frame.size.width/2) - 1, self.abc.dropDownMenuFeildHeight * 1.2f)];
@@ -159,8 +157,12 @@
 }
 
 -(void)setFieldName:(NSString *)name{
+    CGSize titleSize = [name sizeWithFont:self.abc.dropDownTitleFont];
+    CGFloat titleBuffer = (self.abc.dropDownChooseIconLabelHeight - titleSize.height)/2;
+    
+    self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, titleBuffer, self.frame.size.width, self.abc.dropDownMenuTitleHeight)];
 
-    self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, self.abc.dropDownGroupBuffer, self.frame.size.width, self.abc.dropDownMenuTitleHeight)];
+    //[self.title setFrame:CGRectMake(self.title.frame.origin.x, titleBuffer, self.title.frame.size.width, self.title.frame.size.height)];
     [self.title setFont:self.abc.dropDownTitleFont];
     [self.title setTextColor:[UIColor whiteColor]];
     [self.title setTextAlignment:NSTextAlignmentCenter];
@@ -170,10 +172,26 @@
     [self addSubview:self.title];
 }
 
+-(CGFloat)getProjectedHeight{
+    CGFloat projectedHeight = 0;
+    projectedHeight += self.abc.dropDownMenuTitleHeight +
+        (self.textFields.count * (self.abc.dropDownMenuFeildHeight + (self.abc.dropDownFieldBuffer * 2))) +
+        self.abc.dropDownGroupBuffer +
+        (self.abc.dropDownMenuFeildHeight * 1.2);
+    
+    if(self.hasIcons){
+        projectedHeight +=
+            self.abc.topBoxHeight +
+            self.abc.dropDownGroupBuffer;
+    }
+    
+    return projectedHeight;
+}
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     NSLog(@"DDM textFieldShould return");
     [textField resignFirstResponder];
     return YES;
 }
+
 @end

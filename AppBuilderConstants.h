@@ -30,6 +30,11 @@
 @property(strong, nonatomic) UIImage *decreasePowerImage;
 @property(strong, nonatomic) UIImage *allImage;
 @property(strong, nonatomic) UIImage *confirmImage;
+@property(strong, nonatomic) UIImage *actionImage;
+@property(strong, nonatomic) UIImage *lightningImage;
+@property(strong, nonatomic) UIImage *headphoneImage;
+@property(strong, nonatomic) UIImage *announcerImage;
+@property(strong, nonatomic) UIImage *beakerImage;
 
 @property(strong, nonatomic) UIFont *labelFont;
 @property(strong, nonatomic) UIFont *dropDownTitleFont;

@@ -9,6 +9,7 @@
 #import "CompoundTopSection.h"
 #import "IconSubtitle.h"
 #import "ActuatorDropDown.h"
+#import "SensorDropDown.h"
 
 @implementation CompoundTopSection
 
@@ -141,12 +142,16 @@
                 ActuatorDropDown *dropDown = [[ActuatorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
                 self.visibleDropDown = dropDown;
                 [dropDown setDelegate:self];
-                //CGFloat dropDownEndHeight = dropDown.frame.size.height;
                 
                 [self showDropDown:self.visibleDropDown];
+            } else if(self.selectedCategory.iconType == ICON_SENSOR){
                 
+                //SensorDropDown *dropDown = [[S]]
+                SensorDropDown *dropDown = [[SensorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
+                self.visibleDropDown = dropDown;
+                [dropDown setDelegate:self];
                 
-                //[self.dropDownDelegate showDropDown:dropDown];
+                [self showDropDown:self.visibleDropDown];
             }
             
             break;

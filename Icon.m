@@ -79,7 +79,7 @@
             break;
         
         case ICON_GESTURE:
-            [self.bgImage setImage:self.constants.gestureImageDefault];
+            [self.bgImage setImage:self.constants.lightningImage];
             break;
         
         case ICON_REGION:
@@ -133,7 +133,23 @@
         case ICON_CONFIRM:
             [self.bgImage setImage:self.constants.confirmImage];
             break;
-
+        
+        case ICON_LIGHTNING:
+            [self.bgImage setImage:self.constants.lightningImage];
+            break;
+        
+        case ICON_ACTION:
+            [self.bgImage setImage:self.constants.actionImage];
+            break;
+        
+        case ICON_ANNOUNCER:
+            [self.bgImage setImage:self.constants.announcerImage];
+            break;
+        
+        case ICON_BEAKER:
+            [self.bgImage setImage:self.constants.beakerImage];
+            break;
+            
         case ICON_CUSTOM_VALUE:
             [self.customLabel setFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
             [self.customLabel.layer setCornerRadius:self.frame.size.height];
