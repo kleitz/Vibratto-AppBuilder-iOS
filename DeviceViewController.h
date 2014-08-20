@@ -15,8 +15,8 @@ typedef enum {
     SENSOR_SELECT,
     COMPARATOR_SELECT,
     VALUE_SELECT,
-    REGION_SELECT,
     ACTION_SELECT,
+    REGION_SELECT,
     CONFIRM_LISTENER,
     BUILD_LISTENER
 } BUILD_LISTENER_STATUS;
@@ -53,6 +53,8 @@ typedef enum{
 @property(strong, nonatomic) Icon *regionIcon;
 @property(strong, nonatomic) Icon *gestureIcon;
 
+@property(strong, nonatomic) Icon *buildStageIcon;
+
 @property(strong, nonatomic) UILabel *ifLabel;
 @property(strong, nonatomic) UILabel *isLabel;
 @property(strong, nonatomic) UILabel *applyLabel;
@@ -74,6 +76,8 @@ typedef enum{
 @property(assign, nonatomic) CGSize ontoSize;
 
 @property(assign, nonatomic) BUILD_LISTENER_STATUS buildStage;
+@property(assign, nonatomic) BUILD_LISTENER_STATUS frontierStage;
+@property(assign, nonatomic) BUILD_LISTENER_STATUS nextStage;
 
 @property(assign, nonatomic) BOOL isTouching;
 
