@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "Icon.h"
 #import "AppBuilderConstants.h"
-#import "IconSubtitle.h"
 
 @interface TopBox : UIView<IconDelegate>
 

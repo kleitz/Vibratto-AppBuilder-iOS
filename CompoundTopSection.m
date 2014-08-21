@@ -7,7 +7,6 @@
 //
 
 #import "CompoundTopSection.h"
-#import "IconSubtitle.h"
 #import "ActuatorDropDown.h"
 #import "SensorDropDown.h"
 
@@ -354,8 +353,8 @@
         NSLog(@"CTS subtitle is nil");
         icon = [[Icon alloc] initWithFrame:CGRectMake(iconX, (self.abc.topBoxHeight - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
     } else {
-        icon = [[IconSubtitle alloc] initWithFrame:CGRectMake(iconX, self.abc.iconTopBuffer, self.abc.iconHeight, self.abc.iconHeight)];
-        [((IconSubtitle *)icon) changeSubtitle:subtitle];
+        icon = [[Icon alloc] initWithFrame:CGRectMake(iconX, self.abc.iconTopBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+        [icon changeSubtitle:subtitle];
     }
     
     [icon changeIconType:iconType];

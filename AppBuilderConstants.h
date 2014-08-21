@@ -40,6 +40,7 @@
 @property(strong, nonatomic) UIFont *dropDownTitleFont;
 @property(strong, nonatomic) UIFont *dropDownFieldFont;
 @property(strong, nonatomic) UIFont *dropDownChooseIconFont;
+@property(strong, nonatomic) UIFont *builderIconSubtitleFont;
 
 @property(strong, nonatomic) UIColor *primaryColor1;
 @property(strong, nonatomic) UIColor *primaryColor2;

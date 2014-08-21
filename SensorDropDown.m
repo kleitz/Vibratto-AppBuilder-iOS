@@ -24,8 +24,8 @@
         self.sensitivityPlaceholder = @"Sensitivity (Optional)";
         self.namePlaceholder = @"Name (Optional)";
         
-        [self createTextField:self.namePlaceholder];
         [self createTextField:self.pinNumberPlaceholder keyboardType:UIKeyboardTypeNumberPad];
+        [self createTextField:self.namePlaceholder];
         [self createTextField:self.sensitivityPlaceholder keyboardType:UIKeyboardTypeNumberPad];
         
         [self setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, [self getProjectedHeight])];

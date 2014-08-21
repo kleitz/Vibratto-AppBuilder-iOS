@@ -51,14 +51,21 @@ typedef enum {
 @property(strong, nonatomic) UIImage *customImage;
 
 @property(strong, nonatomic) UILabel *customLabel;
+@property(strong, nonatomic) UILabel *subtitle;
 
 @property(strong, nonatomic) AppBuilderConstants *constants;
 @property(weak, nonatomic) id<IconDelegate> myDelegate;
 @property(assign, nonatomic) ICON_TYPE iconType;
 
+@property(assign, nonatomic) CGSize subtitleSize;
+@property(assign, nonatomic) CGFloat iconRatio;
+
 @property(assign, nonatomic) int customValue;
 
 @property(assign, nonatomic) BOOL isHighlighted;
+@property(assign, nonatomic) BOOL hasSubtitle;
+
+-(void)changeSubtitle:(NSString *)text;
 
 -(void)changeIconType:(ICON_TYPE)iconType;
 -(void)toggleHighlighted;

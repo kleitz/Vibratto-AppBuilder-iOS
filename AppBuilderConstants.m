@@ -44,6 +44,7 @@ static AppBuilderConstants *abc;
         abc.dropDownTitleFont = [UIFont systemFontOfSize:25];
         abc.dropDownFieldFont = [UIFont systemFontOfSize:20];
         abc.dropDownChooseIconFont = [UIFont systemFontOfSize:22];
+        abc.builderIconSubtitleFont = [UIFont systemFontOfSize:14];
         
         //abfff1
         abc.primaryColor1 = [[UIColor alloc] initWithRed:0.671 green:1.0 blue:0.945 alpha:1.0];

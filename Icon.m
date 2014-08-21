@@ -26,9 +26,16 @@
         self.customLabel = [[UILabel alloc] init];
         [self.customLabel setTextAlignment:NSTextAlignmentCenter];
         [self.customLabel setBackgroundColor:[UIColor clearColor]];
-        //[self addSubview:self.customLabel];
-        //self.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        //self.layer.borderWidth = 1.0f;
+
+        self.iconRatio = 0.8f;
+        
+        self.subtitle = [[UILabel alloc] init];
+        [self.subtitle setBackgroundColor:[UIColor clearColor]];
+        [self.subtitle setTextColor:[UIColor darkGrayColor]];
+        [self.subtitle setFont:[UIFont systemFontOfSize:9]];
+        [self addSubview:self.subtitle];
+        
+        self.hasSubtitle = NO;
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(iconClicked)];
         [self addGestureRecognizer:tapGesture];
@@ -164,10 +171,18 @@
             break;
     }
 }
-/*
-- (void)drawRect:(CGRect)rect{
-    
+
+-(void)changeSubtitle:(NSString *)text{
+
+    if(text != nil){
+        self.subtitleSize = [text sizeWithFont:self.subtitle.font];
+        [self.subtitle setText:text];
+        [self.subtitle setFrame:CGRectMake((self.frame.size.width/2) - (self.subtitleSize.width/2), (self.frame.size.height), self.subtitleSize.width, self.subtitleSize.height)];
+        self.hasSubtitle = YES;
+    } else {
+        [self.subtitle setText:@""];
+        self.hasSubtitle = NO;
+    }
 }
-*/
 
 @end

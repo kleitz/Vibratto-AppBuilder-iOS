@@ -24,8 +24,8 @@
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_ACTUATOR]];
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_LIGHTNING]];
         
-        [self createTextField:self.namePlaceholder];
         [self createTextField:self.pinNumberPlaceholder keyboardType:UIKeyboardTypeNumberPad];
+        [self createTextField:self.namePlaceholder];
         
         [self setFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, [self getProjectedHeight])];
         

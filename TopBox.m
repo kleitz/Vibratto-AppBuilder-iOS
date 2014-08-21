@@ -8,7 +8,6 @@
 
 #import "TopBox.h"
 #import "Icon.h"
-#import "IconSubtitle.h"
 
 @implementation TopBox
 
@@ -66,13 +65,15 @@
 -(void)fillBox:(NSArray *)newItems andDelegate:(id<IconDelegate>)delegate{
     for(int i=0; i<newItems.count; i++){
         Icon *thisIcon = [newItems objectAtIndex:i];
-        if([thisIcon isKindOfClass:[IconSubtitle class]]){
-            NSString *subtitleText = ((IconSubtitle *)thisIcon).subtitle.text;
+        
+        if(thisIcon.hasSubtitle){
+            NSString *subtitleText = thisIcon.subtitle.text;
             [self addIcon:thisIcon.iconType andIconImage:thisIcon.customImage andDelegate:delegate andTag:thisIcon.tag andSubtitle:subtitleText];
+            
         } else {
             [self addIcon:thisIcon.iconType andIconImage:thisIcon.customImage andDelegate:delegate andTag:thisIcon.tag andSubtitle:nil];
         }
-        
+
     }
 }
 
@@ -151,16 +152,18 @@
         if(subtitle == nil){
             newIcon = [[Icon alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), (self.frame.size.height - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
         } else {
-            newIcon = [[IconSubtitle alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), self.abc.iconTopBuffer, self.abc.iconHeight, self.abc.iconHeight)];
-            [((IconSubtitle *)newIcon) changeSubtitle:subtitle];
+
+            newIcon = [[Icon alloc] initWithFrame:CGRectMake(lastIcon.frame.size.width + lastIcon.frame.origin.x + (2 * self.iconBuffer), self.abc.iconTopBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+            [newIcon changeSubtitle:subtitle];
+            //[((IconSubtitle *)newIcon) changeSubtitle:subtitle];
         }
 
     } else {
         if(subtitle == nil){
             newIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, (self.frame.size.height - self.abc.iconHeight)/2, self.abc.iconHeight, self.abc.iconHeight)];
         } else {
-            newIcon = [[IconSubtitle alloc] initWithFrame:CGRectMake(self.iconBuffer, self.abc.iconTopBuffer, self.abc.iconHeight, self.abc.iconHeight)];
-            [((IconSubtitle *)newIcon) changeSubtitle:subtitle];
+            newIcon = [[Icon alloc] initWithFrame:CGRectMake(self.iconBuffer, self.abc.iconTopBuffer, self.abc.iconHeight, self.abc.iconHeight)];
+            [newIcon changeSubtitle:subtitle];
         }
         
     }
