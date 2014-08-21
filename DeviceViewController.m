@@ -9,6 +9,7 @@
 #import "DeviceViewController.h"
 #import "AppBuilderConstants.h"
 #import "CompoundTopSection.h"
+#import "ListenerDropDown.h"
 
 @interface DeviceViewController ()
 
@@ -372,19 +373,42 @@
             self.buildStage = CONFIRM_LISTENER;
             //if(self.nextStage == self.buildStage){
                 [self.confirmListenerIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.confirmListenerButtonHeight/2, self.gestureIcon.frame.origin.y + self.gestureIcon.frame.size.height + self.abc.builderBuffer + self.gestureIcon.subtitle.frame.size.height, self.abc.confirmListenerButtonHeight, self.abc.confirmListenerButtonHeight)];
-                
+                [self.confirmListenerIcon changeIconType:ICON_CONFIRM];
+            
                 [self.mainView insertSubview:self.confirmListenerIcon belowSubview:self.topSection];
                 
                 self.frontierStage = CONFIRM_LISTENER;
-                self.nextStage = BUILD_LISTENER;
+                self.nextStage = NAME_LISTENER;
             //}
             
             [self highlightBuildStageIcon:self.confirmListenerIcon];
             break;
         
+        case NAME_LISTENER:{
+            self.buildStage = NAME_LISTENER;
+            [self.confirmListenerIcon changeIconType:ICON_CUSTOM];
+            ListenerDropDown *ldd = [[ListenerDropDown alloc] initWithFrame:CGRectMake(0, 0, self.mainView.frame.size.width, 0)];
+            
+            CGFloat projHeight = [ldd getProjectedHeight];
+            
+            [UIView animateWithDuration:0.4f animations:^{
+                [self.confirmListenerIcon setBackgroundColor:self.abc.dropDownBgColor];
+                [self.confirmListenerIcon.layer setCornerRadius:0];
+                [self.confirmListenerIcon.layer setBorderWidth:0];
+                [self.confirmListenerIcon.layer setBorderColor:[UIColor clearColor].CGColor];
+                [self.confirmListenerIcon setFrame:CGRectMake(0, self.abc.topBoxHeight * 2, self.mainView.frame.size.width, projHeight)];
+            } completion:^(BOOL finished){
+                [self.confirmListenerIcon removeFromSuperview];
+                [ldd setFrame:CGRectMake(0, self.abc.topBoxHeight * 2, self.mainView.frame.size.width, [ldd getProjectedHeight])];
+                [ldd setDelegate:self];
+                [self.mainView addSubview:ldd];
+            }];
+            
+            break;
+        }
+            
         case BUILD_LISTENER:{
             self.buildStage = BUILD_LISTENER;
-            [self.confirmListenerIcon removeFromSuperview];
             [self.topSection selectCategoryByType:ICON_LISTENER];
             
             [UIView animateWithDuration:0.4f animations:^{
@@ -394,7 +418,10 @@
                 [self.valueIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.builderIconHeight/2, self.mainView.center.y - self.abc.builderIconHeight/2, self.abc.builderIconHeight, self.abc.builderIconHeight)];
                 [self.gestureIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.builderIconHeight/2, self.mainView.center.y - self.abc.builderIconHeight/2, self.abc.builderIconHeight, self.abc.builderIconHeight)];
                 [self.regionIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.builderIconHeight/2, self.mainView.center.y - self.abc.builderIconHeight/2, self.abc.builderIconHeight, self.abc.builderIconHeight)];
-
+                [self.confirmListenerIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.builderIconHeight/2, self.mainView.center.y - self.abc.builderIconHeight/2, self.abc.builderIconHeight, self.abc.builderIconHeight)];
+                [self.confirmListenerIcon.layer setCornerRadius:(self.abc.confirmListenerButtonHeight/2)];
+                [self.confirmListenerIcon setBackgroundColor:self.abc.seeThruColor];
+                
                 [self.ifLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
                 [self.isLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
                 [self.applyLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
@@ -402,6 +429,8 @@
             } completion:^(BOOL finished){
                 [self.createdListenerIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.builderIconHeight/2, self.mainView.center.y - self.abc.builderIconHeight/2, self.abc.builderIconHeight, self.abc.builderIconHeight)];
                 [self.mainView addSubview:self.createdListenerIcon];
+ 
+                [self.confirmListenerIcon removeFromSuperview];
                 
                 [self.sensorIcon changeIconType:ICON_CUSTOM];
                 [self.sensorIcon removeFromSuperview];
@@ -451,6 +480,41 @@
         default:
             break;
     }
+}
+
+-(void)dropDownOkClicked:(DropDownMenu *)ddm{
+    [ddm removeFromSuperview];
+    [self.mainView insertSubview:self.confirmListenerIcon belowSubview:self.topSection];
+    //[self.mainView addSubview:self.confirmListenerIcon];
+    [self gotoStage:BUILD_LISTENER];
+    
+    /*
+    [UIView animateWithDuration:0.4f animations:^{
+        [self.confirmListenerIcon.layer setCornerRadius:(self.abc.confirmListenerButtonHeight/2)];
+        [self.confirmListenerIcon setBackgroundColor:self.abc.seeThruColor];
+        [self.confirmListenerIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.confirmListenerButtonHeight/2, self.gestureIcon.frame.origin.y + self.gestureIcon.frame.size.height + self.abc.builderBuffer + self.gestureIcon.subtitle.frame.size.height, self.abc.confirmListenerButtonHeight, self.abc.confirmListenerButtonHeight)];
+    } completion:^(BOOL finished){
+        [self.confirmListenerIcon changeIconType:ICON_ADD];
+        [self gotoStage:BUILD_LISTENER];
+    }];
+    */
+}
+
+-(void)dropDowncancelClicked:(DropDownMenu *)ddm{
+    [ddm removeFromSuperview];
+    [self.mainView insertSubview:self.confirmListenerIcon belowSubview:self.topSection];
+    
+    [UIView animateWithDuration:0.4f animations:^{
+        [self.confirmListenerIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.confirmListenerButtonHeight/2, self.gestureIcon.frame.origin.y + self.gestureIcon.frame.size.height + self.abc.builderBuffer + self.gestureIcon.subtitle.frame.size.height, self.abc.confirmListenerButtonHeight, self.abc.confirmListenerButtonHeight)];
+        [self.confirmListenerIcon.layer setCornerRadius:(self.abc.confirmListenerButtonHeight/2)];
+        [self.confirmListenerIcon setBackgroundColor:self.abc.seeThruColor];
+    } completion:^(BOOL finished){
+        [self.confirmListenerIcon changeIconType:ICON_ADD];
+        [self gotoStage:CONFIRM_LISTENER];
+        [self.confirmListenerIcon.layer setBorderColor:self.abc.primaryColor2.CGColor];
+        [self.confirmListenerIcon.layer setBorderWidth:1.0f];
+
+    }];
 }
 
 -(void)showDropDown:(DropDownMenu *)dropDown{
@@ -524,7 +588,8 @@
             int textVal = [[[alertView textFieldAtIndex:0] text] intValue];
             if(textVal < 1024){
                 [self.valueIcon changeCustomValue:[[[alertView textFieldAtIndex:0] text] intValue] setAsIconType:YES];
-                [self.valueIcon changeSubtitle:[NSString stringWithFormat:@"%i", textVal]];
+                [self.valueIcon changeSubtitle:nil];
+                //[self.valueIcon changeSubtitle:[NSString stringWithFormat:@"%i", textVal]];
                 //[self gotoStage:ACTION_SELECT];
                 [self processStage];
             } else {

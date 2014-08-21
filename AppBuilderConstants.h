@@ -48,6 +48,7 @@
 @property(strong, nonatomic) UIColor *primaryColor4;
 @property(strong, nonatomic) UIColor *seeThruColor;
 @property(strong, nonatomic) UIColor *seeThruColorHighlight;
+@property(strong, nonatomic) UIColor *dropDownBgColor;
 
 @property(assign, nonatomic) CGFloat primaryButtonDiameter;
 @property(assign, nonatomic) CGFloat topBoxHeight;

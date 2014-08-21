@@ -56,6 +56,8 @@ static AppBuilderConstants *abc;
         abc.primaryColor4 = [[UIColor alloc] initWithRed:1.0 green:0.906f blue:0.671 alpha:1.0f];
         abc.seeThruColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:0.65];
         abc.seeThruColorHighlight = [[UIColor alloc] initWithRed:0.7f green:0.7f blue:0.7f alpha:0.65];
+        abc.dropDownBgColor = [[UIColor alloc] initWithRed:0.8f green:0.8f blue:0.8f alpha:1.0f];
+        //abc.dropDownBgColor = abc.primaryColor4;
         
         abc.primaryButtonDiameter = 60.0f;
         abc.iconHeight = 46.0f;

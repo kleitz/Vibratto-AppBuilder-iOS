@@ -18,6 +18,7 @@ typedef enum {
     ACTION_SELECT,
     REGION_SELECT,
     CONFIRM_LISTENER,
+    NAME_LISTENER,
     BUILD_LISTENER
 } BUILD_LISTENER_STATUS;
 
@@ -31,7 +32,7 @@ typedef enum{
 } BUILDER_SEQUENCE_TYPES;
 */
 
-@interface DeviceViewController : UIViewController<IconDelegate, UIAlertViewDelegate>
+@interface DeviceViewController : UIViewController<IconDelegate, UIAlertViewDelegate, DropDownDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;
 

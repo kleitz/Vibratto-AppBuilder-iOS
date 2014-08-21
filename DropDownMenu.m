@@ -17,7 +17,7 @@
 
     if(self){
         self.abc = [AppBuilderConstants getAppBuilderConstants];
-        [self setBackgroundColor:[UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1.0]];
+        [self setBackgroundColor:self.abc.dropDownBgColor];
         self.textFields = [[NSMutableArray alloc] init];
         self.iconTypes = [[NSMutableArray alloc] init];
         self.selectedIcon = nil;
@@ -78,13 +78,6 @@
         
         [self.iconBox addIcon:thisIconType andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
     }
-    
-    /*
-    [self.iconBox addIcon:ICON_CUSTOM andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
-    [self.iconBox addIcon:ICON_ACTUATOR andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
-    [self.iconBox addIcon:ICON_ALL andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
-    [self.iconBox addIcon:ICON_MAP andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
-    */
     
     [self.iconBox changeIsCentered:YES];
     [self.iconBox changeTrayColor:[UIColor clearColor]];
