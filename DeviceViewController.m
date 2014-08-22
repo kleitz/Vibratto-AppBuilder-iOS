@@ -115,6 +115,7 @@
     
     self.topSection = [[CompoundTopSection alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 2 * self.abc.topBoxHeight)];
     [self.topSection setDelegate:self];
+    [self.topSection setCompoundDelegate:self];
     
     self.uploadIcon = [[Icon alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.abc.primaryButtonDiameter/2, self.view.frame.size.height - 80.0f + self.abc.topBoxHeight, self.abc.primaryButtonDiameter, self.abc.primaryButtonDiameter)];
     [self.uploadIcon changeIconType:ICON_UPLOAD];
@@ -128,6 +129,10 @@
 
     [self gotoStage:PRE_SELECT];
     //[self.mainView addSubview:self.uploadIcon];
+}
+
+-(void)buildListener:(CompoundTopSection *)compoundTopSection{
+    [self gotoStage:BUILD_LISTENER];
 }
 
 -(void)processStage{
@@ -187,7 +192,7 @@
         }
         [self processStage];
     } else if(icon.tag >= 1000 && icon.tag <2000){
-        int tagAdjust = icon.tag - 1000;
+        NSInteger tagAdjust = icon.tag - 1000;
         
         switch (tagAdjust) {
             case ICON_SENSOR:
@@ -231,6 +236,11 @@
     self.buildStageIcon = icon;
 }
 
+-(void)resetBuild{
+    self.nextStage = PRE_SELECT;
+    [self gotoStage:PRE_SELECT];
+}
+
 -(void)gotoStage:(BUILD_LISTENER_STATUS)stage{
     switch (stage) {
         case PRE_SELECT:
@@ -258,7 +268,6 @@
                 } completion:^(BOOL finished){
                     [self.sensorIcon setFrame:CGRectMake(self.bigAddIcon.frame.origin.x, self.bigAddIcon.frame.origin.y, self.bigAddIcon.frame.size.width, self.bigAddIcon.frame.size.height)];
                     [self.mainView insertSubview:self.sensorIcon belowSubview:self.topSection];
-                    //[self.mainView addSubview:self.sensorIcon];
                     
                     [self.bigAddIcon removeFromSuperview];
                     NSLog(@"DVC ifLabel width: %f, height: %f", self.ifSize.width, self.ifSize.height);
@@ -268,9 +277,6 @@
                     [self.ifLabel setFrame:CGRectMake(self.abc.builderBuffer, 90.0f + self.abc.topBoxHeight + heightAdjust, self.ifSize.width, self.ifSize.height)];
                     
                     [self.mainView insertSubview:self.ifLabel belowSubview:self.topSection];
-                    //[self.mainView addSubview:self.ifLabel];
-                    
-                    
                     
                     self.frontierStage = SENSOR_SELECT;
                     self.nextStage = COMPARATOR_SELECT;
@@ -324,13 +330,9 @@
                 [self.applyLabel setFrame:CGRectMake(self.abc.builderBuffer, self.comparatorIcon.frame.origin.y + self.comparatorIcon.frame.size.height + self.abc.builderBuffer + ((self.comparatorIcon.frame.size.height - self.applySize.height)/2) + self.comparatorIcon.subtitle.frame.size.height, self.applySize.width, self.applySize.height)];
                 
                 [self.mainView insertSubview:self.applyLabel belowSubview:self.topSection];
-                //[self.mainView addSubview:self.applyLabel];
-                
                 [self.gestureIcon setFrame:CGRectMake(self.applyLabel.frame.origin.x + self.applyLabel.frame.size.width + self.abc.builderBuffer, self.comparatorIcon.frame.size.height + self.comparatorIcon.frame.origin.y + self.abc.builderBuffer + self.comparatorIcon.subtitle.frame.size.height, self.abc.builderIconHeight, self.abc.builderIconHeight)];
                 
                 [self.mainView insertSubview:self.gestureIcon belowSubview:self.topSection];
-                //[self.mainView addSubview:self.gestureIcon];
-                
                 
                 self.frontierStage = ACTION_SELECT;
                 self.nextStage = REGION_SELECT;
@@ -377,6 +379,8 @@
         
         case NAME_LISTENER:{
             self.buildStage = NAME_LISTENER;
+            [self.topSection showDropDownByType:ICON_LISTENER];
+            /*
             [self.confirmListenerIcon changeIconType:ICON_CUSTOM];
             self.ldd = [[ListenerDropDown alloc] initWithFrame:CGRectMake(0, 0, self.mainView.frame.size.width, 0)];
             
@@ -394,116 +398,141 @@
                 [self.ldd setDelegate:self];
                 [self.mainView addSubview:self.ldd];
             }];
-            
+            */
             break;
         }
             
         case BUILD_LISTENER:{
             self.buildStage = BUILD_LISTENER;
-            [self.topSection selectCategoryByType:ICON_LISTENER];
+            //[self.topSection selectCategoryByType:ICON_LISTENER];
             [self.sensorIcon changeIconType:ICON_CUSTOM];
             [self.comparatorIcon changeIconType:ICON_CUSTOM];
             [self.valueIcon changeIconType:ICON_CUSTOM];
             [self.gestureIcon changeIconType:ICON_CUSTOM];
             [self.regionIcon changeIconType:ICON_CUSTOM];
             
-            [UIView animateWithDuration:0.5f animations:^{
+            [self.confirmListenerIcon removeFromSuperview];
             
-                [self.sensorIcon setFrame:CGRectMake(self.mainView.center.x - (self.abc.iconHeight/2), self.mainView.center.y - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
-                [self.comparatorIcon setFrame:CGRectMake(self.mainView.center.x - (self.abc.iconHeight/2), self.mainView.center.y - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
-                [self.valueIcon setFrame:CGRectMake(self.mainView.center.x - (self.abc.iconHeight/2), self.mainView.center.y - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
-                [self.gestureIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.iconHeight/2, self.mainView.center.y - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
-                [self.regionIcon setFrame:CGRectMake(self.mainView.center.x - (self.abc.iconHeight/2), self.mainView.center.y - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
-                [self.confirmListenerIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.iconHeight/2, self.mainView.center.y - self.abc.iconHeight/2, self.abc.iconHeight, self.abc.iconHeight)];
-                [self.confirmListenerIcon.layer setCornerRadius:(self.abc.confirmListenerButtonHeight/2)];
-                [self.confirmListenerIcon setBackgroundColor:self.abc.seeThruColor];
-                
-                [self.ifLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
-                [self.isLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
-                [self.applyLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
-                [self.ontoLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
+            [self.sensorIcon changeIconType:ICON_CUSTOM];
+            [self.sensorIcon removeFromSuperview];
+            [self.sensorIcon changeSubtitle:nil];
             
-            } completion:^(BOOL finished){
-                [self.createdListenerIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.iconHeight/2, self.mainView.center.y - self.abc.iconHeight/2, self.abc.iconHeight, self.abc.iconHeight)];
+            [self.comparatorIcon changeIconType:ICON_CUSTOM];
+            [self.comparatorIcon removeFromSuperview];
+            [self.comparatorIcon changeSubtitle:nil];
+            
+            [self.valueIcon changeIconType:ICON_CUSTOM];
+            [self.valueIcon removeFromSuperview];
+            [self.valueIcon changeSubtitle:nil];
+            
+            [self.gestureIcon changeIconType:ICON_CUSTOM];
+            [self.gestureIcon removeFromSuperview];
+            [self.gestureIcon changeSubtitle:nil];
+            
+            [self.regionIcon changeIconType:ICON_CUSTOM];
+            [self.regionIcon removeFromSuperview];
+            [self.regionIcon changeSubtitle:nil];
+            
+            [self.ifLabel removeFromSuperview];
+            [self.isLabel removeFromSuperview];
+            [self.applyLabel removeFromSuperview];
+            [self.ontoLabel removeFromSuperview];
+            
+            //NSTimer *nextTimer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(resetBuild) userInfo:nil repeats:NO];
+            NSTimer *nextTimer = [NSTimer scheduledTimerWithTimeInterval:1.1f target:self selector:@selector(resetBuild) userInfo:nil repeats:NO];
 
-                ICON_TYPE iconType = ICON_CUSTOM;
-                
-                if(self.ldd.selectedIcon != nil){
-                    NSLog(@"DVC selected icon not nil");
-                    iconType = self.ldd.selectedIcon.iconType;
-                    [self.createdListenerIcon changeIconType:iconType];
-                } else {
-                    NSLog(@"DVC selected icon nil");
-                    //[self.createdListenerIcon changeCustomValue:self.topSection.listenersArray.count + 1 setAsIconType:YES];
-                }
-                
-                [self.mainView addSubview:self.createdListenerIcon];
-                
-                [self.confirmListenerIcon removeFromSuperview];
-                
-                [self.sensorIcon changeIconType:ICON_CUSTOM];
-                [self.sensorIcon removeFromSuperview];
-                [self.sensorIcon changeSubtitle:nil];
-                
-                [self.comparatorIcon changeIconType:ICON_CUSTOM];
-                [self.comparatorIcon removeFromSuperview];
-                [self.comparatorIcon changeSubtitle:nil];
-                
-                [self.valueIcon changeIconType:ICON_CUSTOM];
-                [self.valueIcon removeFromSuperview];
-                [self.valueIcon changeSubtitle:nil];
-                
-                [self.gestureIcon changeIconType:ICON_CUSTOM];
-                [self.gestureIcon removeFromSuperview];
-                [self.gestureIcon changeSubtitle:nil];
-                
-                [self.regionIcon changeIconType:ICON_CUSTOM];
-                [self.regionIcon removeFromSuperview];
-                [self.regionIcon changeSubtitle:nil];
-                
-                [self.ifLabel removeFromSuperview];
-                [self.isLabel removeFromSuperview];
-                [self.applyLabel removeFromSuperview];
-                [self.ontoLabel removeFromSuperview];
-                
-                CGFloat createdListenerX = self.topSection.iconBox.addIconBox.frame.size.width + (self.topSection.listenersArray.count * self.abc.iconHeight) + (self.topSection.iconBox.iconBuffer * (self.topSection.listenersArray.count + 1));
-                CGFloat createdListenerY;
-                if(self.ldd.name == nil){
-                    createdListenerY = self.abc.topBoxHeight + ((self.abc.topBoxHeight - self.abc.iconHeight)/2);
-                } else {
-                    createdListenerY = self.abc.topBoxHeight + self.abc.iconTopBuffer;
-                }
-
-                [UIView animateWithDuration:0.5f animations:^{
-                    [self.createdListenerIcon setFrame:CGRectMake(createdListenerX, createdListenerY, self.abc.iconHeight, self.abc.iconHeight)];
-                    [self.createdListenerIcon.layer setCornerRadius:self.abc.iconHeight/2];
-                } completion:^(BOOL finished){
-                    //[self.topSection.iconBox addIcon:ICON_CUSTOM andIconImage:nil andDelegate:nil andTag:100];
-                    NSString *subtitle = self.ldd.name;
-                    if(subtitle == nil){
-                        subtitle = [NSString stringWithFormat:@"%i", self.topSection.listenersArray.count + 1];
-                    }
-                    
-                    [self.topSection addNewIconInCategory:ICON_LISTENER iconType:iconType andIconImage:nil andDelegate:self andTag:0 subtitle:self.ldd.name];
-                    
-                    /*
-                    if(self.ldd.selectedIcon == nil){
-                        [((Icon *)[self.topSection.iconBox.boxItems objectAtIndex:self.topSection.listenersArray.count -1]) changeCustomValue:self.topSection.listenersArray.count + 1 setAsIconType:YES];
-                    }
-                    */
-                    
-                    [self.createdListenerIcon changeIconType:ICON_CUSTOM];
-                    [self.createdListenerIcon removeFromSuperview];
-                    
-                    self.nextStage = PRE_SELECT;
-                    [self gotoStage:PRE_SELECT];
-                }];
-            }];
-            
-            }
-            
+            /*
+             [UIView animateWithDuration:0.5f animations:^{
+             
+             [self.sensorIcon setFrame:CGRectMake(self.mainView.center.x - (self.abc.iconHeight/2), self.mainView.center.y - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
+             [self.comparatorIcon setFrame:CGRectMake(self.mainView.center.x - (self.abc.iconHeight/2), self.mainView.center.y - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
+             [self.valueIcon setFrame:CGRectMake(self.mainView.center.x - (self.abc.iconHeight/2), self.mainView.center.y - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
+             [self.gestureIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.iconHeight/2, self.mainView.center.y - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
+             [self.regionIcon setFrame:CGRectMake(self.mainView.center.x - (self.abc.iconHeight/2), self.mainView.center.y - (self.abc.iconHeight/2), self.abc.iconHeight, self.abc.iconHeight)];
+             [self.confirmListenerIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.iconHeight/2, self.mainView.center.y - self.abc.iconHeight/2, self.abc.iconHeight, self.abc.iconHeight)];
+             [self.confirmListenerIcon.layer setCornerRadius:(self.abc.confirmListenerButtonHeight/2)];
+             [self.confirmListenerIcon setBackgroundColor:self.abc.seeThruColor];
+             
+             [self.ifLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
+             [self.isLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
+             [self.applyLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
+             [self.ontoLabel setFrame:CGRectMake(self.mainView.center.x, self.mainView.center.y, 0, 0)];
+             
+             } completion:^(BOOL finished){
+             [self.createdListenerIcon setFrame:CGRectMake(self.mainView.center.x - self.abc.iconHeight/2, self.mainView.center.y - self.abc.iconHeight/2, self.abc.iconHeight, self.abc.iconHeight)];
+             
+             ICON_TYPE iconType = ICON_CUSTOM;
+             
+             if(self.ldd.selectedIcon != nil){
+             NSLog(@"DVC selected icon not nil");
+             iconType = self.ldd.selectedIcon.iconType;
+             [self.createdListenerIcon changeIconType:iconType];
+             } else {
+             NSLog(@"DVC selected icon nil");
+             //[self.createdListenerIcon changeCustomValue:self.topSection.listenersArray.count + 1 setAsIconType:YES];
+             }
+             
+             [self.mainView addSubview:self.createdListenerIcon];
+             
+             [self.confirmListenerIcon removeFromSuperview];
+             
+             [self.sensorIcon changeIconType:ICON_CUSTOM];
+             [self.sensorIcon removeFromSuperview];
+             [self.sensorIcon changeSubtitle:nil];
+             
+             [self.comparatorIcon changeIconType:ICON_CUSTOM];
+             [self.comparatorIcon removeFromSuperview];
+             [self.comparatorIcon changeSubtitle:nil];
+             
+             [self.valueIcon changeIconType:ICON_CUSTOM];
+             [self.valueIcon removeFromSuperview];
+             [self.valueIcon changeSubtitle:nil];
+             
+             [self.gestureIcon changeIconType:ICON_CUSTOM];
+             [self.gestureIcon removeFromSuperview];
+             [self.gestureIcon changeSubtitle:nil];
+             
+             [self.regionIcon changeIconType:ICON_CUSTOM];
+             [self.regionIcon removeFromSuperview];
+             [self.regionIcon changeSubtitle:nil];
+             
+             [self.ifLabel removeFromSuperview];
+             [self.isLabel removeFromSuperview];
+             [self.applyLabel removeFromSuperview];
+             [self.ontoLabel removeFromSuperview];
+             
+             CGFloat createdListenerX = self.topSection.iconBox.addIconBox.frame.size.width + (self.topSection.listenersArray.count * self.abc.iconHeight) + (self.topSection.iconBox.iconBuffer * (self.topSection.listenersArray.count + 1));
+             CGFloat createdListenerY;
+             if(self.ldd.name == nil){
+             createdListenerY = self.abc.topBoxHeight + ((self.abc.topBoxHeight - self.abc.iconHeight)/2);
+             } else {
+             createdListenerY = self.abc.topBoxHeight + self.abc.iconTopBuffer;
+             }
+             
+             [UIView animateWithDuration:0.5f animations:^{
+             [self.createdListenerIcon setFrame:CGRectMake(createdListenerX, createdListenerY, self.abc.iconHeight, self.abc.iconHeight)];
+             [self.createdListenerIcon.layer setCornerRadius:self.abc.iconHeight/2];
+             } completion:^(BOOL finished){
+             //[self.topSection.iconBox addIcon:ICON_CUSTOM andIconImage:nil andDelegate:nil andTag:100];
+             NSString *subtitle = self.ldd.name;
+             if(subtitle == nil){
+             subtitle = [NSString stringWithFormat:@"%li", (NSInteger)self.topSection.listenersArray.count + 1];
+             }
+             
+             [self.topSection addNewIconInCategory:ICON_LISTENER iconType:iconType andIconImage:nil andDelegate:self andTag:0 subtitle:self.ldd.name];
+             
+             [self.createdListenerIcon changeIconType:ICON_CUSTOM];
+             [self.createdListenerIcon removeFromSuperview];
+             
+             self.nextStage = PRE_SELECT;
+             [self gotoStage:PRE_SELECT];
+             }];
+             }];
+             
+             }
+             */
             break;
-            
+        }
         default:
             break;
     }
@@ -512,13 +541,6 @@
 -(void)dropDownOkClicked:(DropDownMenu *)ddm{
     [ddm removeFromSuperview];
     [self.mainView insertSubview:self.confirmListenerIcon belowSubview:self.topSection];
-    
-    /*
-    if(ddm.selectedIcon == nil){
-        ddm.selectedIcon = [[Icon alloc] init];
-        [ddm.selectedIcon changeIconType:ICON_CUSTOM];
-    }
-    */
     
     [self gotoStage:BUILD_LISTENER];
 }
@@ -595,7 +617,7 @@
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    NSLog(@"DVC alertView clickedbutton: %i, tag: %i", buttonIndex, alertView.tag);
+    NSLog(@"DVC alertView clickedbutton: %li, tag: %li", buttonIndex, alertView.tag);
     if(alertView.tag == 1){
         NSLog(@"DVC value input alertview");
         

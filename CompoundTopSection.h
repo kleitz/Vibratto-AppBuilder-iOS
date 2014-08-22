@@ -10,6 +10,15 @@
 #import "TopBox.h"
 #import "DropDownMenu.h"
 
+@class CompoundTopSection;
+
+@protocol CompoundTopSectionDelegate <NSObject>
+
+@optional
+-(void)buildListener:(CompoundTopSection *)compoundTopSection;
+
+@end
+
 @interface CompoundTopSection : UIView<IconDelegate, DropDownDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;
@@ -38,11 +47,13 @@
 @property(assign, nonatomic) int listenersBaseTag;
 
 @property(strong, nonatomic) id<IconDelegate>delegate;
+@property(strong, nonatomic) id<CompoundTopSectionDelegate>compoundDelegate;
 
 @property(assign, nonatomic) int visibleCount;
 
 -(void)selectCategoryByType:(ICON_TYPE)iconType;
 -(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag subtitle:(NSString *)text;
-
+-(void)showDropDown:(DropDownMenu *)dropDown;
+-(void)showDropDownByType:(ICON_TYPE)iconType;
 
 @end
