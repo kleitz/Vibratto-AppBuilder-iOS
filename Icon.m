@@ -62,6 +62,7 @@
 }
 
 -(void)changeCustomValue:(int)customValue setAsIconType:(BOOL)changeIconType{
+    NSLog(@"Icon changeCustonValue: %i", customValue);
     self.customValue = customValue;
     if(changeIconType){
         [self changeIconType:ICON_CUSTOM_VALUE];

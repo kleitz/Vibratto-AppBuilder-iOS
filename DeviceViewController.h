@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AppBuilderConstants.h"
 #import "CompoundTopSection.h"
+#import "ListenerDropDown.h"
 
 typedef enum {
     PRE_SELECT,
@@ -22,24 +23,9 @@ typedef enum {
     BUILD_LISTENER
 } BUILD_LISTENER_STATUS;
 
-/*
-typedef enum{
-    BST_SENSOR,
-    BST_COMPARATOR,
-    BST_VALUE,
-    BST_GESTURE,
-    BST_REGION
-} BUILDER_SEQUENCE_TYPES;
-*/
-
 @interface DeviceViewController : UIViewController<IconDelegate, UIAlertViewDelegate, DropDownDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;
-
-/*
-@property(strong, nonatomic) TopBox *topBox;
-@property(strong, nonatomic) TopBox *componentsTray;
-*/
 
 @property(strong, nonatomic) CompoundTopSection *topSection;
 
@@ -55,6 +41,8 @@ typedef enum{
 @property(strong, nonatomic) Icon *gestureIcon;
 
 @property(strong, nonatomic) Icon *buildStageIcon;
+
+@property(strong, nonatomic) ListenerDropDown *ldd;
 
 @property(strong, nonatomic) UILabel *ifLabel;
 @property(strong, nonatomic) UILabel *isLabel;
