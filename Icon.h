@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AppBuilderConstants.h"
 #import "AppBuilderProtocols.h"
+#import "TypeData.h"
 
 typedef enum {
     ICON_ADD,
@@ -46,6 +47,8 @@ typedef enum {
 @end
 
 @interface Icon : UIView<IconDelegate>
+
+@property(strong, nonatomic) TypeData *iconData;
 
 @property(strong, nonatomic) UIImageView *bgImage;
 @property(strong, nonatomic) UIImage *customImage;

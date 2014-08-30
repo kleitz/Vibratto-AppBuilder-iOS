@@ -16,7 +16,7 @@
 
 @optional
 -(void)buildListener:(CompoundTopSection *)compoundTopSection;
-
+-(void)addedNewItemFromDropDown:(DropDownMenu *)newItem;
 @end
 
 @interface CompoundTopSection : UIView<IconDelegate, DropDownDelegate>
@@ -53,6 +53,7 @@
 
 -(void)selectCategoryByType:(ICON_TYPE)iconType;
 -(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag subtitle:(NSString *)text;
+-(void)addNewIconInCategory:(ICON_TYPE)iconCategory iconType:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag subtitle:(NSString *)subtitle andData:(TypeData *)iconData;
 -(void)showDropDown:(DropDownMenu *)dropDown;
 -(void)showDropDownByType:(ICON_TYPE)iconType;
 

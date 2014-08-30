@@ -33,7 +33,7 @@
 }
 
 -(void)iconClicked:(Icon *)icon{
-    NSLog(@"TopBox iconClicked: %i", icon.tag);
+    NSLog(@"TopBox iconClicked: %li", (long)icon.tag);
     if(icon.tag == 10000){
         [self.delegate iconClicked:icon];
     } else {

@@ -31,10 +31,6 @@
     [super viewDidLoad];
     
     [self.view setBackgroundColor:self.constants.primaryColor1];
-    //[self.view setBackgroundColor:[UIColor blueColor]];
-    
-    //self.newDeviceButton = [UIButton alloc] initWithFrame:[CGRectMake(self.view.frame.size.width/2, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)]
-    //self.newDeviceButton = [[UIButton alloc] initWithFrame:[self createCenteredButtonWithDiameter:self.constants.primaryButtonDiameter]];
     
     self.addDeviceButton = [[Icon alloc] initWithFrame:CGRectMake(self.view.center.x - self.constants.primaryButtonDiameter/2, self.view.frame.size.height * 0.8f, self.constants.primaryButtonDiameter, self.constants.primaryButtonDiameter)];
     [self.addDeviceButton changeIconType:ICON_ADD];
@@ -42,18 +38,14 @@
     [self.addDeviceButton.layer setBorderColor:[UIColor lightGrayColor].CGColor];
     [self.addDeviceButton setMyDelegate:self];
     
-    /*
-    self.addDeviceButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.constants.primaryButtonDiameter/2, self.view.frame.size.height * 0.8, self.constants.primaryButtonDiameter, self.constants.primaryButtonDiameter)];
-    [self.addDeviceButton.layer setCornerRadius:self.constants.primaryButtonDiameter/2];
-    [self.addDeviceButton.layer setBorderColor:[UIColor lightGrayColor].CGColor];
-    [self.addDeviceButton.layer setBorderWidth:1.0f];
-    [self.addDeviceButton setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.3]];
-    [self.addDeviceButton addTarget:self action:@selector(newDeviceButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    */
-    
     [self.view addSubview:self.addDeviceButton];
     
     NSLog(@"Done setting up!");
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [self setupBluetoothCentral];
+    //[self setupBluetoothPeripheral];
 }
 
 -(void)newDeviceButtonClicked{
@@ -67,15 +59,76 @@
     [self newDeviceButtonClicked];
 }
 
-/*
--(CGRect)createCenteredButtonWithDiameter:(CGFloat)diameter{
-    return CGRectMake(self.view.frame.size.width/2 - diameter/2, 0, diameter, diameter);
-}
-*/
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
+-(void)setupBluetoothPeripheral{
+    NSLog(@"Hi from setupBluetooth");
+    
+    self.btPeripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
+    //self.btPeripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil options:nil];
+    NSLog(@"initialized peripheralManager");
+    
+    CBUUID *myCustomServiceUUID = [CBUUID UUIDWithString:@"7698BD06-62BA-46FA-A1ED-1EA14926E259"];
+    CBUUID *myChustomCharacteristicUUID = [CBUUID UUIDWithString:@"E30EEF25-88B4-44CC-88CF-E434A81D570A"];
+    NSLog(@"Generated UUIDs");
+    
+    self.btCharacteristic = [[CBMutableCharacteristic alloc] initWithType:myChustomCharacteristicUUID properties:CBCharacteristicPropertyRead value:nil permissions:CBAttributePermissionsReadable];
+    self.btService = [[CBMutableService alloc] initWithType:myCustomServiceUUID primary:YES];
+    self.btService.characteristics = @[self.btCharacteristic];
 }
+
+-(void)setupBluetoothCentral{
+    NSLog(@"Hi from setupBluetooth central");
+    self.btCentralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
+-(void)centralManagerDidUpdateState:(CBCentralManager *)central{
+    NSLog(@"Hi from centralManager did update state: %li", (long)central.state);
+    if(central.state == CBCentralManagerStatePoweredOn){
+        NSLog(@"State is on!");
+        [self.btCentralManager scanForPeripheralsWithServices:nil options:nil];
+    } else {
+        NSLog(@"State is something else");
+    }
+}
+
+-(void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI{
+    NSLog(@"Hi from centralManagerDidDiscoverPeripheral, name:%@ uuid:%@, id: %@", peripheral.name, peripheral.UUID, peripheral.identifier);
+    NSLog(@"PeripheralData: %@", advertisementData);
+    self.btPeripheral = peripheral;
+}
+
+-(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral{
+    NSLog(@"CentralManager didConnectPeripheral: %@", peripheral.UUID);
+}
+
+-(void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral{
+    NSLog(@"Hi from peripheralManagerDidUpdateState");
+    if(peripheral.state == CBPeripheralManagerStatePoweredOn){
+        NSLog(@"peripheral powered on!");
+        [self.btPeripheralManager addService:self.btService];
+    } else {
+        NSLog(@"State was something else: %li", (long)peripheral.state);
+    }
+}
+
+-(void)peripheralManager:(CBPeripheralManager *)peripheral didAddService:(CBService *)service error:(NSError *)error{
+    NSLog(@"Hi from peripheralManagerDidAddService");
+    if(error){
+        NSLog(@"Error publishing service: %@", [error localizedDescription]);
+    } else {
+        [self.btPeripheralManager startAdvertising:@{CBAdvertisementDataServiceUUIDsKey: @[self.btService.UUID]}];
+    }
+}
+
+-(void)peripheralManagerDidStartAdvertising:(CBPeripheralManager *)peripheral error:(NSError *)error{
+    NSLog(@"Hi from peripheralManagerDidStartAdvertising");
+    if(error){
+        NSLog(@"Error advertising service: %@", [error localizedDescription]);
+    } else {
+        NSLog(@"Advertised successfully!, %i", peripheral.isAdvertising);
+    }
+}
+
 
 @end

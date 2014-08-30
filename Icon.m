@@ -22,6 +22,7 @@
         self.bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width * ((1.0f - self.constants.iconImagePercent)/2), self.frame.size.height * ((1.0f - self.constants.iconImagePercent)/2), self.frame.size.width * self.constants.iconImagePercent, self.frame.size.height * self.constants.iconImagePercent)];
         self.customImage = [[UIImage alloc] init];
         self.layer.cornerRadius = self.frame.size.width/2;
+        self.iconData = nil;
         
         self.customLabel = [[UILabel alloc] init];
         [self.customLabel setTextAlignment:NSTextAlignmentCenter];
@@ -33,6 +34,9 @@
         [self.subtitle setBackgroundColor:[UIColor clearColor]];
         [self.subtitle setTextColor:[UIColor darkGrayColor]];
         [self.subtitle setFont:[UIFont systemFontOfSize:9]];
+        [self.subtitle setNumberOfLines:1];
+        [self.subtitle setAdjustsFontSizeToFitWidth:YES];
+        
         [self addSubview:self.subtitle];
         
         self.hasSubtitle = NO;

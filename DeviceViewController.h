@@ -44,6 +44,12 @@ typedef enum {
 
 @property(strong, nonatomic) ListenerDropDown *ldd;
 
+@property(strong, nonatomic) NSMutableArray *actuators;
+@property(strong, nonatomic) NSMutableArray *sensors;
+@property(strong, nonatomic) NSMutableArray *regions;
+@property(strong, nonatomic) NSMutableArray *gestures;
+@property(strong, nonatomic) NSMutableArray *listeners;
+
 @property(strong, nonatomic) UILabel *ifLabel;
 @property(strong, nonatomic) UILabel *isLabel;
 @property(strong, nonatomic) UILabel *applyLabel;
