@@ -49,21 +49,23 @@
     for(int i=0; i<self.textFields.count; i++){
         UITextField *thisTextField = [self.textFields objectAtIndex:i];
         if([thisTextField.placeholder isEqualToString:self.namePlaceholder]){
-            if(![thisTextField.text isEqualToString: @""]){
+            if(![thisTextField.text isEqualToString: @""] && thisTextField.text != nil){
                 self.name = thisTextField.text;
             } else {
                 self.name = nil;
             }
         } else if([thisTextField.placeholder isEqualToString:self.pinNumberPlaceholder]){
-            if(![thisTextField.text isEqualToString:@""]){
+            if(![thisTextField.text isEqualToString:@""] && thisTextField.text != nil){
                 self.pinNumber = [thisTextField.text intValue];
             } else {
                 self.pinNumber = 0;
             }
         } else if([thisTextField.placeholder isEqualToString:self.sensitivityPlaceholder]){
-            if(![thisTextField.text isEqualToString:@""]){
+            if(![thisTextField.text isEqualToString:@""] && thisTextField.text != nil){
+                NSLog(@"SDD Sensitivity is not empty: %@", thisTextField.text);
                 self.sensitivity = [thisTextField.text intValue];
             } else {
+                NSLog(@"SDD sensitivity is epty");
                 self.sensitivity = -1;
             }
         }

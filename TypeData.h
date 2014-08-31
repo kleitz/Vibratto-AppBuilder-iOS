@@ -8,6 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    MAP,
+    SENSOR_TO_VALUE,
+    SENSOR_TO_SENSOR,
+} TRIGGER_TYPE;
+
+typedef enum {
+    ACTION_GESTURE,
+    ACTION_DIRECT,
+    ACTION_RELATIVE
+} ACTION_TYPE;
+
 @interface TypeData : NSObject
 
 @property(assign, nonatomic) BOOL isCustom;
@@ -45,9 +57,12 @@
 @property(strong, nonatomic) NSString *gesture;
 @property(strong, nonatomic) NSString *action;
 @property(strong, nonatomic) NSString *region;
+@property(strong, nonatomic) NSString *valueName;
 @property(strong, nonatomic) NSString *onRegion;
 @property(strong, nonatomic) NSString *toRegion;
 
+@property(assign, nonatomic) TRIGGER_TYPE triggerType;
+@property(assign, nonatomic) ACTION_TYPE actionType;
 @property(assign, nonatomic) int sensorPin;
 @property(assign, nonatomic) int sensorAPin;
 @property(assign, nonatomic) int sensorBPin;

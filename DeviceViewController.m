@@ -129,6 +129,7 @@
     self.uploadIcon = [[Icon alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.abc.primaryButtonDiameter/2, self.view.frame.size.height - 80.0f + self.abc.topBoxHeight, self.abc.primaryButtonDiameter, self.abc.primaryButtonDiameter)];
     [self.uploadIcon changeIconType:ICON_UPLOAD];
     [self.uploadIcon setTag:3];
+    [self.uploadIcon setMyDelegate:self];
     
     self.bigAddIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.bigAddButtonHeight, self.abc.bigAddButtonHeight)];
     [self.bigAddIcon changeIconType:ICON_ADD];
@@ -172,7 +173,7 @@
         
         iconData = thisActuator;
         
-        [self.actuators addObject:[NSNumber numberWithInt:thisActuatorDropDown.pinNumber]];
+        [self.actuators addObject:thisActuator];
     } else if([newItem isKindOfClass:[SensorDropDown class]]){
         SensorDropDown *thisSensorDropDown = ((SensorDropDown *)newItem);
         
@@ -216,51 +217,91 @@
         Listener *thisListener = [[Listener alloc] init];
         [thisListener setIsCustom:YES];
         
-        if(comparatorData.type == ICON_GREATERTHEN){
-            //if(self.valueIcon.)
-            //self.valueIcon.iconData == ICON_CUSTOM
-            if([self.valueIcon.iconData isKindOfClass:[TriggerValue class]]){
-                NSLog(@"DVC sensorGreaterThenValue");
-                
+        if([self.valueIcon.iconData isKindOfClass:[TriggerValue class]]){
+            NSLog(@"DVC sensorGreaterThenValue");
+            
+            if(comparatorData.type == ICON_GREATERTHEN){
                 [thisListener setType:@"sensorGreaterThenValue"];
-                Sensor *thisSensorData = ((Sensor *)self.sensorIcon.iconData);
-                
-                if(thisSensorData.hasName){
-                    [thisListener setSensor:thisSensorData.name];
-                } else {
-                    [thisListener setSensorPin:thisSensorData.pinNumber];
-                }
-                
-                TriggerValue *thisValueData = ((TriggerValue *)self.valueIcon.iconData);
-                
-                [thisListener setTriggerValue:thisValueData.triggerValue];
-                
-                Action *thisActionData = ((Action *)self.gestureIcon.iconData);
-                
-                if(thisActionData.isCustom){
-                    [thisListener setGesture:thisActionData.name];
-                } else {
-                    [thisListener setAction:thisActionData.name];
-                }
-
-                Region *thisRegionData = ((Region *)self.regionIcon.iconData);
-                
-                [thisListener setRegion:thisRegionData.name];
-                
-                NSLog(@"DVC createListener: type: %@, sensorPin: %i, sensorName: %@, value: %i, action: %@, gesture: %@, region: %@", thisListener.type, thisListener.sensorPin, thisListener.sensor, thisListener.triggerValue, thisListener.action, thisListener.gesture, thisListener.region);
-                
-                NSLog(@"DVC added listener, new length: %i", self.listeners.count);
-            } else {
-                NSLog(@"DVC sensorGreaterThenSensor");
-                [thisListener setType:@"sensorGreaterThenSensor"];
+            } else if(comparatorData.type == ICON_LESSTHEN){
+                [thisListener setType:@"sensorLessThenValue"];
             }
+            
+            
+            [thisListener setTriggerType:SENSOR_TO_VALUE];
+            
+            TriggerValue *thisValueData = ((TriggerValue *)self.valueIcon.iconData);
+            
+            [thisListener setTriggerValue:thisValueData.triggerValue];
+            
+            Sensor *thisSensorData = ((Sensor *)self.sensorIcon.iconData);
+            
+            if(thisSensorData.hasName){
+                [thisListener setSensor:thisSensorData.name];
+            } else {
+                [thisListener setSensorPin:thisSensorData.pinNumber];
+            }
+            
+        } else {
+            NSLog(@"DVC sensorGreaterThenSensor");
+            
+            if(comparatorData.type == ICON_GREATERTHEN){
+                [thisListener setType:@"sensorGreaterThenSensor"];
+            } else if(comparatorData.type == ICON_LESSTHEN){
+                [thisListener setType:@"sensorLessThenSensor"];
+            }
+
+            [thisListener setTriggerType:SENSOR_TO_SENSOR];
+            
+            Sensor *sensorAData = ((Sensor *)self.sensorIcon.iconData);
+            
+            if(sensorAData.hasName){
+                [thisListener setSensorA:sensorAData.name];
+            } else {
+                [thisListener setSensorAPin:sensorAData.pinNumber];
+            }
+            
+            
+            Sensor *sensorBData = ((Sensor *)self.valueIcon.iconData);
+            
+            if(sensorBData.hasName){
+                [thisListener setSensorB:sensorBData.name];
+            } else {
+                [thisListener setSensorBPin:sensorBData.pinNumber];
+            }
+            
+            
+            //thisListener setValueName:targetSensorData
+        }
+        
+        Action *thisActionData = ((Action *)self.gestureIcon.iconData);
+        
+        if(thisActionData.isCustom){
+            [thisListener setGesture:thisActionData.name];
+        } else {
+            [thisListener setAction:thisActionData.name];
+        }
+        
+        Region *thisRegionData = ((Region *)self.regionIcon.iconData);
+        
+        [thisListener setRegion:thisRegionData.name];
+        
+        NSLog(@"DVC createListener: type: %@, sensorPin: %i, sensorName: %@, sensorAPin: %i, sensorAName: %@, sensorBPin: %i, sensorBName: %@, value: %i, action: %@, gesture: %@, region: %@", thisListener.type, thisListener.sensorPin, thisListener.sensor, thisListener.sensorAPin, thisListener.sensorA, thisListener.sensorBPin, thisListener.sensorB, thisListener.triggerValue, thisListener.action, thisListener.gesture, thisListener.region);
+        
+        NSLog(@"DVC added listener, new length: %i", self.listeners.count);
+
+        
+        /*
+        if(comparatorData.type == ICON_GREATERTHEN){
+
+
         } else if(self.comparatorIcon.iconType == ICON_LESSTHEN){
-            if(self.valueIcon.iconType == ICON_CUSTOM){
+            if([self.valueIcon.iconData isKindOfClass:[TriggerValue class]]){
                 [thisListener setType:@"sensorLessThenValue"];
             } else {
                 [thisListener setType:@"sensorLessThenSensor"];
             }
         }
+        */
         
         iconData = thisListener;
         
@@ -289,51 +330,103 @@
     
     [self.topSection addNewIconInCategory:self.topSection.selectedCategory.iconType iconType:newItem.selectedIcon.iconType andIconImage:nil andDelegate:self.topSection andTag:0 subtitle:newItem.name andData:iconData];
 
-    /*
-    TypeData *iconData;
-    
-    if([self.visibleDropDown isKindOfClass:[ActuatorDropDown class]]){
-        ActuatorDropDown *thisActuatorDropDown = ((ActuatorDropDown *)self.visibleDropDown);
-        
-        Actuator *thisActuator = [[Actuator alloc] init];
-        [thisActuator setPinNumber:thisActuatorDropDown.pinNumber];
-        
-        iconData = thisActuator;
-        
-    } else if([self.visibleDropDown isKindOfClass:[SensorDropDown class]]){
-        SensorDropDown *thisSensorDropDown = ((SensorDropDown *)self.visibleDropDown);
-        
-        Sensor *thisSensor = [[Sensor alloc] init];
-        [thisSensor setPinNumber:thisSensorDropDown.pinNumber];
-        [thisSensor setName:thisSensorDropDown.name];
-        [thisSensor setSensitivity:thisSensorDropDown.sensitivity];
-        
-        iconData = thisSensor;
-        
-    } else if([self.visibleDropDown isKindOfClass:[ListenerDropDown class]]){
-        
-    }
-    
-    [self addNewIconInCategory:self.selectedCategory.iconType iconType:self.visibleDropDown.selectedIcon.iconType andIconImage:nil andDelegate:self andTag:0 subtitle:self.visibleDropDown.name];
-    */
-    
 }
 
--(NSString *)returnSensorNameString:(Icon *)sensorIcon{
-    switch (sensorIcon.iconType) {
-        case ICON_MAP:
-            return @"gps";
-            break;
-        
-        case ICON_TILT:
-            return @"tilt";
-            break;
-            
-        default:
-            return @"dead";
-            break;
+-(NSArray *)returnActuatorsForJson{
+    NSMutableArray *actuatorArray = [[NSMutableArray alloc] init];
+    for(int i=0; i<self.actuators.count; i++){
+        Actuator *thisActuator = [self.actuators objectAtIndex:i];
+        [actuatorArray addObject:[NSNumber numberWithInt:thisActuator.pinNumber]];
     }
+    
+    return actuatorArray;
 }
+
+-(NSArray *)returnSensorsForJson{
+    NSMutableArray *sensorArray = [[NSMutableArray alloc] init];
+    for(int i=0; i<self.sensors.count; i++){
+        Sensor *thisSensor = [self.sensors objectAtIndex:i];
+        NSMutableDictionary *thisSensorDictionary = [[NSMutableDictionary alloc] init];
+        
+        if(thisSensor.hasName){
+            [thisSensorDictionary setObject:thisSensor.name forKey:@"name"];
+        }
+        
+        if(thisSensor.sensitivity >= 0){
+            [thisSensorDictionary setObject:[NSNumber numberWithInt:thisSensor.sensitivity] forKey:@"sensitivity"];
+        }
+        
+        [thisSensorDictionary setObject:[NSNumber numberWithInt:thisSensor.pinNumber] forKey:@"pin"];
+        
+        [sensorArray addObject:thisSensorDictionary];
+    }
+    
+    return sensorArray;
+}
+
+-(NSArray *)returnRegionForJson{
+    NSMutableArray *regionArray = [[NSMutableArray alloc] init];
+    for(int i=0; i<self.regions.count; i++){
+        
+    }
+    
+    return regionArray;
+}
+
+-(NSArray *)returnListenersForJson{
+    NSMutableArray *listenersArray = [[NSMutableArray alloc] init];
+    NSLog(@"DVC Listeners count: %i", self.listeners.count);
+    
+    for(int i=0; i<self.listeners.count; i++){
+        Listener *thisListener = [self.listeners objectAtIndex:i];
+        NSMutableDictionary *thisListenerDictionary = [[NSMutableDictionary alloc] init];
+        
+        [thisListenerDictionary setObject:thisListener.type forKey:@"type"];
+        
+        NSLog(@"DVC sensorTriggerType: %i", thisListener.triggerType);
+        
+        if(thisListener.triggerType == MAP){
+        
+        } else if(thisListener.triggerType == SENSOR_TO_VALUE){
+            NSLog(@"DVC sensorName: %@", thisListener.sensor);
+            if(thisListener.sensor != nil){
+                [thisListenerDictionary setObject:thisListener.sensor forKey:@"sensor"];
+            } else {
+                [thisListenerDictionary setObject:[NSNumber numberWithInt:thisListener.sensorPin] forKey:@"sensor"];
+            }
+            
+            [thisListenerDictionary setObject:[NSNumber numberWithInt:thisListener.triggerValue] forKey:@"value"];
+        } else if(thisListener.triggerType == SENSOR_TO_SENSOR){
+            NSLog(@"DVC sensorToSensor");
+            if(thisListener.sensorA != nil){
+                [thisListenerDictionary setObject:thisListener.sensorA forKey:@"sensorA"];
+            } else {
+                [thisListenerDictionary setObject:[NSNumber numberWithInt:thisListener.sensorAPin] forKey:@"sensorA"];
+            }
+            
+            if(thisListener.sensorB != nil){
+                [thisListenerDictionary setObject:thisListener.sensorB forKey:@"sensorB"];
+            } else {
+                [thisListenerDictionary setObject:[NSNumber numberWithInt:thisListener.sensorBPin] forKey:@"sensorB"];
+            }
+        }
+        
+        if(thisListener.action != nil){
+            [thisListenerDictionary setObject:thisListener.action forKey:@"action"];
+        } else {
+            [thisListenerDictionary setObject:thisListener.gesture forKey:@"gesture"];
+        }
+        
+        [thisListenerDictionary setObject:thisListener.region forKey:@"region"];
+        
+        [listenersArray addObject:thisListenerDictionary];
+    }
+    
+    NSLog(@"DVC listnersArray count: %i", listenersArray.count);
+    
+    return listenersArray;
+}
+
 
 -(void)iconClicked:(Icon *)icon{
     NSLog(@"DVC iconClicked: %li, buildStage: %i", (long)icon.tag, self.buildStage);
@@ -349,14 +442,15 @@
         NSLog(@"Upload Button Clicked");
         NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
         //create actuators
-        
+        [message setObject:[self returnActuatorsForJson] forKey:@"actuators"];
         //create sensors
-        
+        [message setObject:[self returnSensorsForJson] forKey:@"sensors"];
         //create regions
         
         //create gestures
         
-        //create listenres
+        //create listeners
+        [message setObject:[self returnListenersForJson] forKey:@"listeners"];
         
         NSData *messageJSON = [NSJSONSerialization dataWithJSONObject:message options:0 error:nil];
         NSString *messageString = [[NSString alloc] initWithData:messageJSON encoding:NSUTF8StringEncoding];
