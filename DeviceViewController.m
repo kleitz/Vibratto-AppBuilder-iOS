@@ -194,15 +194,10 @@
             [newItem setName:[NSString stringWithFormat:@"%i", thisSensorDropDown.pinNumber]];
         }
         
-        /*
-        if(thisSensorDropDown.sensitivity != -1){
-            [thisSensor setSensitivity:thisSensorDropDown.sensitivity];
-        }
-        */
-        
         [thisSensorData setSensitivity:thisSensorDropDown.sensitivity];
         
         [self.sensors addObject:thisSensorData];
+        
         iconData = thisSensorData;
         
     } else if([newItem isKindOfClass:[ListenerDropDown class]]){
@@ -326,6 +321,10 @@
         //[self.regionIcon removeFromSuperview];
         [self.regionIcon changeIconType:ICON_CUSTOM];
         [self.regionIcon changeSubtitle:nil];
+    }
+    
+    if(self.topSection.selectedCategory.iconType == ICON_SENSOR){
+        [self.topSection addNewIconInCategory:ICON_VALUE iconType:newItem.selectedIcon.iconType andIconImage:nil andDelegate:self.topSection andTag:0 subtitle:newItem.name andData:iconData];
     }
     
     [self.topSection addNewIconInCategory:self.topSection.selectedCategory.iconType iconType:newItem.selectedIcon.iconType andIconImage:nil andDelegate:self.topSection andTag:0 subtitle:newItem.name andData:iconData];
