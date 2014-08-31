@@ -69,9 +69,11 @@
         }
     }
     
+    NSLog(@"SDD name: %@, pinNumber: %i", self.name, self.pinNumber);
+    
     [super okButtonClicked];
     
-    NSLog(@"ADD name: %@, pinNumber: %i", self.name, self.pinNumber);
+    NSLog(@"SDD name: %@, pinNumber: %i", self.name, self.pinNumber);
 }
 
 

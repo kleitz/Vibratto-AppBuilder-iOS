@@ -11,9 +11,6 @@
 #import "SensorDropDown.h"
 #import "ListenerDropDown.h"
 #import "TypeData.h"
-#import "Actuator.h"
-#import "Sensor.h"
-#import "Listener.h"
 
 @implementation CompoundTopSection
 
@@ -44,11 +41,11 @@
         [self setBackgroundColor:[UIColor clearColor]];
         
         self.categories = [[TopBox alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
-        [self.categories addIcon:ICON_SENSOR andIconImage:nil andDelegate:self andTag:11 andSubtitle: @"Sensors"];
-        [self.categories addIcon:ICON_ACTUATOR andIconImage:nil andDelegate:self andTag:10 andSubtitle:@"Actuators"];
-        [self.categories addIcon:ICON_REGION andIconImage:nil andDelegate:self andTag:12 andSubtitle:@"Regions"];
-        [self.categories addIcon:ICON_GESTURE andIconImage:nil andDelegate:self andTag:13 andSubtitle:@"Actions"];
-        [self.categories addIcon:ICON_LISTENER andIconImage:nil andDelegate:self andTag:14 andSubtitle:@"Listeners"];
+        [self.categories addIcon:ICON_SENSOR andIconImage:nil andDelegate:self andTag:11 andSubtitle: @"Sensors" andIconData:nil];
+        [self.categories addIcon:ICON_ACTUATOR andIconImage:nil andDelegate:self andTag:10 andSubtitle:@"Actuators" andIconData:nil];
+        [self.categories addIcon:ICON_REGION andIconImage:nil andDelegate:self andTag:12 andSubtitle:@"Regions" andIconData:nil];
+        [self.categories addIcon:ICON_GESTURE andIconImage:nil andDelegate:self andTag:13 andSubtitle:@"Actions" andIconData:nil];
+        [self.categories addIcon:ICON_LISTENER andIconImage:nil andDelegate:self andTag:14 andSubtitle:@"Listeners" andIconData:nil];
         [self.categories addIconWithoutDisplay:ICON_COMPARATOR andDelegate:self andTag:15];
         [self.categories addIconWithoutDisplay:ICON_VALUE andDelegate:self andTag:16];
         
@@ -62,20 +59,41 @@
         self.iconBox = [[TopBox alloc] initWithFrame:CGRectMake(0, self.abc.topBoxHeight, self.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
         [self.iconBox setDelegate:self];
         
-        [self addNewIconInCategory:ICON_SENSOR iconType:ICON_TILT andIconImage:nil andDelegate:self andTag:(ICON_SENSOR * 100) subtitle:@"Rotation"];
-        [self addNewIconInCategory:ICON_SENSOR iconType:ICON_MAP andIconImage:nil andDelegate:self andTag:(ICON_SENSOR * 100) + 1 subtitle:@"GPS"];
+        /*
+        Sensor *rotationSensor = [[Sensor alloc] init];
+        [rotationSensor setPinNumber:-1];
+        [rotationSensor setName:@"Rotation"];
+        [rotationSensor setSensitivity:-1];
+        */
         
-        [self addNewIconInCategory:ICON_COMPARATOR iconType:ICON_GREATERTHEN andIconImage:nil andDelegate:self andTag:(ICON_COMPARATOR * 100) subtitle:@"above"];
-        [self addNewIconInCategory:ICON_COMPARATOR iconType:ICON_LESSTHEN andIconImage:nil andDelegate:self andTag:(ICON_COMPARATOR * 100) + 1 subtitle:@"below"];
+        Sensor *rotationSensor = [[Sensor alloc] initWithPinNumber:-1 hasName:YES andName:@"Rotation" andSensitivity:-1 andIsCustom:NO];
+        [rotationSensor setIsCustom:NO];
+        
+        Sensor *gpsSensor = [[Sensor alloc] initWithPinNumber:-1 hasName:YES andName:@"GPS" andSensitivity:-1 andIsCustom:NO];
+        [gpsSensor setIsCustom:NO];
+        
+        Action *increasePowerAction = [[Action alloc] initWithName:@"increasePower" isCustom:NO];
+        Action *decreasePowerAction = [[Action alloc] initWithName:@"decreasePower" isCustom:NO];
+        
+        Comparator *greaterThenComparator = [[Comparator alloc] initWithType:ICON_GREATERTHEN];
+        Comparator *lessThenComparator = [[Comparator alloc] initWithType:ICON_LESSTHEN];
+        
+        Region *deviceRegion = [[Region alloc] initWithName:@"Device" isCustom:NO];
+        
+        [self addNewIconInCategory:ICON_SENSOR iconType:ICON_TILT andIconImage:nil andDelegate:self andTag:(ICON_SENSOR * 100) subtitle:@"Rotation" andData:rotationSensor];
+        [self addNewIconInCategory:ICON_SENSOR iconType:ICON_MAP andIconImage:nil andDelegate:self andTag:(ICON_SENSOR * 100) + 1 subtitle:@"GPS" andData:gpsSensor];
+        
+        [self addNewIconInCategory:ICON_COMPARATOR iconType:ICON_GREATERTHEN andIconImage:nil andDelegate:self andTag:(ICON_COMPARATOR * 100) subtitle:@"above" andData:greaterThenComparator];
+        [self addNewIconInCategory:ICON_COMPARATOR iconType:ICON_LESSTHEN andIconImage:nil andDelegate:self andTag:(ICON_COMPARATOR * 100) + 1 subtitle:@"below" andData:lessThenComparator];
         
         [self addNewIconInCategory:ICON_VALUE iconType:ICON_NUMBER andIconImage:nil andDelegate:self andTag:(ICON_VALUE * 100) subtitle:@"Value..."];
-        [self addNewIconInCategory:ICON_VALUE iconType:ICON_TILT andIconImage:nil andDelegate:self andTag:(ICON_VALUE * 100) + 1 subtitle:@"Rotation"];
-        [self addNewIconInCategory:ICON_VALUE iconType:ICON_MAP andIconImage:nil andDelegate:self andTag:(ICON_VALUE * 100) + 2 subtitle:@"GPS"];
+        [self addNewIconInCategory:ICON_VALUE iconType:ICON_TILT andIconImage:nil andDelegate:self andTag:(ICON_VALUE * 100) + 1 subtitle:@"Rotation" andData:rotationSensor];
+        [self addNewIconInCategory:ICON_VALUE iconType:ICON_MAP andIconImage:nil andDelegate:self andTag:(ICON_VALUE * 100) + 2 subtitle:@"GPS" andData:gpsSensor];
         
-        [self addNewIconInCategory:ICON_GESTURE iconType:ICON_INCREASE_POWER andIconImage:nil andDelegate:self andTag:(ICON_GESTURE * 100) subtitle:@"+ Power"];
-        [self addNewIconInCategory:ICON_GESTURE iconType:ICON_DECREASE_POWER andIconImage:nil andDelegate:self andTag:(ICON_GESTURE * 100) + 1 subtitle:@"- Power"];
+        [self addNewIconInCategory:ICON_GESTURE iconType:ICON_INCREASE_POWER andIconImage:nil andDelegate:self andTag:(ICON_GESTURE * 100) subtitle:@"+ Power" andData:increasePowerAction];
+        [self addNewIconInCategory:ICON_GESTURE iconType:ICON_DECREASE_POWER andIconImage:nil andDelegate:self andTag:(ICON_GESTURE * 100) + 1 subtitle:@"- Power" andData:decreasePowerAction];
         
-        [self addNewIconInCategory:ICON_REGION iconType:ICON_ALL andIconImage:nil andDelegate:self andTag:(ICON_REGION * 100) subtitle:@"Device"];
+        [self addNewIconInCategory:ICON_REGION iconType:ICON_ALL andIconImage:nil andDelegate:self andTag:(ICON_REGION * 100) subtitle:@"Device" andData:deviceRegion];
 
         [self addSubview:self.iconBox];
         [self addSubview:self.categories];
@@ -139,25 +157,31 @@
                 ((ActuatorDropDown *)ddm).name = [NSString stringWithFormat:@"%i",((ActuatorDropDown *)ddm).pinNumber];
             }
             
-            [self.visibleDropDown colapseDropDown];            
+            [self.visibleDropDown colapseDropDown];
+            [self.compoundDelegate collapsingStarted:self.visibleDropDown];
         }
     } else if(self.selectedCategory.iconType == ICON_SENSOR){
         if(((SensorDropDown *)ddm).pinNumber == 0){
             [self retractDropDown];
         } else {
+            /*
             if(((SensorDropDown *)ddm).name == nil){
                 ((SensorDropDown *)ddm).name = [NSString stringWithFormat:@"%i",((SensorDropDown *)ddm).pinNumber];
             }
+            */
             
             [self.visibleDropDown colapseDropDown];
+            [self.compoundDelegate collapsingStarted:self.visibleDropDown];
         }
     } else if([ddm isKindOfClass:[ListenerDropDown class]]){
         if(self.selectedCategory.iconType != ICON_LISTENER){
             [self selectCategoryByType:ICON_LISTENER];
         }
         
-        [self.compoundDelegate buildListener:self];
+        //
         [self.visibleDropDown colapseDropDown];
+        [self.compoundDelegate collapsingStarted:self.visibleDropDown];
+        //[self.compoundDelegate buildListener:self];
     }
 }
 
@@ -180,33 +204,6 @@
     } completion:^(BOOL finished){
         
         [self.compoundDelegate addedNewItemFromDropDown:self.visibleDropDown];
-        /*
-        TypeData *iconData;
-        
-        if([self.visibleDropDown isKindOfClass:[ActuatorDropDown class]]){
-            ActuatorDropDown *thisActuatorDropDown = ((ActuatorDropDown *)self.visibleDropDown);
-            
-            Actuator *thisActuator = [[Actuator alloc] init];
-            [thisActuator setPinNumber:thisActuatorDropDown.pinNumber];
-            
-            iconData = thisActuator;
-            
-        } else if([self.visibleDropDown isKindOfClass:[SensorDropDown class]]){
-            SensorDropDown *thisSensorDropDown = ((SensorDropDown *)self.visibleDropDown);
-            
-            Sensor *thisSensor = [[Sensor alloc] init];
-            [thisSensor setPinNumber:thisSensorDropDown.pinNumber];
-            [thisSensor setName:thisSensorDropDown.name];
-            [thisSensor setSensitivity:thisSensorDropDown.sensitivity];
-            
-            iconData = thisSensor;
-
-        } else if([self.visibleDropDown isKindOfClass:[ListenerDropDown class]]){
-
-        }
-        
-        [self addNewIconInCategory:self.selectedCategory.iconType iconType:self.visibleDropDown.selectedIcon.iconType andIconImage:nil andDelegate:self andTag:0 subtitle:self.visibleDropDown.name];
-        */
         
         [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height - [self.visibleDropDown getProjectedHeight])];
         [self.visibleDropDown removeFromSuperview];
@@ -308,6 +305,8 @@
         
         case ICON_COMPARATOR:
             NSLog(@"CTS iconComparator");
+            NSLog(@"CTS comparatorType: %i", ((Comparator *)iconData).type);
+            NSLog(@"CTS iconCategory: %i", iconCategory);
             thisArray = self.comparatorsArray;
             break;
             
@@ -337,6 +336,11 @@
     NSInteger tagNum = (iconCategory * 100) + thisArray.count;
     
     [icon setTag:tagNum];
+    
+    if([iconData isKindOfClass:[Comparator class]]){
+        NSLog(@"CTS iconData is comparator");
+    }
+    
     [icon setIconData:iconData];
     
     if(delegate != nil){

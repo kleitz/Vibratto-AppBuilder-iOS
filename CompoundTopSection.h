@@ -15,7 +15,8 @@
 @protocol CompoundTopSectionDelegate <NSObject>
 
 @optional
--(void)buildListener:(CompoundTopSection *)compoundTopSection;
+//-(void)buildListener:(CompoundTopSection *)compoundTopSection;
+-(void)collapsingStarted:(DropDownMenu *)newItem;
 -(void)addedNewItemFromDropDown:(DropDownMenu *)newItem;
 @end
 

@@ -76,7 +76,7 @@
     for(int i=0; i<self.iconTypes.count; i++){
         ICON_TYPE thisIconType = ((NSNumber *)[self.iconTypes objectAtIndex:i]).intValue;
         
-        [self.iconBox addIcon:thisIconType andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil];
+        [self.iconBox addIcon:thisIconType andIconImage:nil andDelegate:self andTag:0 andSubtitle:nil andIconData:nil];
     }
     
     [self.iconBox changeIsCentered:YES];

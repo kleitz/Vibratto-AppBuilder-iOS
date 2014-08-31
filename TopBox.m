@@ -68,10 +68,10 @@
         
         if(thisIcon.hasSubtitle){
             NSString *subtitleText = thisIcon.subtitle.text;
-            [self addIcon:thisIcon.iconType andIconImage:thisIcon.customImage andDelegate:delegate andTag:thisIcon.tag andSubtitle:subtitleText];
+            [self addIcon:thisIcon.iconType andIconImage:thisIcon.customImage andDelegate:delegate andTag:thisIcon.tag andSubtitle:subtitleText andIconData:thisIcon.iconData];
             
         } else {
-            [self addIcon:thisIcon.iconType andIconImage:thisIcon.customImage andDelegate:delegate andTag:thisIcon.tag andSubtitle:nil];
+            [self addIcon:thisIcon.iconType andIconImage:thisIcon.customImage andDelegate:delegate andTag:thisIcon.tag andSubtitle:nil andIconData:thisIcon.iconData];
         }
 
     }
@@ -139,7 +139,7 @@
     }
 }
 
--(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag andSubtitle:(NSString *)subtitle{
+-(void)addIcon:(ICON_TYPE)iconType andIconImage:(UIImage *)iconImage andDelegate:(id<IconDelegate>)delegate andTag:(NSInteger)tag andSubtitle:(NSString *)subtitle andIconData:(TypeData *)iconData{
     //NSLog(@"TopBox addIcon");
 
     Icon *newIcon;
@@ -180,6 +180,8 @@
     } else {
         [newIcon setMyDelegate:self];
     }
+    
+    [newIcon setIconData:iconData];
     
     [newIcon setTag:tag];
     

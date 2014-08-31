@@ -12,10 +12,7 @@
 #import "ActuatorDropDown.h"
 #import "SensorDropDown.h"
 #import "ListenerDropDown.h"
-#import "Sensor.h"
-#import "Actuator.h"
-#import "Listener.h"
-#import "Action.h"
+#import "TypeData.h"
 
 @interface DeviceViewController ()
 
@@ -144,8 +141,12 @@
     [self.mainView addSubview:self.uploadIcon];
 }
 
--(void)buildListener:(CompoundTopSection *)compoundTopSection{
-    [self gotoStage:BUILD_LISTENER];
+-(void)collapsingStarted:(DropDownMenu *)newItem{
+    NSLog(@"DVC collapsingStarted");
+    if([newItem isKindOfClass:[ListenerDropDown class]]){
+        NSLog(@"DVC newItem is a listenerDropDown");
+        [self gotoStage:BUILD_LISTENER];
+    }
 }
 
 -(void)processStage{
@@ -158,6 +159,7 @@
 
 -(void)addedNewItemFromDropDown:(DropDownMenu *)newItem{
     NSLog(@"DVC addedNewItemFromDropDown");
+    
     TypeData *iconData;
     
     if([newItem isKindOfClass:[ActuatorDropDown class]]){
@@ -174,13 +176,21 @@
     } else if([newItem isKindOfClass:[SensorDropDown class]]){
         SensorDropDown *thisSensorDropDown = ((SensorDropDown *)newItem);
         
-        Sensor *thisSensor = [[Sensor alloc] init];
-        [thisSensor setIsCustom:YES];
+        Sensor *thisSensorData = [[Sensor alloc] init];
+        [thisSensorData setIsCustom:YES];
         
-        [thisSensor setPinNumber:thisSensorDropDown.pinNumber];
+        [thisSensorData setPinNumber:thisSensorDropDown.pinNumber];
         
-        if(![thisSensorDropDown.name isEqualToString:@""]){
-            [thisSensor setName:thisSensorDropDown.name];
+        NSLog(@"DVC sensor name: %@", thisSensorDropDown.name);
+        
+        if(![thisSensorDropDown.name isEqualToString:@""] && thisSensorDropDown.name != nil){
+            NSLog(@"DVC sensor has name");
+            [thisSensorData setName:thisSensorDropDown.name];
+            [thisSensorData setHasName:YES];
+        } else {
+            NSLog(@"DVC sensor doesnt have name");
+            [thisSensorData setHasName:NO];
+            [newItem setName:[NSString stringWithFormat:@"%i", thisSensorDropDown.pinNumber]];
         }
         
         /*
@@ -189,23 +199,59 @@
         }
         */
         
-        [thisSensor setSensitivity:thisSensorDropDown.sensitivity];
+        [thisSensorData setSensitivity:thisSensorDropDown.sensitivity];
         
-        [self.sensors addObject:thisSensor];
-        iconData = thisSensor;
+        [self.sensors addObject:thisSensorData];
+        iconData = thisSensorData;
         
     } else if([newItem isKindOfClass:[ListenerDropDown class]]){
+        NSLog(@"DVC newItem is listenerDropDown");
+        
+        Comparator *comparatorData = ((Comparator *)self.comparatorIcon.iconData);
+        
+        NSLog(@"DVC comparator iconType: %i", comparatorData.type);
+        
         ListenerDropDown *thisListenerDropDown = ((ListenerDropDown *)newItem);
         
         Listener *thisListener = [[Listener alloc] init];
         [thisListener setIsCustom:YES];
         
-        if(self.comparatorIcon.iconType == ICON_GREATERTHEN){
+        if(comparatorData.type == ICON_GREATERTHEN){
             //if(self.valueIcon.)
-            if(self.valueIcon.iconType == ICON_CUSTOM){
-                [thisListener setType:@"sensorGreaterThenValue"];
+            //self.valueIcon.iconData == ICON_CUSTOM
+            if([self.valueIcon.iconData isKindOfClass:[TriggerValue class]]){
+                NSLog(@"DVC sensorGreaterThenValue");
                 
+                [thisListener setType:@"sensorGreaterThenValue"];
+                Sensor *thisSensorData = ((Sensor *)self.sensorIcon.iconData);
+                
+                if(thisSensorData.hasName){
+                    [thisListener setSensor:thisSensorData.name];
+                } else {
+                    [thisListener setSensorPin:thisSensorData.pinNumber];
+                }
+                
+                TriggerValue *thisValueData = ((TriggerValue *)self.valueIcon.iconData);
+                
+                [thisListener setTriggerValue:thisValueData.triggerValue];
+                
+                Action *thisActionData = ((Action *)self.gestureIcon.iconData);
+                
+                if(thisActionData.isCustom){
+                    [thisListener setGesture:thisActionData.name];
+                } else {
+                    [thisListener setAction:thisActionData.name];
+                }
+
+                Region *thisRegionData = ((Region *)self.regionIcon.iconData);
+                
+                [thisListener setRegion:thisRegionData.name];
+                
+                NSLog(@"DVC createListener: type: %@, sensorPin: %i, sensorName: %@, value: %i, action: %@, gesture: %@, region: %@", thisListener.type, thisListener.sensorPin, thisListener.sensor, thisListener.triggerValue, thisListener.action, thisListener.gesture, thisListener.region);
+                
+                NSLog(@"DVC added listener, new length: %i", self.listeners.count);
             } else {
+                NSLog(@"DVC sensorGreaterThenSensor");
                 [thisListener setType:@"sensorGreaterThenSensor"];
             }
         } else if(self.comparatorIcon.iconType == ICON_LESSTHEN){
@@ -217,8 +263,30 @@
         }
         
         iconData = thisListener;
+        
+        [self.listeners addObject:thisListener];
+        
+        //[self.sensorIcon removeFromSuperview];
+        [self.sensorIcon changeIconType:ICON_CUSTOM];
+        [self.sensorIcon changeSubtitle:nil];
+        
+        //[self.comparatorIcon removeFromSuperview];
+        [self.comparatorIcon changeIconType:ICON_CUSTOM];
+        [self.comparatorIcon changeSubtitle:nil];
+        
+        //[self.valueIcon removeFromSuperview];
+        [self.valueIcon changeIconType:ICON_CUSTOM];
+        [self.valueIcon changeSubtitle:nil];
+        
+        //[self.gestureIcon removeFromSuperview];
+        [self.gestureIcon changeIconType:ICON_CUSTOM];
+        [self.gestureIcon changeSubtitle:nil];
+        
+        //[self.regionIcon removeFromSuperview];
+        [self.regionIcon changeIconType:ICON_CUSTOM];
+        [self.regionIcon changeSubtitle:nil];
     }
-
+    
     [self.topSection addNewIconInCategory:self.topSection.selectedCategory.iconType iconType:newItem.selectedIcon.iconType andIconImage:nil andDelegate:self.topSection andTag:0 subtitle:newItem.name andData:iconData];
 
     /*
@@ -248,6 +316,7 @@
     
     [self addNewIconInCategory:self.selectedCategory.iconType iconType:self.visibleDropDown.selectedIcon.iconType andIconImage:nil andDelegate:self andTag:0 subtitle:self.visibleDropDown.name];
     */
+    
 }
 
 -(NSString *)returnSensorNameString:(Icon *)sensorIcon{
@@ -295,6 +364,8 @@
         NSLog(@"About to sendMessageString: %@", messageString);
     } else if(icon.tag >= (ICON_SENSOR * 100) && icon.tag < ((ICON_SENSOR * 100) + 100) && self.buildStage == SENSOR_SELECT){
         [self.sensorIcon changeIconType:icon.iconType];
+        [self.sensorIcon setIconData:icon.iconData];
+        
         if(icon.hasSubtitle){
             [self.sensorIcon changeSubtitle:icon.subtitle.text];
         }
@@ -302,6 +373,14 @@
         [self processStage];
     } else if(icon.tag >= (ICON_COMPARATOR * 100) && icon.tag < ((ICON_COMPARATOR * 100) + 100) && self.buildStage == COMPARATOR_SELECT){
         [self.comparatorIcon changeIconType:icon.iconType];
+        [self.comparatorIcon setIconData:icon.iconData];
+        
+        if([icon.iconData isKindOfClass:[Comparator class]]){
+            NSLog(@"DVC iconData is comparator");
+        }
+        
+        NSLog(@"DVC picked comparatorIcon data: %i", ((Comparator *)icon.iconData).type);
+        
         if(icon.hasSubtitle){
             [self.comparatorIcon changeSubtitle:icon.subtitle.text];
         }
@@ -314,18 +393,24 @@
         [alertView show];
     } else if(icon.tag >= (ICON_VALUE * 100) && icon.tag < ((ICON_VALUE * 100) + 100) && self.buildStage == VALUE_SELECT){
         [self.valueIcon changeIconType:icon.iconType];
+        [self.valueIcon setIconData:icon.iconData];
+        
         if(icon.hasSubtitle){
             [self.valueIcon changeSubtitle:icon.subtitle.text];
         }
         [self processStage];
     } else if(icon.tag >= (ICON_GESTURE * 100) && icon.tag < ((ICON_GESTURE * 100) + 100) && self.buildStage == ACTION_SELECT){
         [self.gestureIcon changeIconType:icon.iconType];
+        [self.gestureIcon setIconData:icon.iconData];
+        
         if(icon.hasSubtitle){
             [self.gestureIcon changeSubtitle:icon.subtitle.text];
         }
         [self processStage];
     } else if(icon.tag >= (ICON_REGION * 100) && icon.tag < ((ICON_REGION * 100) + 100) && self.buildStage == REGION_SELECT){
         [self.regionIcon changeIconType:icon.iconType];
+        [self.regionIcon setIconData:icon.iconData];
+        
         if(icon.hasSubtitle){
             [self.regionIcon changeSubtitle:icon.subtitle.text];
         }
@@ -558,25 +643,26 @@
             } completion:^(BOOL finished){
                 [self.confirmListenerIcon removeFromSuperview];
                 
-                [self.sensorIcon changeIconType:ICON_CUSTOM];
+                
                 [self.sensorIcon removeFromSuperview];
-                [self.sensorIcon changeSubtitle:nil];
+                //[self.sensorIcon changeIconType:ICON_CUSTOM];
+                //[self.sensorIcon changeSubtitle:nil];
                 
-                [self.comparatorIcon changeIconType:ICON_CUSTOM];
                 [self.comparatorIcon removeFromSuperview];
-                [self.comparatorIcon changeSubtitle:nil];
+                //[self.comparatorIcon changeIconType:ICON_CUSTOM];
+                //[self.comparatorIcon changeSubtitle:nil];
                 
-                [self.valueIcon changeIconType:ICON_CUSTOM];
                 [self.valueIcon removeFromSuperview];
-                [self.valueIcon changeSubtitle:nil];
+                //[self.valueIcon changeIconType:ICON_CUSTOM];
+                //[self.valueIcon changeSubtitle:nil];
                 
-                [self.gestureIcon changeIconType:ICON_CUSTOM];
                 [self.gestureIcon removeFromSuperview];
-                [self.gestureIcon changeSubtitle:nil];
+                //[self.gestureIcon changeIconType:ICON_CUSTOM];
+                //[self.gestureIcon changeSubtitle:nil];
                 
-                [self.regionIcon changeIconType:ICON_CUSTOM];
                 [self.regionIcon removeFromSuperview];
-                [self.regionIcon changeSubtitle:nil];
+                //[self.regionIcon changeIconType:ICON_CUSTOM];
+                //[self.regionIcon changeSubtitle:nil];
                 
                 [self.ifLabel removeFromSuperview];
                 [self.isLabel removeFromSuperview];
@@ -684,10 +770,15 @@
         if(buttonIndex == 1){
             int textVal = [[[alertView textFieldAtIndex:0] text] intValue];
             if(textVal < 1024){
-                [self.valueIcon changeCustomValue:[[[alertView textFieldAtIndex:0] text] intValue] setAsIconType:YES];
+                int inputValue = [[[alertView textFieldAtIndex:0] text] intValue];
+                TriggerValue *valueData = [[TriggerValue alloc] init];
+                [valueData setIsCustom:YES];
+                [valueData setTriggerValue:inputValue];
+                
+                [self.valueIcon changeCustomValue:inputValue setAsIconType:YES];
                 [self.valueIcon changeSubtitle:nil];
-                //[self.valueIcon changeSubtitle:[NSString stringWithFormat:@"%i", textVal]];
-                //[self gotoStage:ACTION_SELECT];
+                [self.valueIcon setIconData:valueData];
+                
                 [self processStage];
             } else {
                 //[self gotoStage:VALUE_SELECT];
