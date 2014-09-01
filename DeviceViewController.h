@@ -29,6 +29,8 @@ typedef enum {
 
 @property(strong, nonatomic) CompoundTopSection *topSection;
 
+@property(strong, nonatomic) TopBox *bottomSection;
+
 @property(strong, nonatomic) Icon *bigAddIcon;
 @property(strong, nonatomic) Icon *uploadIcon;
 @property(strong, nonatomic) Icon *confirmListenerIcon;

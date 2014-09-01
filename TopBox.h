@@ -43,5 +43,6 @@
 -(void)addIcon:(Icon *)iconToAdd;
 
 -(Icon *)returnItemAtIndex:(NSInteger)index;
+-(Icon *)returnItemByType:(ICON_TYPE)iconType;
 
 @end

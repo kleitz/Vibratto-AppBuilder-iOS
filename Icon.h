@@ -44,6 +44,7 @@ typedef enum {
 
 @optional
 -(void)iconClicked:(Icon *)icon;
+-(void)iconLongPressed:(Icon *)icon;
 @end
 
 @interface Icon : UIView<IconDelegate>

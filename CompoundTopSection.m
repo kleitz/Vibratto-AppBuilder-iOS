@@ -43,7 +43,7 @@
         
         self.categories = [[TopBox alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
         [self.categories addIcon:ICON_SENSOR andIconImage:nil andDelegate:self andTag:11 andSubtitle: @"Sensors" andIconData:nil];
-        [self.categories addIcon:ICON_ACTUATOR andIconImage:nil andDelegate:self andTag:10 andSubtitle:@"Actuators" andIconData:nil];
+        //[self.categories addIcon:ICON_ACTUATOR andIconImage:nil andDelegate:self andTag:10 andSubtitle:@"Actuators" andIconData:nil];
         [self.categories addIcon:ICON_REGION andIconImage:nil andDelegate:self andTag:12 andSubtitle:@"Regions" andIconData:nil];
         [self.categories addIcon:ICON_GESTURE andIconImage:nil andDelegate:self andTag:13 andSubtitle:@"Actions" andIconData:nil];
         [self.categories addIcon:ICON_LISTENER andIconImage:nil andDelegate:self andTag:14 andSubtitle:@"Listeners" andIconData:nil];
@@ -53,7 +53,8 @@
         [self.categories changeTrayColor:self.abc.primaryColor3];
         [self.categories changeIsCentered:YES];
         
-        Icon *listenerIcon = [self.categories returnItemAtIndex:4];
+        Icon *listenerIcon = [self.categories returnItemByType:ICON_LISTENER];
+        
         [listenerIcon toggleHighlighted];
         self.selectedCategory = listenerIcon;
         
@@ -220,6 +221,10 @@
         [self.visibleDropDown removeFromSuperview];
         self.visibleDropDown = nil;
     }];
+}
+
+-(void)iconLongPressed:(Icon *)icon{
+    [self.delegate iconLongPressed:icon];
 }
 
 -(void)iconClicked:(Icon *)icon{

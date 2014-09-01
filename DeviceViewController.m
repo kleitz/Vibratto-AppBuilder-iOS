@@ -119,7 +119,7 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor clearColor]];
     
-    self.mainView = [[UIView alloc] initWithFrame:CGRectMake(0, self.abc.topBoxHeight * -1, self.view.frame.size.width, self.view.frame.size.height + self.abc.topBoxHeight)];
+    self.mainView = [[UIView alloc] initWithFrame:CGRectMake(0, self.abc.topBoxHeight * -1, self.view.frame.size.width, self.view.frame.size.height + self.abc.topBoxHeight + self.abc.topBoxHeight)];
     [self.mainView setBackgroundColor:self.abc.primaryColor4];
     [self.view addSubview:self.mainView];
     
@@ -127,10 +127,18 @@
     [self.topSection setDelegate:self];
     [self.topSection setCompoundDelegate:self];
     
-    self.uploadIcon = [[Icon alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.abc.primaryButtonDiameter/2, self.view.frame.size.height - 80.0f + self.abc.topBoxHeight, self.abc.primaryButtonDiameter, self.abc.primaryButtonDiameter)];
-    [self.uploadIcon changeIconType:ICON_UPLOAD];
-    [self.uploadIcon setTag:3];
-    [self.uploadIcon setMyDelegate:self];
+    self.bottomSection = [[TopBox alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height + self.abc.topBoxHeight, self.mainView.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
+    [self.bottomSection setDelegate:self];
+    [self.bottomSection changeTrayColor:self.abc.primaryColor3];
+    
+    [self.bottomSection addIcon:ICON_UPLOAD andIconImage:nil andDelegate:self andTag:3 andSubtitle:@"Upload" andIconData:nil];
+    [self.bottomSection addIcon:ICON_ADD andIconImage:nil andDelegate:self andTag:4 andSubtitle:@"Save" andIconData:nil];
+    //self.uploadIcon = [[Icon alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.abc.primaryButtonDiameter/2, self.view.frame.size.height - 80.0f + self.abc.topBoxHeight, self.abc.primaryButtonDiameter, self.abc.primaryButtonDiameter)];
+    //[self.uploadIcon changeIconType:ICON_UPLOAD];
+    //[self.uploadIcon setTag:3];
+    //[self.uploadIcon setMyDelegate:self];
+    
+    [self.bottomSection changeIsCentered:YES];
     
     self.bigAddIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.bigAddButtonHeight, self.abc.bigAddButtonHeight)];
     [self.bigAddIcon changeIconType:ICON_ADD];
@@ -138,7 +146,8 @@
     [self.bigAddIcon setMyDelegate:self];
     
     [self.mainView addSubview:self.topSection];
-
+    [self.mainView addSubview:self.bottomSection];
+    
     [self gotoStage:PRE_SELECT];
     [self.mainView addSubview:self.uploadIcon];
 }
@@ -514,6 +523,10 @@
     return listenersArray;
 }
 
+-(void)iconLongPressed:(Icon *)icon{
+    NSLog(@"DVC iconLongPressed: %li", (long)icon.tag);
+    
+}
 
 -(void)iconClicked:(Icon *)icon{
     NSLog(@"DVC iconClicked: %li, buildStage: %i", (long)icon.tag, self.buildStage);
@@ -916,7 +929,11 @@
     CGPoint translation = CGPointMake(newPoint.x - self.currentPoint.x, newPoint.y - self.currentPoint.y);
     
     NSLog(@"CEV touchesMoved: %f", translation.y);
-    if(self.mainView.frame.origin.y + translation.y <= -1 * self.abc.topBoxHeight){
+    if(self.mainView.frame.origin.y + translation.y <= 0 && self.mainView.frame.origin.y + translation.y >= (-2 * self.abc.topBoxHeight)){
+        [self.mainView setFrame:CGRectMake(self.mainView.frame.origin.x, self.mainView.frame.origin.y + translation.y, self.mainView.frame.size.width, self.mainView.frame.size.height)];
+    }
+    /*
+    if(self.mainView.frame.origin.y + translation.y <= -1 * self.abc.topBoxHeight || self.mainView.frame.origin.y + translation.y >= self.abc.topBoxHeight){
         //CGFloat viewRatio = (float)(self.mainView.frame.size.height + translation.y)/self.mainView.frame.size.height;
         //CGFloat invertRatio = 1.0 - viewRatio;
         //[self.mainView setFrame:CGRectMake(invertRatio * self.mainView.frame.size.width, invertRatio * self.mainView.frame.size.height, self.mainView.frame.size.width * viewRatio, self.mainView.frame.size.height * viewRatio)];
@@ -924,15 +941,20 @@
     } else if(self.mainView.frame.origin.y + translation.y < 0) {
         [self.mainView setFrame:CGRectMake(self.mainView.frame.origin.x, self.mainView.frame.origin.y + translation.y, self.mainView.frame.size.width, self.mainView.frame.size.height)];
     }
+    */
 
     self.currentPoint = newPoint;
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"DVC touchesEnded");
+    NSLog(@"DVC touchesEnded: mainView origin: %f, topBoxHeight 1.5: %f", self.mainView.frame.origin.y, -1.5 * self.abc.topBoxHeight);
     self.isTouching = NO;
     
-    if(self.mainView.frame.origin.y < -1 * (self.abc.topBoxHeight)/2){
+    if(self.mainView.frame.origin.y < -1.5 * self.abc.topBoxHeight){
+        [UIView animateWithDuration:0.2f animations:^{
+            [self.mainView setFrame:CGRectMake(self.mainView.frame.origin.x, self.abc.topBoxHeight * -2, self.mainView.frame.size.width, self.mainView.frame.size.height)];
+        }];
+    } else if(self.mainView.frame.origin.y < -1 * (self.abc.topBoxHeight)/2){
         [UIView animateWithDuration:0.2f animations:^{
             [self.mainView setFrame:CGRectMake(self.mainView.frame.origin.x, self.abc.topBoxHeight * -1, self.mainView.frame.size.width, self.mainView.frame.size.height)];
         }];

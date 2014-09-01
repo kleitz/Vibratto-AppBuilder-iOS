@@ -43,8 +43,13 @@
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(iconClicked)];
         [self addGestureRecognizer:tapGesture];
+        
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressMade)];
+        [self addGestureRecognizer:longPressGesture];
+
         [self setBackgroundColor:self.constants.seeThruColor];
         [self addSubview:self.bgImage];
+        
     }
     
     return self;
@@ -53,6 +58,11 @@
 -(void)iconClicked{
     NSLog(@"Icon iconClicked");
     [self.myDelegate iconClicked:self];
+}
+
+-(void)longPressMade{
+    NSLog(@"Icon longPressMade");
+    [self.myDelegate iconLongPressed:self];
 }
 
 -(void)toggleHighlighted{

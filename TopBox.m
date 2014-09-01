@@ -211,6 +211,17 @@
     return thisIcon;
 }
 
+-(Icon *)returnItemByType:(ICON_TYPE)iconType{
+    for(int i=0; i<self.boxItems.count; i++){
+        Icon *thisIcon = [self returnItemAtIndex:i];
+        if(thisIcon.iconType == ICON_LISTENER){
+            return thisIcon;
+        }
+    }
+    
+    return nil;
+}
+
 -(void)setHighlightedIcon:(NSInteger)index{
     Icon *thisIcon = [self.boxItems objectAtIndex:index];
     [thisIcon toggleHighlighted];
