@@ -300,7 +300,7 @@
         
         NSLog(@"DVC createListener: type: %@, sensorPin: %i, sensorName: %@, sensorAPin: %i, sensorAName: %@, sensorBPin: %i, sensorBName: %@, value: %i, action: %@, gesture: %@, region: %@", thisListener.type, thisListener.sensorPin, thisListener.sensor, thisListener.sensorAPin, thisListener.sensorA, thisListener.sensorBPin, thisListener.sensorB, thisListener.triggerValue, thisListener.action, thisListener.gesture, thisListener.region);
         
-        NSLog(@"DVC added listener, new length: %i", self.listeners.count);
+        NSLog(@"DVC added listener, new length: %li", (long)self.listeners.count);
 
         
         /*
@@ -363,10 +363,55 @@
 }
 
 -(NSArray *)returnActuatorsForJson{
+    long long numTrackerLL = 1;
+    
+    NSLog(@"DVC returnActuatorsForJson");
+    //NSLog(@"DVC numTracker pre: %lli", numTrackerLL);
+    //numTrackerLL = numTrackerLL << 10;
+    
+    //NSLog(@"DVC numTracker post: %lli", numTrackerLL);
+    
+    //long numTrackerL = 0;
+    //int numTrackerInt = 1;
+    
+    //NSLog(@"longlong: %lu, long: %lu, int: %lu", sizeof(numTrackerLL), sizeof(numTrackerL), sizeof(numTrackerInt));
+    
     NSMutableArray *actuatorArray = [[NSMutableArray alloc] init];
     for(int i=0; i<self.actuators.count; i++){
         Actuator *thisActuator = [self.actuators objectAtIndex:i];
-        [actuatorArray addObject:[NSNumber numberWithInt:thisActuator.pinNumber]];
+        long long starter = 1;
+        int shiftAmount = thisActuator.pinNumber - 1;
+        
+        long long shiftedNum = starter << shiftAmount;
+        
+        numTrackerLL = numTrackerLL | shiftedNum;
+        
+        //[actuatorArray addObject:[NSNumber numberWithInt:thisActuator.pinNumber]];
+    }
+    
+    for (int i=0; i<self.regions.count; i++){
+        Region *thisRegion = [self.regions objectAtIndex:i];
+
+        for(int j=0; j<thisRegion.actuators.count; j++){
+            Actuator *thisActuator = [thisRegion.actuators objectAtIndex:j];
+            long long starter = 1;
+            int shiftAmount = thisActuator.pinNumber - 1;
+            
+            long long shiftedNum = starter << shiftAmount;
+            
+            numTrackerLL = numTrackerLL | shiftedNum;
+
+        }
+
+    }
+    
+    for(int i=0; i<(sizeof(numTrackerLL) * 8); i++){
+        long long starter = 1;
+        long long shiftedNum = starter << i;
+        
+        if(shiftedNum & numTrackerLL){
+            [actuatorArray addObject:[NSNumber numberWithInt:(i + 1)]];
+        }
     }
     
     return actuatorArray;
@@ -417,7 +462,7 @@
 
 -(NSArray *)returnListenersForJson{
     NSMutableArray *listenersArray = [[NSMutableArray alloc] init];
-    NSLog(@"DVC Listeners count: %i", self.listeners.count);
+    NSLog(@"DVC Listeners count: %li", (long)self.listeners.count);
     
     for(int i=0; i<self.listeners.count; i++){
         Listener *thisListener = [self.listeners objectAtIndex:i];
@@ -464,7 +509,7 @@
         [listenersArray addObject:thisListenerDictionary];
     }
     
-    NSLog(@"DVC listnersArray count: %i", listenersArray.count);
+    NSLog(@"DVC listnersArray count: %li", (long)listenersArray.count);
     
     return listenersArray;
 }
