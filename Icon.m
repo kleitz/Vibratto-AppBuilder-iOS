@@ -171,6 +171,14 @@
         case ICON_BEAKER:
             [self.bgImage setImage:self.constants.beakerImage];
             break;
+        
+        case ICON_CANCEL:
+            [self.bgImage setImage:self.constants.cancelImage];
+            break;
+        
+        case ICON_SAVE:
+            [self.bgImage setImage:self.constants.saveImage];
+            break;
             
         case ICON_CUSTOM_VALUE:
             [self.customLabel setFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];

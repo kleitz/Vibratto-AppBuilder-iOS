@@ -39,6 +39,8 @@ static AppBuilderConstants *abc;
         abc.headphoneImage = [UIImage imageNamed:@"headphone.png"];
         abc.announcerImage = [UIImage imageNamed:@"announcer.png"];
         abc.beakerImage = [UIImage imageNamed:@"beaker.png"];
+        abc.cancelImage = [UIImage imageNamed:@"multiply.png"];
+        abc.saveImage = [UIImage imageNamed:@"box2.png"];
         
         abc.labelFont = [UIFont systemFontOfSize:42];
         abc.dropDownTitleFont = [UIFont systemFontOfSize:25];
@@ -59,7 +61,10 @@ static AppBuilderConstants *abc;
         abc.dropDownBgColor = [[UIColor alloc] initWithRed:0.8f green:0.8f blue:0.8f alpha:1.0f];
         //abc.dropDownBgColor = abc.seeThruColor;
         
-        abc.primaryButtonDiameter = 60.0f;
+        abc.primaryButtonDiameter = 50.0f;
+        abc.primaryAddButtonDiameter = 60.0f;
+        abc.primaryScreenBuffer = 20.0f;
+        
         abc.iconHeight = 46.0f;
         abc.addIconHeight = 50.0f;
         abc.iconTopBuffer = 4.0f;

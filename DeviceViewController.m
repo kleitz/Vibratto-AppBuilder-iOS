@@ -21,9 +21,9 @@
 
 @implementation DeviceViewController
 
--(id)init{
+-(id)initWithFrame:(CGRect)frame{
     NSLog(@"DeviceViewController init");
-    self = [super init];
+    self = [super initWithFrame:frame];
     if(self){
         self.abc = [AppBuilderConstants getAppBuilderConstants];
         self.buildStage = PRE_SELECT;
@@ -101,6 +101,38 @@
         self.ontoSize = [@"on" sizeWithFont:self.abc.labelFont];
         
         self.arrow1 = [[UIImageView alloc] initWithImage:self.abc.rightArrowImage];
+        
+        //-------------
+        [self setBackgroundColor:[UIColor clearColor]];
+        
+        self.mainView = [[UIView alloc] initWithFrame:CGRectMake(0, self.abc.topBoxHeight * -1, self.frame.size.width, self.frame.size.height + self.abc.topBoxHeight + self.abc.topBoxHeight)];
+        [self.mainView setBackgroundColor:self.abc.primaryColor4];
+        [self addSubview:self.mainView];
+        
+        self.topSection = [[CompoundTopSection alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 2 * self.abc.topBoxHeight)];
+        [self.topSection setDelegate:self];
+        [self.topSection setCompoundDelegate:self];
+        
+        self.bottomSection = [[TopBox alloc] initWithFrame:CGRectMake(0, self.frame.size.height + self.abc.topBoxHeight, self.mainView.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
+        [self.bottomSection setDelegate:self];
+        [self.bottomSection changeTrayColor:self.abc.primaryColor3];
+        
+        [self.bottomSection addIcon:ICON_UPLOAD andIconImage:nil andDelegate:self andTag:3 andSubtitle:@"Upload" andIconData:nil];
+        [self.bottomSection addIcon:ICON_SAVE andIconImage:nil andDelegate:self andTag:4 andSubtitle:@"Save" andIconData:nil];
+        [self.bottomSection addIcon:ICON_CANCEL andIconImage:nil andDelegate:self andTag:5 andSubtitle:@"Cancel" andIconData:nil];
+        
+        [self.bottomSection changeIsCentered:YES];
+        
+        self.bigAddIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.bigAddButtonHeight, self.abc.bigAddButtonHeight)];
+        [self.bigAddIcon changeIconType:ICON_ADD];
+        [self.bigAddIcon setTag:1];
+        [self.bigAddIcon setMyDelegate:self];
+        
+        [self.mainView addSubview:self.topSection];
+        [self.mainView addSubview:self.bottomSection];
+        
+        [self gotoStage:PRE_SELECT];
+        [self.mainView addSubview:self.uploadIcon];
     }
     
     return self;
@@ -111,45 +143,6 @@
     [label setTextColor:[UIColor whiteColor]];
     [label setFont:self.abc.labelFont];
     [label setBackgroundColor:[UIColor clearColor]];
-}
-
-- (void)viewDidLoad
-{
-    NSLog(@"DeviceViewController viewDidLoad");
-    [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor clearColor]];
-    
-    self.mainView = [[UIView alloc] initWithFrame:CGRectMake(0, self.abc.topBoxHeight * -1, self.view.frame.size.width, self.view.frame.size.height + self.abc.topBoxHeight + self.abc.topBoxHeight)];
-    [self.mainView setBackgroundColor:self.abc.primaryColor4];
-    [self.view addSubview:self.mainView];
-    
-    self.topSection = [[CompoundTopSection alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 2 * self.abc.topBoxHeight)];
-    [self.topSection setDelegate:self];
-    [self.topSection setCompoundDelegate:self];
-    
-    self.bottomSection = [[TopBox alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height + self.abc.topBoxHeight, self.mainView.frame.size.width, self.abc.topBoxHeight) andHasAddBox:NO];
-    [self.bottomSection setDelegate:self];
-    [self.bottomSection changeTrayColor:self.abc.primaryColor3];
-    
-    [self.bottomSection addIcon:ICON_UPLOAD andIconImage:nil andDelegate:self andTag:3 andSubtitle:@"Upload" andIconData:nil];
-    [self.bottomSection addIcon:ICON_ADD andIconImage:nil andDelegate:self andTag:4 andSubtitle:@"Save" andIconData:nil];
-    //self.uploadIcon = [[Icon alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - self.abc.primaryButtonDiameter/2, self.view.frame.size.height - 80.0f + self.abc.topBoxHeight, self.abc.primaryButtonDiameter, self.abc.primaryButtonDiameter)];
-    //[self.uploadIcon changeIconType:ICON_UPLOAD];
-    //[self.uploadIcon setTag:3];
-    //[self.uploadIcon setMyDelegate:self];
-    
-    [self.bottomSection changeIsCentered:YES];
-    
-    self.bigAddIcon = [[Icon alloc] initWithFrame:CGRectMake(0, 0, self.abc.bigAddButtonHeight, self.abc.bigAddButtonHeight)];
-    [self.bigAddIcon changeIconType:ICON_ADD];
-    [self.bigAddIcon setTag:1];
-    [self.bigAddIcon setMyDelegate:self];
-    
-    [self.mainView addSubview:self.topSection];
-    [self.mainView addSubview:self.bottomSection];
-    
-    [self gotoStage:PRE_SELECT];
-    [self.mainView addSubview:self.uploadIcon];
 }
 
 -(void)collapsingStarted:(DropDownMenu *)newItem{
@@ -539,7 +532,7 @@
         [self gotoStage:self.nextStage];
         //[self processStage];
     } else if(icon.tag == 3){
-        NSLog(@"Upload Button Clicked");
+        NSLog(@"DVC Upload Button Clicked");
         NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
         //create actuators
         [message setObject:[self returnActuatorsForJson] forKey:@"actuators"];
@@ -555,7 +548,44 @@
         NSData *messageJSON = [NSJSONSerialization dataWithJSONObject:message options:0 error:nil];
         NSString *messageString = [[NSString alloc] initWithData:messageJSON encoding:NSUTF8StringEncoding];
         
-        NSLog(@"About to sendMessageString: %@", messageString);
+        NSLog(@"DVC About to sendMessageString: %@", messageString);
+    } else if(icon.tag == 4){
+        NSLog(@"DVC Save clicked");
+        for(int i=self.mainView.subviews.count -1; i>=0; i--){
+            [[self.mainView.subviews objectAtIndex:i] removeFromSuperview];
+        }
+        
+        CGFloat topWidth = self.superview.frame.size.width;
+        CGFloat topHeight = self.superview.frame.size.height;
+        
+        [UIView animateWithDuration:0.45f animations:^{
+            [self.mainView.layer setCornerRadius:(self.abc.primaryButtonDiameter/2)];
+            [self.mainView setFrame:CGRectMake((topWidth/2) - (self.abc.primaryButtonDiameter/2), (topHeight/2) - (self.abc.primaryButtonDiameter/2), self.abc.primaryButtonDiameter, self.abc.primaryButtonDiameter)];
+        } completion:^(BOOL finished){
+            [UIView animateWithDuration:0.2f animations:^{
+                [self.mainView setBackgroundColor:self.abc.seeThruColor];
+            } completion:^(BOOL finished){
+                [self.delegate sketchFinishedBuilding:self];
+            }];
+        }];
+        
+    } else if(icon.tag == 5){
+        NSLog(@"DVC Cancel clicked");
+        /*
+        for(int i=self.mainView.subviews.count -1; i>=0; i--){
+            [[self.mainView.subviews objectAtIndex:i] removeFromSuperview];
+        }
+        */
+        
+        CGFloat topWidth = self.superview.frame.size.width;
+        CGFloat topHeight = self.superview.frame.size.height;
+        
+        [UIView animateWithDuration:0.45f animations:^{
+            [self.mainView setFrame:CGRectMake(0, topHeight, self.mainView.frame.size.width, self.mainView.frame.size.height)];
+        } completion:^(BOOL finished){
+            [self.delegate sketchCanceled:self];
+        }];
+        
     } else if(icon.tag >= (ICON_SENSOR * 100) && icon.tag < ((ICON_SENSOR * 100) + 100) && self.buildStage == SENSOR_SELECT){
         [self.sensorIcon changeIconType:icon.iconType];
         [self.sensorIcon setIconData:icon.iconData];
@@ -636,9 +666,7 @@
             default:
                 break;
         }
-
     }
-
 }
 
 -(void)highlightBuildStageIcon:(Icon *)icon{
@@ -660,13 +688,21 @@
 }
 
 -(void)gotoStage:(BUILD_LISTENER_STATUS)stage{
+    NSLog(@"DVC gotoStage, stage: %i", stage);
+    
     switch (stage) {
         case PRE_SELECT:
+            NSLog(@"DVC stage is pre select");
+            
             self.buildStage = PRE_SELECT;
             if(self.nextStage == self.buildStage){
-                [self.bigAddIcon setFrame:CGRectMake(self.view.center.x - self.abc.bigAddButtonHeight/2, self.view.center.y + self.abc.topBoxHeight - self.abc.bigAddButtonHeight/2, self.abc.bigAddButtonHeight, self.abc.bigAddButtonHeight)];
+                NSLog(@"DVC going to insert bai");
+                [self.bigAddIcon setFrame:CGRectMake((self.frame.size.width/2) - self.abc.bigAddButtonHeight/2, (self.frame.size.height/2) + (self.abc.topBoxHeight * 1.0) - self.abc.bigAddButtonHeight/2, self.abc.bigAddButtonHeight, self.abc.bigAddButtonHeight)];
                 [self.bigAddIcon changeIconType:ICON_ADD];
                 [self.bigAddIcon.layer setCornerRadius:self.abc.bigAddButtonHeight/2];
+                
+                NSLog(@"DVC bai x: %f, y: %f height: %f, width: %f", self.bigAddIcon.frame.origin.x, self.bigAddIcon.frame.origin.y, self.bigAddIcon.frame.size.height, self.bigAddIcon.frame.size.width);
+                
                 //[self.mainView addSubview:self.bigAddIcon];
                 [self.mainView insertSubview:self.bigAddIcon belowSubview:self.topSection];
                 self.frontierStage = PRE_SELECT;
@@ -917,7 +953,7 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     NSLog(@"DVC touchesBegan");
     self.isTouching = YES;
-    CGPoint touchPoint = [[touches anyObject] locationInView:self.view];
+    CGPoint touchPoint = [[touches anyObject] locationInView:self];
     self.currentPoint = touchPoint;
 
 }
@@ -925,7 +961,7 @@
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     //NSLog(@"DVC touchesMoved");
     UITouch *newTouch = [touches anyObject];
-    CGPoint newPoint = [newTouch locationInView:self.view];
+    CGPoint newPoint = [newTouch locationInView:self];
     CGPoint translation = CGPointMake(newPoint.x - self.currentPoint.x, newPoint.y - self.currentPoint.y);
     
     NSLog(@"CEV touchesMoved: %f", translation.y);

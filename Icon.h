@@ -35,6 +35,8 @@ typedef enum {
     ICON_ACTION,
     ICON_LIGHTNING,
     ICON_BEAKER,
+    ICON_CANCEL,
+    ICON_SAVE,
     ICON_CUSTOM
 } ICON_TYPE;
 
@@ -45,6 +47,7 @@ typedef enum {
 @optional
 -(void)iconClicked:(Icon *)icon;
 -(void)iconLongPressed:(Icon *)icon;
+
 @end
 
 @interface Icon : UIView<IconDelegate>

@@ -20,7 +20,8 @@
     NSLog(@"ViewController init");
     self = [super init];
     if(self){
-        self.constants = [AppBuilderConstants getAppBuilderConstants];
+        self.abc = [AppBuilderConstants getAppBuilderConstants];
+        self.sketches = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -30,9 +31,11 @@
 {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:self.constants.primaryColor1];
+    [self.view setBackgroundColor:self.abc.primaryColor1];
     
-    self.addDeviceButton = [[Icon alloc] initWithFrame:CGRectMake(self.view.center.x - self.constants.primaryButtonDiameter/2, self.view.frame.size.height * 0.8f, self.constants.primaryButtonDiameter, self.constants.primaryButtonDiameter)];
+    self.iconsPerRow = (int)((self.view.frame.size.width - self.abc.primaryScreenBuffer)/(self.abc.primaryScreenBuffer + self.abc.primaryButtonDiameter));
+    
+    self.addDeviceButton = [[Icon alloc] initWithFrame:CGRectMake(self.view.center.x - self.abc.primaryAddButtonDiameter/2, self.view.frame.size.height * 0.8f, self.abc.primaryAddButtonDiameter, self.abc.primaryAddButtonDiameter)];
     [self.addDeviceButton changeIconType:ICON_ADD];
     [self.addDeviceButton.layer setBorderWidth:1.0f];
     [self.addDeviceButton.layer setBorderColor:[UIColor lightGrayColor].CGColor];
@@ -50,15 +53,47 @@
 
 -(void)newDeviceButtonClicked{
     NSLog(@"New device button clicked!");
-    DeviceViewController *dvc = [[DeviceViewController alloc] init];
+    DeviceViewController *dvc = [[DeviceViewController alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height)];
+    //[dvc setFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height)];
+    [dvc setDelegate:self];
     
-    [self presentViewController:dvc animated:YES completion:nil];
+    [self.view addSubview:dvc];
+    
+    [UIView animateWithDuration:0.35f delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [dvc setFrame:CGRectMake(0, 0, dvc.frame.size.width, dvc.frame.size.height)];
+    } completion:nil];
+    
+    //[self presentViewController:dvc animated:YES completion:nil];
 }
 
 -(void)iconClicked:(Icon *)icon{
     [self newDeviceButtonClicked];
 }
 
+-(void)sketchFinishedBuilding:(DeviceViewController *)sketch{
+    NSLog(@"VC sketchFinishedBuilding");
+    Sketch *thisSketch = [[Sketch alloc] initWithSensors:sketch.sensors regions:sketch.regions listeners:sketch.listeners actions:sketch.gestures isCustom:YES];
+    
+    Icon *sketchIcon = [[Icon alloc] initWithFrame:CGRectMake(sketch.mainView.frame.origin.x, sketch.mainView.frame.origin.y, sketch.mainView.frame.size.width, sketch.mainView.frame.size.height)];
+    [sketchIcon setIconData:thisSketch];
+    
+    [sketch removeFromSuperview];
+    [self.view addSubview:sketchIcon];
+    
+    CGFloat xVal = self.abc.primaryScreenBuffer + ((self.abc.primaryButtonDiameter + self.abc.primaryScreenBuffer) * (self.sketches.count % self.iconsPerRow));
+    CGFloat yVal = self.abc.primaryScreenBuffer + ((self.abc.primaryButtonDiameter + self.abc.primaryScreenBuffer) * (int)(self.sketches.count / self.iconsPerRow));
+    
+    [self.sketches addObject:sketchIcon];
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        [sketchIcon setFrame:CGRectMake(xVal, yVal, sketchIcon.frame.size.width, sketchIcon.frame.size.height)];
+    }];
+}
+
+-(void)sketchCanceled:(DeviceViewController *)sketch{
+    NSLog(@"VC sketchCancelled");
+    [sketch removeFromSuperview];
+}
 
 -(void)setupBluetoothPeripheral{
     NSLog(@"Hi from setupBluetooth");

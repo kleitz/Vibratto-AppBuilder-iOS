@@ -23,7 +23,16 @@ typedef enum {
     BUILD_LISTENER
 } BUILD_LISTENER_STATUS;
 
-@interface DeviceViewController : UIViewController<IconDelegate, UIAlertViewDelegate, DropDownDelegate, CompoundTopSectionDelegate>
+@class DeviceViewController;
+
+@protocol DeviceBuilderDelegate <NSObject>
+
+@optional
+-(void)sketchFinishedBuilding:(DeviceViewController *)sketch;
+-(void)sketchCanceled:(DeviceViewController *)sketch;
+@end
+
+@interface DeviceViewController : UIView<IconDelegate, UIAlertViewDelegate, DropDownDelegate, CompoundTopSectionDelegate>
 
 @property(strong, nonatomic) AppBuilderConstants *abc;
 
@@ -45,6 +54,8 @@ typedef enum {
 @property(strong, nonatomic) Icon *buildStageIcon;
 
 @property(strong, nonatomic) ListenerDropDown *ldd;
+
+@property(weak, nonatomic) id<DeviceBuilderDelegate> delegate;
 
 @property(strong, nonatomic) NSMutableArray *actuators;
 @property(strong, nonatomic) NSMutableArray *sensors;

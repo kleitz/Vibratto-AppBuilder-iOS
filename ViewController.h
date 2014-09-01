@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "AppBuilderConstants.h"
 #import "Icon.h"
+#import "DeviceViewController.h"
 #include <CoreBluetooth/CoreBluetooth.h>
 
-@interface ViewController : UIViewController<IconDelegate, CBCentralManagerDelegate, CBPeripheralManagerDelegate>
+@interface ViewController : UIViewController<IconDelegate, CBCentralManagerDelegate, CBPeripheralManagerDelegate, DeviceBuilderDelegate>
 
-@property(strong, nonatomic) AppBuilderConstants *constants;
+@property(strong, nonatomic) AppBuilderConstants *abc;
 @property(strong, nonatomic) Icon *addDeviceButton;
 
 @property(strong, nonatomic) CBPeripheralManager *btPeripheralManager;
@@ -24,4 +25,7 @@
 
 @property(strong, nonatomic) CBPeripheral *btPeripheral;
 
+@property(strong, nonatomic) NSMutableArray *sketches;
+
+@property(assign, nonatomic) int iconsPerRow;
 @end

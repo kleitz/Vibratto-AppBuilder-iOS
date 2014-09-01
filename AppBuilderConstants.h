@@ -35,6 +35,8 @@
 @property(strong, nonatomic) UIImage *headphoneImage;
 @property(strong, nonatomic) UIImage *announcerImage;
 @property(strong, nonatomic) UIImage *beakerImage;
+@property(strong, nonatomic) UIImage *cancelImage;
+@property(strong, nonatomic) UIImage *saveImage;
 
 @property(strong, nonatomic) UIFont *labelFont;
 @property(strong, nonatomic) UIFont *dropDownTitleFont;
@@ -51,6 +53,9 @@
 @property(strong, nonatomic) UIColor *dropDownBgColor;
 
 @property(assign, nonatomic) CGFloat primaryButtonDiameter;
+@property(assign, nonatomic) CGFloat primaryAddButtonDiameter;
+@property(assign, nonatomic) CGFloat primaryScreenBuffer;
+
 @property(assign, nonatomic) CGFloat topBoxHeight;
 @property(assign, nonatomic) CGFloat iconHeight;
 @property(assign, nonatomic) CGFloat addIconHeight;

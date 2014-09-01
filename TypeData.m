@@ -142,6 +142,7 @@
 
 @end
 
+
 @implementation Action
 
 -(id)initWithName:(NSString *)name isCustom:(BOOL)isCustom{
@@ -153,5 +154,36 @@
     
     return self;
 }
+
+@end
+
+
+@implementation Sketch
+
+-(id)initWithSensors:(NSArray *)sensors regions:(NSArray *)regions listeners:(NSArray *)listeners actions:(NSArray *)actions isCustom:(BOOL)isCustom{
+    self = [super init];
+    if(self){
+        self.isCustom = isCustom;
+        
+        self.sensors = [[NSMutableArray alloc] init];
+        self.regions = [[NSMutableArray alloc] init];
+        self.listeners = [[NSMutableArray alloc] init];
+        self.actions = [[NSMutableArray alloc] init];
+        
+        [self addItemsIn:sensors into:self.sensors];
+        [self addItemsIn:regions into:self.regions];
+        [self addItemsIn:listeners into:self.listeners];
+        [self addItemsIn:actions into:self.actions];
+    }
+    
+    return self;
+}
+
+-(void)addItemsIn:(NSArray *)originalArray into:(NSMutableArray *)targetArray{
+    for(int i=0; i<originalArray.count; i++){
+        [targetArray addObject:[originalArray objectAtIndex:i]];
+    }
+}
+
 
 @end

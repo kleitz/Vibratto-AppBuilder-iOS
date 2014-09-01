@@ -110,4 +110,13 @@ typedef enum {
 
 @end
 
+@interface Sketch : TypeData
+
+@property(strong, nonatomic) NSMutableArray *sensors;
+@property(strong, nonatomic) NSMutableArray *regions;
+@property(strong, nonatomic) NSMutableArray *listeners;
+@property(strong, nonatomic) NSMutableArray *actions;
+
+-(id)initWithSensors:(NSArray *)sensors regions:(NSArray *)regions listeners:(NSArray *)listeners actions:(NSArray *)actions isCustom:(BOOL)isCustom;
+@end
 
