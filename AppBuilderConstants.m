@@ -78,6 +78,8 @@ static AppBuilderConstants *abc;
         abc.dropDownChooseIconLabelHeight = 35.0f;
         abc.dropDownGroupBuffer = 6.0f;
         abc.dropDownFieldBuffer = 1.0f;
+        
+        abc.regionSelectorIconHeight = 30.0f;
     }
     
     return abc;

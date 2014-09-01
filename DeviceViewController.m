@@ -12,6 +12,7 @@
 #import "ActuatorDropDown.h"
 #import "SensorDropDown.h"
 #import "ListenerDropDown.h"
+#import "RegionDropDown.h"
 #import "TypeData.h"
 
 @interface DeviceViewController ()
@@ -200,6 +201,23 @@
         
         iconData = thisSensorData;
         
+    } else if([newItem isKindOfClass:[RegionDropDown class]]){
+        NSLog(@"DVC newItem is regionDropDown");
+        RegionDropDown *thisRegionDropDown = ((RegionDropDown *)newItem);
+        
+        NSMutableArray *selectedActuators = [[NSMutableArray alloc] init];
+        for(int i=0; i<thisRegionDropDown.regionIcons.count; i++){
+            Icon *thisActuatorIcon = [thisRegionDropDown.regionIcons objectAtIndex:i];
+            if(thisActuatorIcon.isHighlighted){
+                [selectedActuators addObject:thisActuatorIcon.iconData];
+            }
+        }
+        
+        Region *thisRegionData = [[Region alloc] initWithName:newItem.name andActuators:selectedActuators isCustom:YES];
+        iconData = thisRegionData;
+        
+        [self.regions addObject:thisRegionData];
+        
     } else if([newItem isKindOfClass:[ListenerDropDown class]]){
         NSLog(@"DVC newItem is listenerDropDown");
         
@@ -323,11 +341,24 @@
         [self.regionIcon changeSubtitle:nil];
     }
     
-    if(self.topSection.selectedCategory.iconType == ICON_SENSOR){
-        [self.topSection addNewIconInCategory:ICON_VALUE iconType:newItem.selectedIcon.iconType andIconImage:nil andDelegate:self.topSection andTag:0 subtitle:newItem.name andData:iconData];
+    NSLog(@"DVC selected iconType: %i, dropDownTypeIcon: %i", newItem.selectedIcon.iconType, newItem.dropDownTypeIcon);
+    
+    ICON_TYPE usingIconType;
+    
+    if(newItem.selectedIcon.iconType == 0){
+        NSLog(@"DVC Going to change iconType");
+        usingIconType = newItem.dropDownTypeIcon;
+    } else {
+        usingIconType = newItem.selectedIcon.iconType;
     }
     
-    [self.topSection addNewIconInCategory:self.topSection.selectedCategory.iconType iconType:newItem.selectedIcon.iconType andIconImage:nil andDelegate:self.topSection andTag:0 subtitle:newItem.name andData:iconData];
+    NSLog(@"DVC selected iconType: %i, dropDownTypeIcon: %i", newItem.selectedIcon.iconType, newItem.dropDownTypeIcon);
+    
+    if(self.topSection.selectedCategory.iconType == ICON_SENSOR){
+        [self.topSection addNewIconInCategory:ICON_VALUE iconType:usingIconType andIconImage:nil andDelegate:self.topSection andTag:0 subtitle:newItem.name andData:iconData];
+    }
+    
+    [self.topSection addNewIconInCategory:self.topSection.selectedCategory.iconType iconType:usingIconType andIconImage:nil andDelegate:self.topSection andTag:0 subtitle:newItem.name andData:iconData];
 
 }
 
@@ -366,7 +397,19 @@
 -(NSArray *)returnRegionForJson{
     NSMutableArray *regionArray = [[NSMutableArray alloc] init];
     for(int i=0; i<self.regions.count; i++){
+        Region *thisRegion = [self.regions objectAtIndex:i];
+        NSMutableDictionary *thisRegionDictionary = [[NSMutableDictionary alloc] init];
+        [thisRegionDictionary setObject:thisRegion.name forKey:@"name"];
         
+        NSMutableArray *componentsArray = [[NSMutableArray alloc] init];
+        for(int j=0; j<thisRegion.actuators.count; j++){
+            Actuator *thisActuator = [thisRegion.actuators objectAtIndex:j];
+            [componentsArray addObject:[NSNumber numberWithInt:thisActuator.pinNumber]];
+        }
+        
+        [thisRegionDictionary setObject:componentsArray forKey:@"components"];
+        
+        [regionArray addObject:thisRegionDictionary];
     }
     
     return regionArray;
@@ -445,7 +488,7 @@
         //create sensors
         [message setObject:[self returnSensorsForJson] forKey:@"sensors"];
         //create regions
-        
+        [message setObject:[self returnRegionForJson] forKey:@"regions"];
         //create gestures
         
         //create listeners

@@ -19,6 +19,8 @@
         self.pinNumberPlaceholder = @"Pin Number";
         self.namePlaceholder = @"Name (Optional)";
         
+        self.dropDownTypeIcon = ICON_ACTUATOR;
+        
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_CUSTOM]];
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_ANNOUNCER]];
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_ACTUATOR]];

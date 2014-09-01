@@ -64,11 +64,18 @@
 
 @implementation Region
 
--(id)initWithName:(NSString *)name isCustom:(BOOL)isCustom{
+-(id)initWithName:(NSString *)name andActuators:(NSArray *)actuators isCustom:(BOOL)isCustom{
     self = [super init];
     if(self){
         self.name = name;
         self.isCustom = isCustom;
+        
+        self.actuators = [[NSMutableArray alloc] init];
+        
+        for(int i=0; i<actuators.count; i++){
+            [self.actuators addObject:[actuators objectAtIndex:i]];
+        }
+        
     }
     
     return self;

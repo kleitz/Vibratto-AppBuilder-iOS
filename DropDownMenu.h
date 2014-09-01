@@ -34,6 +34,8 @@
 @property(strong, nonatomic) id<DropDownDelegate> delegate;
 @property(strong, nonatomic) Icon *selectedIcon;
 
+@property(assign, nonatomic) ICON_TYPE dropDownTypeIcon;
+
 @property(strong, nonatomic) UIButton *okButton;
 @property(strong, nonatomic) UIButton *cancelButton;
 

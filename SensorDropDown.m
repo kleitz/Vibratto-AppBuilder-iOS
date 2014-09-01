@@ -17,6 +17,8 @@
     if(self){
         self.hasIcons = YES;
         
+        self.dropDownTypeIcon = ICON_SENSOR;
+        
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_CUSTOM]];
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_SENSOR]];
         

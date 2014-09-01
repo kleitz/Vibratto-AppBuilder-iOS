@@ -10,6 +10,7 @@
 #import "ActuatorDropDown.h"
 #import "SensorDropDown.h"
 #import "ListenerDropDown.h"
+#import "RegionDropDown.h"
 #import "TypeData.h"
 
 @implementation CompoundTopSection
@@ -78,7 +79,8 @@
         Comparator *greaterThenComparator = [[Comparator alloc] initWithType:ICON_GREATERTHEN];
         Comparator *lessThenComparator = [[Comparator alloc] initWithType:ICON_LESSTHEN];
         
-        Region *deviceRegion = [[Region alloc] initWithName:@"Device" isCustom:NO];
+        RegionDropDown *rdd = [[RegionDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
+        Region *deviceRegion = [[Region alloc] initWithName:@"Device" andActuators:rdd.regionIcons isCustom:NO];
         
         [self addNewIconInCategory:ICON_SENSOR iconType:ICON_TILT andIconImage:nil andDelegate:self andTag:(ICON_SENSOR * 100) subtitle:@"Rotation" andData:rotationSensor];
         [self addNewIconInCategory:ICON_SENSOR iconType:ICON_MAP andIconImage:nil andDelegate:self andTag:(ICON_SENSOR * 100) + 1 subtitle:@"GPS" andData:gpsSensor];
@@ -125,6 +127,8 @@
         self.visibleDropDown = [[SensorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
     } else if(iconType == ICON_LISTENER){
         self.visibleDropDown = [[ListenerDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
+    } else if(iconType == ICON_REGION){
+        self.visibleDropDown = [[RegionDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
     }
     
     [self.visibleDropDown setDelegate:self];
@@ -182,6 +186,13 @@
         [self.visibleDropDown colapseDropDown];
         [self.compoundDelegate collapsingStarted:self.visibleDropDown];
         //[self.compoundDelegate buildListener:self];
+    } else if([ddm isKindOfClass:[RegionDropDown class]]){
+        if(((RegionDropDown *)ddm).name == nil){
+            [self retractDropDown];
+        } else {
+            [self.visibleDropDown colapseDropDown];
+            [self.compoundDelegate collapsingStarted:self.visibleDropDown];
+        }
     }
 }
 
@@ -224,6 +235,8 @@
             } else if(self.selectedCategory.iconType == ICON_SENSOR){
                 NSLog(@"CTS sensor");
                 [self showDropDownByType:ICON_SENSOR];
+            } else if(self.selectedCategory.iconType == ICON_REGION){
+                [self showDropDownByType:ICON_REGION];
             }
             
             break;
@@ -319,7 +332,6 @@
             NSLog(@"CTS default");
             break;
         }
-            
     }
     
     CGFloat iconX = (thisArray.count * self.abc.iconHeight) + ((thisArray.count + 1) * self.iconBox.iconBuffer);

@@ -77,8 +77,9 @@ typedef enum {
 @interface Region : TypeData
 
 @property(strong, nonatomic) NSString *name;
+@property(strong, nonatomic) NSMutableArray *actuators;
 
--(id)initWithName:(NSString *)name isCustom:(BOOL)isCustom;
+-(id)initWithName:(NSString *)name andActuators:(NSArray *)actuators isCustom:(BOOL)isCustom;
 
 @end
 

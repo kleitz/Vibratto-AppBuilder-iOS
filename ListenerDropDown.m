@@ -18,6 +18,8 @@
         self.hasIcons = YES;
         self.namePlaceholder = @"Name (Optional)";
         
+        self.dropDownTypeIcon = ICON_LISTENER;
+        
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_CUSTOM]];
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_ANNOUNCER]];
         [self.iconTypes addObject:[NSNumber numberWithInt:ICON_ACTUATOR]];
