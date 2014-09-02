@@ -835,7 +835,7 @@
         
         case NAME_LISTENER:{
             self.buildStage = NAME_LISTENER;
-            [self.topSection showDropDownByType:ICON_LISTENER isEditing:NO typeData:nil];
+            [self.topSection showDropDownByType:ICON_LISTENER isEditing:NO typeData:nil representingIcon:nil];
             break;
         }
             

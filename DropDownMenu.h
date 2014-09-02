@@ -48,6 +48,7 @@
 @property(assign, nonatomic) BOOL isEditing;
 
 @property(strong, nonatomic) TypeData *typeData;
+@property(strong, nonatomic) Icon *representedIcon;
 
 -(void)setFieldName:(NSString *)name;
 -(void)createTextField:(NSString *)text;

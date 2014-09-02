@@ -121,7 +121,7 @@
     }];
 }
 
--(void)showDropDownByType:(ICON_TYPE)iconType isEditing:(BOOL)isEditing typeData:(TypeData *)typeData{
+-(void)showDropDownByType:(ICON_TYPE)iconType isEditing:(BOOL)isEditing typeData:(TypeData *)typeData representingIcon:(Icon *)icon{
     if(iconType == ICON_ACTUATOR){
         self.visibleDropDown = [[ActuatorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
     } else if(iconType == ICON_SENSOR){
@@ -135,6 +135,7 @@
     [self.visibleDropDown setDelegate:self];
     [self.visibleDropDown setIsEditing:isEditing];
     [self.visibleDropDown changeTypeData:typeData];
+    [self.visibleDropDown setRepresentedIcon:icon];
     [self showDropDown:self.visibleDropDown];
 }
 
@@ -168,12 +169,27 @@
             [self.compoundDelegate collapsingStarted:self.visibleDropDown];
         }
     } else if(self.selectedCategory.iconType == ICON_SENSOR){
-        if(((SensorDropDown *)ddm).pinNumber == 0){
+        SensorDropDown *sensorDropDown = (SensorDropDown *)ddm;
+        if(sensorDropDown.pinNumber == 0){
             [self retractDropDown];
         } else {
             
-            [self.visibleDropDown colapseDropDown];
-            [self.compoundDelegate collapsingStarted:self.visibleDropDown];
+            if(self.visibleDropDown.isEditing){
+                NSLog(@"CTS sensor isEditing, name: %@, pin: %i, sensitivity: %i", sensorDropDown.name, sensorDropDown.pinNumber, sensorDropDown.sensitivity);
+                Sensor *thisSensor = (Sensor *)self.visibleDropDown.typeData;
+                [thisSensor setName:sensorDropDown.name];
+                [thisSensor setPinNumber:sensorDropDown.pinNumber];
+                [thisSensor setSensitivity:sensorDropDown.sensitivity];
+                
+                Icon *sensorIcon = sensorDropDown.representedIcon;
+                [sensorIcon changeSubtitle:thisSensor.name];
+                
+                [self retractDropDown];
+            } else {
+                [self.visibleDropDown colapseDropDown];
+                [self.compoundDelegate collapsingStarted:self.visibleDropDown];
+            }
+
         }
     } else if([ddm isKindOfClass:[ListenerDropDown class]]){
         if(self.selectedCategory.iconType != ICON_LISTENER){
@@ -224,11 +240,11 @@
     
     if(icon.iconData.isCustom){
         if([icon.iconData isKindOfClass:[Sensor class]]){
-            [self showDropDownByType:ICON_SENSOR isEditing:YES typeData:icon.iconData];
+            [self showDropDownByType:ICON_SENSOR isEditing:YES typeData:icon.iconData representingIcon:icon];
         } else if([icon.iconData isKindOfClass:[Listener class]]){
-            [self showDropDownByType:ICON_LISTENER isEditing:YES typeData:icon.iconData];
+            [self showDropDownByType:ICON_LISTENER isEditing:YES typeData:icon.iconData representingIcon:icon];
         } else if([icon.iconData isKindOfClass:[Region class]]){
-            [self showDropDownByType:ICON_REGION isEditing:YES typeData:icon.iconData];
+            [self showDropDownByType:ICON_REGION isEditing:YES typeData:icon.iconData representingIcon:icon];
         } else if([icon.iconData isKindOfClass:[Action class]]){
             
         }
@@ -246,12 +262,12 @@
                 [self retractDropDown];
             } else if(self.selectedCategory.iconType == ICON_ACTUATOR){
                 NSLog(@"CTS actuator");
-                [self showDropDownByType:ICON_ACTUATOR isEditing:NO typeData:nil];
+                [self showDropDownByType:ICON_ACTUATOR isEditing:NO typeData:nil representingIcon:nil];
             } else if(self.selectedCategory.iconType == ICON_SENSOR){
                 NSLog(@"CTS sensor");
-                [self showDropDownByType:ICON_SENSOR isEditing:NO typeData:nil];
+                [self showDropDownByType:ICON_SENSOR isEditing:NO typeData:nil representingIcon:nil];
             } else if(self.selectedCategory.iconType == ICON_REGION){
-                [self showDropDownByType:ICON_REGION isEditing:NO typeData:nil];
+                [self showDropDownByType:ICON_REGION isEditing:NO typeData:nil representingIcon:nil];
             }
             
             break;
