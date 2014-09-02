@@ -42,7 +42,7 @@ typedef enum {
 
 @class Icon;
 
-@protocol IconDelegate <NSObject>
+@protocol IconDelegate <NSObject, UIGestureRecognizerDelegate>
 
 @optional
 -(void)iconClicked:(Icon *)icon;

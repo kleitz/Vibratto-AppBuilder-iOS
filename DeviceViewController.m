@@ -232,6 +232,8 @@
         Listener *thisListener = [[Listener alloc] init];
         [thisListener setIsCustom:YES];
         
+        [thisListener setName:thisListenerDropDown.name];
+        
         if([self.valueIcon.iconData isKindOfClass:[TriggerValue class]]){
             NSLog(@"DVC sensorGreaterThenValue");
             
@@ -593,7 +595,7 @@
         if(icon.hasSubtitle){
             [self.sensorIcon changeSubtitle:icon.subtitle.text];
         }
-
+    
         [self processStage];
     } else if(icon.tag >= (ICON_COMPARATOR * 100) && icon.tag < ((ICON_COMPARATOR * 100) + 100) && self.buildStage == COMPARATOR_SELECT){
         [self.comparatorIcon changeIconType:icon.iconType];
@@ -833,7 +835,7 @@
         
         case NAME_LISTENER:{
             self.buildStage = NAME_LISTENER;
-            [self.topSection showDropDownByType:ICON_LISTENER];
+            [self.topSection showDropDownByType:ICON_LISTENER isEditing:NO typeData:nil];
             break;
         }
             

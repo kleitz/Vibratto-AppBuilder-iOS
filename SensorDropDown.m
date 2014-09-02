@@ -15,7 +15,7 @@
     self = [super initWithFrame:frame];
     
     if(self){
-        self.hasIcons = YES;
+        self.hasIcons = NO;
         
         self.dropDownTypeIcon = ICON_SENSOR;
         
@@ -34,7 +34,6 @@
         
         [self setFieldName:@"Add Sensor"];
         [self addFields];
-        
         
         if(self.hasIcons){
             [self displayIcons];
@@ -78,6 +77,23 @@
     [super okButtonClicked];
     
     NSLog(@"SDD name: %@, pinNumber: %i", self.name, self.pinNumber);
+}
+
+-(void)changeTypeData:(TypeData *)typeData{
+    NSLog(@"SensorDropDown changeDataType");
+    [super changeTypeData:typeData];
+    
+    if(typeData != nil){
+        Sensor *sensorTypeData = (Sensor *)typeData;
+        
+        [[self getTextFieldByPlaceHolder:self.pinNumberPlaceholder] setText:[NSString stringWithFormat:@"%i", sensorTypeData.pinNumber]];
+        [[self getTextFieldByPlaceHolder:self.namePlaceholder] setText:sensorTypeData.name];
+        [self setFieldName:@"Edit Sensor"];
+        
+        if(sensorTypeData.sensitivity >= 0){
+            [[self getTextFieldByPlaceHolder:self.sensitivityPlaceholder] setText:[NSString stringWithFormat:@"%i", sensorTypeData.sensitivity]];
+        }
+    }
 }
 
 

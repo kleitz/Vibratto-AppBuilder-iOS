@@ -15,7 +15,7 @@
     self = [super initWithFrame:frame];
     
     if(self){
-        self.hasIcons = YES;
+        self.hasIcons = NO;
         self.namePlaceholder = @"Name (Optional)";
         
         self.dropDownTypeIcon = ICON_LISTENER;
@@ -58,6 +58,19 @@
     [super okButtonClicked];
     
     NSLog(@"ADD name: %@", self.name);
+}
+
+-(void)changeTypeData:(TypeData *)typeData{
+    NSLog(@"LDD changeTypeData");
+    [super typeData];
+    
+    if(typeData != nil){
+        UITextField *nameTextField = [self getTextFieldByPlaceHolder:self.namePlaceholder];
+        Listener *listenerData = (Listener *)typeData;
+        
+        [nameTextField setText:listenerData.name];
+    }
+
 }
 
 @end

@@ -121,7 +121,7 @@
     }];
 }
 
--(void)showDropDownByType:(ICON_TYPE)iconType{
+-(void)showDropDownByType:(ICON_TYPE)iconType isEditing:(BOOL)isEditing typeData:(TypeData *)typeData{
     if(iconType == ICON_ACTUATOR){
         self.visibleDropDown = [[ActuatorDropDown alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
     } else if(iconType == ICON_SENSOR){
@@ -133,6 +133,8 @@
     }
     
     [self.visibleDropDown setDelegate:self];
+    [self.visibleDropDown setIsEditing:isEditing];
+    [self.visibleDropDown changeTypeData:typeData];
     [self showDropDown:self.visibleDropDown];
 }
 
@@ -169,11 +171,6 @@
         if(((SensorDropDown *)ddm).pinNumber == 0){
             [self retractDropDown];
         } else {
-            /*
-            if(((SensorDropDown *)ddm).name == nil){
-                ((SensorDropDown *)ddm).name = [NSString stringWithFormat:@"%i",((SensorDropDown *)ddm).pinNumber];
-            }
-            */
             
             [self.visibleDropDown colapseDropDown];
             [self.compoundDelegate collapsingStarted:self.visibleDropDown];
@@ -183,7 +180,6 @@
             [self selectCategoryByType:ICON_LISTENER];
         }
         
-        //
         [self.visibleDropDown colapseDropDown];
         [self.compoundDelegate collapsingStarted:self.visibleDropDown];
         //[self.compoundDelegate buildListener:self];
@@ -224,7 +220,21 @@
 }
 
 -(void)iconLongPressed:(Icon *)icon{
-    [self.delegate iconLongPressed:icon];
+    NSLog(@"CTS iconLongPress, tag: %i, isCustom: %i", icon.tag, icon.iconData.isCustom);
+    
+    if(icon.iconData.isCustom){
+        if([icon.iconData isKindOfClass:[Sensor class]]){
+            [self showDropDownByType:ICON_SENSOR isEditing:YES typeData:icon.iconData];
+        } else if([icon.iconData isKindOfClass:[Listener class]]){
+            [self showDropDownByType:ICON_LISTENER isEditing:YES typeData:icon.iconData];
+        } else if([icon.iconData isKindOfClass:[Region class]]){
+            [self showDropDownByType:ICON_REGION isEditing:YES typeData:icon.iconData];
+        } else if([icon.iconData isKindOfClass:[Action class]]){
+            
+        }
+    } else {
+        
+    }
 }
 
 -(void)iconClicked:(Icon *)icon{
@@ -236,12 +246,12 @@
                 [self retractDropDown];
             } else if(self.selectedCategory.iconType == ICON_ACTUATOR){
                 NSLog(@"CTS actuator");
-                [self showDropDownByType:ICON_ACTUATOR];
+                [self showDropDownByType:ICON_ACTUATOR isEditing:NO typeData:nil];
             } else if(self.selectedCategory.iconType == ICON_SENSOR){
                 NSLog(@"CTS sensor");
-                [self showDropDownByType:ICON_SENSOR];
+                [self showDropDownByType:ICON_SENSOR isEditing:NO typeData:nil];
             } else if(self.selectedCategory.iconType == ICON_REGION){
-                [self showDropDownByType:ICON_REGION];
+                [self showDropDownByType:ICON_REGION isEditing:NO typeData:nil];
             }
             
             break;

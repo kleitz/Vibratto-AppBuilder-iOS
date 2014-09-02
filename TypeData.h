@@ -50,6 +50,8 @@ typedef enum {
 
 @interface Listener : TypeData
 
+@property(strong, nonatomic) NSString *name;
+
 @property(strong, nonatomic) NSString *type;
 @property(strong, nonatomic) NSString *sensor;
 @property(strong, nonatomic) NSString *sensorA;

@@ -96,7 +96,7 @@
     CGFloat projectedHeight = [super getProjectedHeight];
     //CGFloat regionBoxHeight = self.abc.regionSelectorIconHeight * 3;
     
-    return projectedHeight + self.regionBuilderHeight + self.abc.dropDownGroupBuffer;
+    return projectedHeight + self.regionBuilderHeight;
 }
 
 -(void)iconClicked:(Icon *)icon{
@@ -119,6 +119,20 @@
     */
 }
 
+-(void)changeTypeData:(TypeData *)typeData{
+    NSLog(@"RDD changeTypeData");
+    [super changeTypeData:typeData];
+    if(typeData != nil){
+        Region *regionTypeData = (Region *)typeData;
+        [self setFieldName:@"Edit Region"];
+        [[self getTextFieldByPlaceHolder:self.namePlaceholder] setText:regionTypeData.name];
+        for(int i=0; i<regionTypeData.actuators.count; i++){
+            Actuator *thisActuator = [regionTypeData.actuators objectAtIndex:i];
+            Icon *thisIcon = [self.regionIcons objectAtIndex:(thisActuator.pinNumber -1)];
+            [thisIcon toggleHighlighted];
+        }
+    }
+}
 
 -(void)setButtons{
     CGFloat originY;

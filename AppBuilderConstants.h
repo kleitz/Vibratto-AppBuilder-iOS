@@ -72,6 +72,7 @@
 @property(assign, nonatomic) CGFloat dropDownChooseIconLabelHeight;
 @property(assign, nonatomic) CGFloat dropDownFieldBuffer;
 @property(assign, nonatomic) CGFloat dropDownGroupBuffer;
+@property(assign, nonatomic) CGFloat dropDownOkButtonHeight;
 @property(assign, nonatomic) CGFloat regionSelectorIconHeight;
 
 @end

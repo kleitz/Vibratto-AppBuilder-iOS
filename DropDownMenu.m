@@ -24,7 +24,7 @@
         
         self.iconBoxHeight = self.abc.dropDownChooseIconLabelHeight + self.abc.topBoxHeight;
         self.titleY = self.abc.dropDownMenuTitleHeight + self.abc.dropDownGroupBuffer + self.abc.dropDownGroupBuffer;
-        
+        self.isEditing = NO;
     }
     
     return self;
@@ -140,12 +140,12 @@
             self.abc.dropDownGroupBuffer;
     } else {
         originY =
-            self.titleY +
+            self.title.frame.size.height +
             (self.textFields.count * (self.abc.dropDownMenuFeildHeight + (self.abc.dropDownFieldBuffer * 2))) +
             self.abc.dropDownGroupBuffer;
     }
     
-    self.okButton = [[UIButton alloc] initWithFrame:CGRectMake(0, originY, (self.frame.size.width/2) - 1, self.abc.dropDownMenuFeildHeight * 1.2f)];
+    self.okButton = [[UIButton alloc] initWithFrame:CGRectMake(0, originY, (self.frame.size.width/2) - 1, self.abc.dropDownOkButtonHeight)];
     [self.okButton setBackgroundColor:[UIColor colorWithRed:0.97f green:0.97f blue:0.97f alpha:1.0f]];
     [self.okButton setTitle:@"OK" forState:UIControlStateNormal];
     [self.okButton addTarget:self action:@selector(okButtonClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -153,7 +153,7 @@
     
     [self addSubview:self.okButton];
     
-    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake((self.frame.size.width/2) + 1, originY, (self.frame.size.width/2) -1, self.abc.dropDownMenuFeildHeight * 1.2f)];
+    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake((self.frame.size.width/2) + 1, originY, (self.frame.size.width/2) -1, self.abc.dropDownOkButtonHeight)];
     [self.cancelButton setBackgroundColor:[UIColor colorWithRed:0.97f green:0.97f blue:0.97f alpha:1.0f]];
     [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [self.cancelButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
@@ -176,19 +176,24 @@
 }
 
 -(void)setFieldName:(NSString *)name{
-    CGSize titleSize = [name sizeWithFont:self.abc.dropDownTitleFont];
-    CGFloat titleBuffer = (self.abc.dropDownChooseIconLabelHeight - titleSize.height)/2;
+    NSLog(@"DDM setFieldName: %@", name);
     
-    self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, titleBuffer, self.frame.size.width, self.abc.dropDownMenuTitleHeight)];
-
-    //[self.title setFrame:CGRectMake(self.title.frame.origin.x, titleBuffer, self.title.frame.size.width, self.title.frame.size.height)];
-    [self.title setFont:self.abc.dropDownTitleFont];
-    [self.title setTextColor:[UIColor whiteColor]];
-    [self.title setTextAlignment:NSTextAlignmentCenter];
-    [self.title setBackgroundColor:[UIColor clearColor]];
+    if(self.title == nil){
+        NSLog(@"DDM title is nil");
+        
+        CGSize titleSize = [name sizeWithFont:self.abc.dropDownTitleFont];
+        CGFloat titleBuffer = (self.abc.dropDownChooseIconLabelHeight - titleSize.height)/2;
+        
+        self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, titleBuffer, self.frame.size.width, self.abc.dropDownMenuTitleHeight)];
+        [self.title setFont:self.abc.dropDownTitleFont];
+        [self.title setTextColor:[UIColor whiteColor]];
+        [self.title setTextAlignment:NSTextAlignmentCenter];
+        [self.title setBackgroundColor:[UIColor clearColor]];
+        
+        [self addSubview:self.title];
+    }
+    
     [self.title setText:name];
-    
-    [self addSubview:self.title];
 }
 
 -(CGFloat)getProjectedHeight{
@@ -196,12 +201,13 @@
     projectedHeight += self.abc.dropDownMenuTitleHeight +
         (self.textFields.count * (self.abc.dropDownMenuFeildHeight + (self.abc.dropDownFieldBuffer * 2))) +
         self.abc.dropDownGroupBuffer +
-        (self.abc.dropDownMenuFeildHeight * 1.2);
+        self.abc.dropDownOkButtonHeight;
+        //(self.abc.dropDownMenuFeildHeight * 1.2);
     
     if(self.hasIcons){
         projectedHeight +=
-            self.abc.topBoxHeight +
-            self.abc.dropDownGroupBuffer;
+            self.abc.dropDownGroupBuffer +
+            self.abc.topBoxHeight;
     }
     
     return projectedHeight;
@@ -211,6 +217,21 @@
     NSLog(@"DDM textFieldShould return");
     [textField resignFirstResponder];
     return YES;
+}
+
+-(void)changeTypeData:(TypeData *)typeData{
+    self.typeData = typeData;
+}
+
+-(UITextField *)getTextFieldByPlaceHolder:(NSString *)placeholder{
+    for(int i=0; i<self.textFields.count; i++){
+        UITextField *thisTextField = [self.textFields objectAtIndex:i];
+        if([thisTextField.placeholder isEqualToString:placeholder]){
+            return thisTextField;
+        }
+    }
+    
+    return nil;
 }
 
 @end

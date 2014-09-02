@@ -45,6 +45,9 @@
 @property(assign, nonatomic) CGFloat iconBoxHeight;
 
 @property(assign, nonatomic) BOOL hasIcons;
+@property(assign, nonatomic) BOOL isEditing;
+
+@property(strong, nonatomic) TypeData *typeData;
 
 -(void)setFieldName:(NSString *)name;
 -(void)createTextField:(NSString *)text;
@@ -55,6 +58,8 @@
 -(void)colapseDropDown;
 -(void)okButtonClicked;
 -(void)cancelClicked;
+-(void)changeTypeData:(TypeData *)typeData;
+-(UITextField *)getTextFieldByPlaceHolder:(NSString *)placeholder;
 
 -(CGFloat)getProjectedHeight;
 

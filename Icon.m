@@ -195,6 +195,18 @@
     }
 }
 
+-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    NSLog(@"Icon gestureRecognizerShouldBegin");
+    if([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]){
+        NSLog(@"Icon longpress about to begin");
+        [self longPressMade];
+        return NO;
+    } else {
+        NSLog(@"Icon other gesture about to begin");
+        return YES;
+    }
+}
+
 -(void)changeSubtitle:(NSString *)text{
 
     if(text != nil){
