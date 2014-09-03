@@ -11,7 +11,7 @@
 @implementation ListenerDropDown
 
 -(id)initWithFrame:(CGRect)frame{
-    NSLog(@"ADD initWithFrame");
+    NSLog(@"LDD initWithFrame");
     self = [super initWithFrame:frame];
     
     if(self){
@@ -57,12 +57,12 @@
     
     [super okButtonClicked];
     
-    NSLog(@"ADD name: %@", self.name);
+    NSLog(@"LDD name: %@, typeData name; %@", self.name, ((Listener *)self.typeData).name);
 }
 
 -(void)changeTypeData:(TypeData *)typeData{
     NSLog(@"LDD changeTypeData");
-    [super typeData];
+    [super changeTypeData:typeData];
     
     if(typeData != nil){
         UITextField *nameTextField = [self getTextFieldByPlaceHolder:self.namePlaceholder];

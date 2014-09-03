@@ -16,10 +16,10 @@
     NSLog(@"Icon initWithFrame");
     if (self) {
         self.customValue = 0;
-        self.constants = [AppBuilderConstants getAppBuilderConstants];
+        self.abc = [AppBuilderConstants getAppBuilderConstants];
         self.isHighlighted = NO;
         self.iconType = ICON_CUSTOM;
-        self.bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width * ((1.0f - self.constants.iconImagePercent)/2), self.frame.size.height * ((1.0f - self.constants.iconImagePercent)/2), self.frame.size.width * self.constants.iconImagePercent, self.frame.size.height * self.constants.iconImagePercent)];
+        self.bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width * ((1.0f - self.abc.iconImagePercent)/2), self.frame.size.height * ((1.0f - self.abc.iconImagePercent)/2), self.frame.size.width * self.abc.iconImagePercent, self.frame.size.height * self.abc.iconImagePercent)];
         self.customImage = [[UIImage alloc] init];
         self.layer.cornerRadius = self.frame.size.width/2;
         self.iconData = nil;
@@ -47,7 +47,7 @@
         UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressMade)];
         [self addGestureRecognizer:longPressGesture];
 
-        [self setBackgroundColor:self.constants.seeThruColor];
+        [self setBackgroundColor:self.abc.seeThruColor];
         [self addSubview:self.bgImage];
         
     }
@@ -69,9 +69,9 @@
     self.isHighlighted = !self.isHighlighted;
     
     if(self.isHighlighted){
-        [self setBackgroundColor:self.constants.seeThruColorHighlight];
+        [self setBackgroundColor:self.abc.seeThruColorHighlight];
     } else {
-        [self setBackgroundColor:self.constants.seeThruColor];
+        [self setBackgroundColor:self.abc.seeThruColor];
     }
 }
 
@@ -89,95 +89,95 @@
     [self.customLabel removeFromSuperview];
     switch (self.iconType) {
         case ICON_ADD:
-            [self.bgImage setImage:self.constants.plusImage];
+            [self.bgImage setImage:self.abc.plusImage];
             break;
             
         case ICON_ACTUATOR:
-            [self.bgImage setImage:self.constants.actuatorImageDefault];
+            [self.bgImage setImage:self.abc.actuatorImageDefault];
             break;
             
         case ICON_SENSOR:
-            [self.bgImage setImage:self.constants.sensorImageDefault];
+            [self.bgImage setImage:self.abc.sensorImageDefault];
             break;
         
         case ICON_GESTURE:
-            [self.bgImage setImage:self.constants.lightningImage];
+            [self.bgImage setImage:self.abc.lightningImage];
             break;
         
         case ICON_REGION:
-            [self.bgImage setImage:self.constants.regionImageDefault];
+            [self.bgImage setImage:self.abc.regionImageDefault];
             break;
         
         case ICON_COMPARATOR:
-            [self.bgImage setImage:self.constants.comparatorImage];
+            [self.bgImage setImage:self.abc.comparatorImage];
             break;
         
         case ICON_GREATERTHEN:
-            [self.bgImage setImage:self.constants.greaterThenImage];
+            [self.bgImage setImage:self.abc.greaterThenImage];
             break;
         
         case ICON_LESSTHEN:
-            [self.bgImage setImage:self.constants.lessThenImage];
+            [self.bgImage setImage:self.abc.lessThenImage];
             break;
             
         case ICON_LISTENER:
-            [self.bgImage setImage:self.constants.listenerImageDefault];
+            [self.bgImage setImage:self.abc.listenerImageDefault];
             break;
         
         case ICON_UPLOAD:
-            [self.bgImage setImage:self.constants.uploadImageDefault];
+            [self.bgImage setImage:self.abc.uploadImageDefault];
             break;
             
         case ICON_MAP:
-            [self.bgImage setImage:self.constants.mapImageDefault];
+            [self.bgImage setImage:self.abc.mapImageDefault];
             break;
             
         case ICON_TILT:
-            [self.bgImage setImage:self.constants.tiltImageDefault];
+            [self.bgImage setImage:self.abc.tiltImageDefault];
             break;
         
         case ICON_NUMBER:
-            [self.bgImage setImage:self.constants.numberImage];
+            [self.bgImage setImage:self.abc.numberImage];
             break;
         
         case ICON_DECREASE_POWER:
-            [self.bgImage setImage:self.constants.decreasePowerImage];
+            [self.bgImage setImage:self.abc.decreasePowerImage];
             break;
         
         case ICON_INCREASE_POWER:
-            [self.bgImage setImage:self.constants.increasePowerImage];
+            [self.bgImage setImage:self.abc.increasePowerImage];
             break;
         
         case ICON_ALL:
-            [self.bgImage setImage:self.constants.allImage];
+            [self.bgImage setImage:self.abc.allImage];
             break;
         
         case ICON_CONFIRM:
-            [self.bgImage setImage:self.constants.confirmImage];
+            [self.bgImage setImage:self.abc.confirmImage];
             break;
         
         case ICON_LIGHTNING:
-            [self.bgImage setImage:self.constants.lightningImage];
+            [self.bgImage setImage:self.abc.lightningImage];
             break;
         
         case ICON_ACTION:
-            [self.bgImage setImage:self.constants.actionImage];
+            [self.bgImage setImage:self.abc.actionImage];
             break;
         
         case ICON_ANNOUNCER:
-            [self.bgImage setImage:self.constants.announcerImage];
+            [self.bgImage setImage:self.abc.announcerImage];
             break;
         
         case ICON_BEAKER:
-            [self.bgImage setImage:self.constants.beakerImage];
+            [self.bgImage setImage:self.abc.beakerImage];
             break;
         
         case ICON_CANCEL:
-            [self.bgImage setImage:self.constants.cancelImage];
+            [self.bgImage setImage:self.abc.cancelImage];
             break;
         
         case ICON_SAVE:
-            [self.bgImage setImage:self.constants.saveImage];
+            [self.bgImage setImage:self.abc.saveImage];
             break;
             
         case ICON_CUSTOM_VALUE:
@@ -218,6 +218,51 @@
         [self.subtitle setText:@""];
         self.hasSubtitle = NO;
     }
+}
+
+-(void)fireChangeAnimation{
+    NSLog(@"Icon fireChangeAnimation");
+    [self.layer setBorderColor:[UIColor blackColor].CGColor];
+    
+    CGFloat xVal = self.frame.origin.x;
+    CGFloat yVal = self.frame.origin.y;
+    CGFloat width = self.frame.size.width;
+    CGFloat height = self.frame.size.height;
+    
+    CGFloat scaleFactor = 0.8f;
+    
+    [UIView animateWithDuration:0.2f animations:^{
+        //[self setFrame:CGRectMake(xVal * scaleFactor * scaleFactor, yVal * scaleFactor * scaleFactor, width/scaleFactor, height/scaleFactor)];
+        [self setFrame:CGRectMake(xVal, yVal - 10, width, height)];
+        //[self.layer setBorderWidth:3.0f];
+    
+    } completion:^(BOOL finished){
+        [UIView animateWithDuration:0.2f animations:^{
+            [self setFrame:CGRectMake(xVal, yVal, width, height)];
+        }];
+    }];
+    /*
+    [self.layer setBorderColor:[UIColor greenColor].CGColor];
+    
+    [UIView animateWithDuration:0.1f animations:^{
+        [self setBackgroundColor:self.abc.primaryColor1];
+    } completion:^(BOOL finished){
+        [UIView animateWithDuration:0.1f animations:^{
+            [self setBackgroundColor:self.abc.seeThruColor];
+        }];
+    }];
+    */
+    /*
+    [UIView animateWithDuration:1.0f animations:^{
+        [self.layer setBorderColor:[UIColor yellowColor].CGColor];
+        [self.layer setBorderWidth:3.0f];
+    } completion:^(BOOL finished){
+        [UIView animateWithDuration:1.0f animations:^{
+            [self.layer setBorderColor:[UIColor clearColor].CGColor];
+            [self.layer setBorderWidth:0];
+        }];
+    }];
+    */
 }
 
 @end

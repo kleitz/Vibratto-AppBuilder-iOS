@@ -54,13 +54,14 @@ typedef enum {
 
 @property(strong, nonatomic) TypeData *iconData;
 
+@property(strong, nonatomic) AppBuilderConstants *abc;
+
 @property(strong, nonatomic) UIImageView *bgImage;
 @property(strong, nonatomic) UIImage *customImage;
 
 @property(strong, nonatomic) UILabel *customLabel;
 @property(strong, nonatomic) UILabel *subtitle;
 
-@property(strong, nonatomic) AppBuilderConstants *constants;
 @property(weak, nonatomic) id<IconDelegate> myDelegate;
 @property(assign, nonatomic) ICON_TYPE iconType;
 
@@ -77,5 +78,6 @@ typedef enum {
 -(void)changeIconType:(ICON_TYPE)iconType;
 -(void)toggleHighlighted;
 -(void)changeCustomValue:(int)customValue setAsIconType:(BOOL)changeIconType;
+-(void)fireChangeAnimation;
 
 @end

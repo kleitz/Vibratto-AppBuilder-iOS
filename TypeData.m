@@ -97,6 +97,7 @@
         self.maximumFires = -1;
         
         self.type = nil;
+        self.name = nil;
         self.sensor = nil;
         self.sensorA = nil;
         self.sensorB = nil;

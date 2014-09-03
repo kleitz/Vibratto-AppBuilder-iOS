@@ -177,12 +177,16 @@
             if(self.visibleDropDown.isEditing){
                 NSLog(@"CTS sensor isEditing, name: %@, pin: %i, sensitivity: %i", sensorDropDown.name, sensorDropDown.pinNumber, sensorDropDown.sensitivity);
                 Sensor *thisSensor = (Sensor *)self.visibleDropDown.typeData;
-                [thisSensor setName:sensorDropDown.name];
-                [thisSensor setPinNumber:sensorDropDown.pinNumber];
-                [thisSensor setSensitivity:sensorDropDown.sensitivity];
                 
-                Icon *sensorIcon = sensorDropDown.representedIcon;
-                [sensorIcon changeSubtitle:thisSensor.name];
+                if(![thisSensor.name isEqualToString:sensorDropDown.name] || thisSensor.pinNumber != sensorDropDown.pinNumber || thisSensor.sensitivity != sensorDropDown.sensitivity){
+                    [thisSensor setName:sensorDropDown.name];
+                    [thisSensor setPinNumber:sensorDropDown.pinNumber];
+                    [thisSensor setSensitivity:sensorDropDown.sensitivity];
+                    
+                    Icon *sensorIcon = sensorDropDown.representedIcon;
+                    [sensorIcon changeSubtitle:thisSensor.name];
+                    [sensorIcon fireChangeAnimation];
+                }
                 
                 [self retractDropDown];
             } else {
@@ -192,15 +196,78 @@
 
         }
     } else if([ddm isKindOfClass:[ListenerDropDown class]]){
+        ListenerDropDown *listenerDropDown = (ListenerDropDown *)ddm;
+
         if(self.selectedCategory.iconType != ICON_LISTENER){
             [self selectCategoryByType:ICON_LISTENER];
         }
         
-        [self.visibleDropDown colapseDropDown];
-        [self.compoundDelegate collapsingStarted:self.visibleDropDown];
+        if(listenerDropDown.isEditing){
+            if([self.visibleDropDown.typeData isKindOfClass:[Listener class]]){
+                NSLog(@"CTS ok it is a listener");
+            } else {
+                NSLog(@"CTS its not a listner");
+                
+            }
+            
+            Listener *thisListener = (Listener *)self.visibleDropDown.typeData;
+            NSLog(@"CTS listener isEditing, listnerName: %@", thisListener.name);
+            
+            if(![thisListener.name isEqualToString:listenerDropDown.name]){
+                NSLog(@"CTS listener isEditing, change, newName: %@", listenerDropDown.name);
+                [thisListener setName:listenerDropDown.name];
+                
+                NSLog(@"CTS listenerName: %@", thisListener.name);
+                Icon *listenerIcon = listenerDropDown.representedIcon;
+                [listenerIcon changeSubtitle:thisListener.name];
+                [listenerIcon fireChangeAnimation];
+            }
+            
+            [self retractDropDown];
+        } else {
+            [self.visibleDropDown colapseDropDown];
+            [self.compoundDelegate collapsingStarted:self.visibleDropDown];
+        }
         //[self.compoundDelegate buildListener:self];
     } else if([ddm isKindOfClass:[RegionDropDown class]]){
-        if(((RegionDropDown *)ddm).name == nil){
+        RegionDropDown *regionDropDown = (RegionDropDown *)ddm;
+        
+        if(regionDropDown.name == nil){
+            [self retractDropDown];
+        } else if(self.visibleDropDown.isEditing){
+            Region *thisRegion = (Region *)self.visibleDropDown.typeData;
+            
+            BOOL hasChanged = NO;
+            NSMutableArray *highlightedIconsEdited = [[NSMutableArray alloc] init];
+            
+            for(int i=0; i<regionDropDown.regionIcons.count; i++){
+                Icon *thisIcon = [regionDropDown.regionIcons objectAtIndex:i];
+                if(thisIcon.isHighlighted){
+                    [highlightedIconsEdited addObject:thisIcon.iconData];
+                }
+            }
+            
+            if(highlightedIconsEdited.count != thisRegion.actuators.count){
+                hasChanged = YES;
+            } else {
+                for(int i=0; i<thisRegion.actuators.count; i++){
+                    Actuator *thisActuatorOld = [thisRegion.actuators objectAtIndex:i];
+                    Actuator *thisActuatorNew = [highlightedIconsEdited objectAtIndex:i];
+                    
+                    if(thisActuatorOld.pinNumber != thisActuatorNew.pinNumber){
+                        hasChanged = YES;
+                        break;
+                    }
+                }
+            }
+            
+            if(hasChanged || ![thisRegion.name isEqualToString:regionDropDown.name]){
+                [thisRegion setName:thisRegion.name];
+                [thisRegion setActuators:highlightedIconsEdited];
+                [regionDropDown.representedIcon fireChangeAnimation];
+                
+            }
+            
             [self retractDropDown];
         } else {
             [self.visibleDropDown colapseDropDown];
@@ -240,10 +307,16 @@
     
     if(icon.iconData.isCustom){
         if([icon.iconData isKindOfClass:[Sensor class]]){
+            NSLog(@"CTS longPress sensor");
             [self showDropDownByType:ICON_SENSOR isEditing:YES typeData:icon.iconData representingIcon:icon];
+            
         } else if([icon.iconData isKindOfClass:[Listener class]]){
+            NSLog(@"CTS longPress listener: %@", ((Listener *)icon.iconData).name);
             [self showDropDownByType:ICON_LISTENER isEditing:YES typeData:icon.iconData representingIcon:icon];
+            
         } else if([icon.iconData isKindOfClass:[Region class]]){
+            NSLog(@"CTS longPress region");
+            
             [self showDropDownByType:ICON_REGION isEditing:YES typeData:icon.iconData representingIcon:icon];
         } else if([icon.iconData isKindOfClass:[Action class]]){
             
